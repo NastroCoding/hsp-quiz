@@ -20,6 +20,7 @@ Route::controller(RouteController::class)->group(function(){
     Route::get('/admin/quiz', 'add_quiz')->middleware('admin');
     Route::get('/admin/users', 'users')->middleware('admin');
     Route::get('/admin/quiz/result', 'quiz_result')->middleware('admin');
+    Route::get('/admin/quiz/question', 'quiz_question')->middleware('admin');
 });
 
 Route::controller(AuthController::class)->group(function(){
