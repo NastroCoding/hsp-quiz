@@ -13,15 +13,18 @@ return new class extends Migration
     {
         Schema::create('quizes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('updated_by');
             $table->string('token');
             $table->string('title');
             $table->text('description');
             $table->integer('time');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->softDeletes();
+            
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
