@@ -26,6 +26,13 @@ class RouteController extends Controller
         ]);
     }
 
+    public function quiz_result(){
+        return view('admin.quiz_result', [
+            "active" => "active",
+            "page" => "Quiz"
+        ]);
+    }
+
     public function users()
     {
         return view('admin.users', [

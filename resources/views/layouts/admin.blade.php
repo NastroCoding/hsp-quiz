@@ -116,7 +116,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="quiz-result.html" class="nav-link">
+                                    <a href="/admin/quiz/result" class="nav-link">
                                         <i class="fas fa-square-poll-horizontal nav-icon"></i>
                                         <p>Quiz Result</p>
                                     </a>
