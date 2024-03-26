@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('container')
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
@@ -22,5 +22,4 @@
         <!-- Main content -->
         <h4 class="col-sm-6">Recent Quiz</h4>
         <!-- /.content -->
-    </div>
 @endsection
