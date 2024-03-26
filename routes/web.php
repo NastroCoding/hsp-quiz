@@ -19,6 +19,7 @@ Route::controller(RouteController::class)->group(function(){
     Route::get('/admin/dashboard', 'admin_dashboard')->middleware('admin');
     Route::get('/admin/quiz', 'add_quiz')->middleware('admin');
     Route::get('/admin/users', 'users')->middleware('admin');
+    
 });
 
 Route::controller(AuthController::class)->group(function(){

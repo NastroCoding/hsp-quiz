@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('token');
             $table->string('title');
             $table->text('description');
+            $table->string('slug');
             $table->integer('time');
             $table->timestamps();
             $table->softDeletes();

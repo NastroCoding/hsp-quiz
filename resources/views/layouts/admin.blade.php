@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard | HSPNet</title>
+    <title>{{ $page }} | HSPNet</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -236,13 +236,13 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="quiz-result.html" class="nav-link active">
+                                    <a href="quiz-result.html" class="nav-link">
                                         <i class="fas fa-square-poll-horizontal nav-icon"></i>
                                         <p>Quiz Result</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/admin/users" class="nav-link">
+                                    <a href="/admin/users" class="nav-link ">
                                         <i class="fas fa-user nav-icon"></i>
                                         <p>Users</p>
                                     </a>
