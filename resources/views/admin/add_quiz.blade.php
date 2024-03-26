@@ -8,11 +8,6 @@
               <div class="card-header">
                 <h3 class="card-title">Add Quiz</h3>
 
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                </div>
               </div>
               <div class="card-body">
                 <div class="form-group">
@@ -23,6 +18,33 @@
                   <label for="inputDescription">Description</label>
                   <textarea id="inputDescription" class="form-control" rows="4"></textarea>
                 </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                      <!-- select -->
+                      <div class="form-group">
+                        <label>Category</label>
+                        <select class="form-control">
+                          <option>option 1</option>
+                          <option>option 2</option>
+                          <option>option 3</option>
+                          <option>option 4</option>
+                          <option>option 5</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label>Education</label>
+                        <select class="form-control">
+                          <option>option 1</option>
+                          <option>option 2</option>
+                          <option>option 3</option>
+                          <option>option 4</option>
+                          <option>option 5</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 <button type="button" class="btn btn-success float-right">Create Quiz</button>
               </div>
               <!-- /.card-body -->

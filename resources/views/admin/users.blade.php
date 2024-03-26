@@ -46,7 +46,6 @@
                         <th>ID</th>
                         <th>Username</th>
                         <th>Password</th>
-                        <th>Actions</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -56,12 +55,10 @@
                         <td>John Doe</td>
                         <td>11-7-2014</td>
                         <td>
-                            <a class="btn btn-block btn-info btn-sm" href="edit-user.html">
+                            <a class="btn btn-info btn-sm" href="edit-user.html">
                                 Edit
                             </a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal"
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                 data-target="#modal-default">
                                 Delete
                             </button>
@@ -72,12 +69,10 @@
                         <td>Alexander Pierce</td>
                         <td>11-7-2014</td>
                         <td>
-                            <a class="btn btn-block btn-info btn-sm" href="edit-user.html">
+                            <a class="btn btn-info btn-sm" href="edit-user.html">
                                 Edit
                             </a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal"
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                 data-target="#modal-default">
                                 Delete
                             </button>
@@ -88,12 +83,10 @@
                         <td>Bob Doe</td>
                         <td>11-7-2014</td>
                         <td>
-                            <a class="btn btn-block btn-info btn-sm" href="edit-user.html">
+                            <a class="btn btn-info btn-sm" href="edit-user.html">
                                 Edit
                             </a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal"
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                 data-target="#modal-default">
                                 Delete
                             </button>
@@ -104,12 +97,10 @@
                         <td>Mike Doe</td>
                         <td>11-7-2014</td>
                         <td>
-                            <a class="btn btn-block btn-info btn-sm" href="edit-user.html">
+                            <a class="btn btn-info btn-sm" href="edit-user.html">
                                 Edit
                             </a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal"
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                 data-target="#modal-default">
                                 Delete
                             </button>
