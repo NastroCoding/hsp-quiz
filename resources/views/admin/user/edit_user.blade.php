@@ -1,52 +1,56 @@
 @extends('layouts.admin')
 @section('container')
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>User</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="admin.html">Home</a></li>
-                            <li class="breadcrumb-item active">User</li>
-                        </ol>
-                    </div>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Edit User</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Edit User</li>
+                    </ol>
                 </div>
             </div>
-            <!-- /.container-fluid -->
-        </section>
+        </div>
+        <!-- /.container-fluid -->
+    </section>
 
-        <!-- Main content -->
-        <div class="card card-primary">
-            <div class="card-header">
-                <h3 class="card-title">Edit User</h3>
-            </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form>
+    <!-- Main content -->
+    <div class="card card-primary m-3">
+        <div class="card-header">
+            <h3 class="card-title">Edit User</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        @foreach ($data as $user)
+            <form action="/admin/user/edit/{{ $user->id }}" method="POST">
+                @csrf
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Username</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" />
+                        <label for="exampleInputToken">Token</label>
+                        <input type="text" name="token" class="form-control" id="exampleInputToken"
+                            placeholder="Enter Token" value="{{ $user->token }}">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
+                        <label for="exampleInputEmail">Email</label>
+                        <input type="email" name="email" class="form-control" id="exampleInputEmail" placeholder="Email"
+                            value="{{ $user->email }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword">Password</label>
+                        <input type="password" name="password" class="form-control" id="exampleInputPassword"
+                            placeholder="Password" value="{{ $user->password }}">
                     </div>
                 </div>
                 <!-- /.card-body -->
-
-                <div class="card-footer">
-                    <a href="users.html" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary float-right">Edit</button>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default">Back</button>
+                    <input type="submit" name="submit" class="btn btn-success" value="Edit User">
                 </div>
             </form>
-        </div>
-
-        <!-- /.content -->
+        @endforeach
     </div>
 @endsection

@@ -46,25 +46,28 @@
                     <tr>
                         <th>Token</th>
                         <th>Email</th>
+                        <th>Role</th>
                         <th>Password</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $user)
-                    <tr>
-                        <td>{{ $user->token }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->password }}</td>
-                        <td>
-                            <a class="btn btn-info btn-sm" href="edit-user.html">
-                                Edit
-                            </a>
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $user->token }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->role }}</td>
+                            <td>{{ $user->password }}</td>
+                            <td>
+                                <a class="btn btn-info btn-sm" href="/admin/user/edit/{{ $user->id }}">
+                                    Edit
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                    data-id="{{ $user->id }}" data-toggle="modal" data-target="#delete">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -90,7 +93,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail">Email</label>
-                                    <input type="email" name="email" class="form-control" id="exampleInputEmail" placeholder="Email">
+                                    <input type="email" name="email" class="form-control" id="exampleInputEmail"
+                                        placeholder="Email">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword">Password</label>
@@ -124,7 +128,9 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger">Delete</button>
+                        <a id="deleteButton" class="btn btn-danger">
+                            Delete
+                        </a>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -133,4 +139,20 @@
         </div>
     </div>
     <!-- /.content -->
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // Capture delete button click event
+            $('.delete-btn').click(function() {
+                // Get the ID of the user
+                var userId = $(this).data('id');
+                // Construct the delete URL
+                var deleteUrl = '/admin/user/delete/' + userId;
+                // Set the delete button href attribute
+                $('#deleteButton').attr('href', deleteUrl);
+            });
+        });
+    </script>
 @endsection

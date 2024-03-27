@@ -46,7 +46,11 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $show = User::where('id', $id)->get();
+        return view('admin.user.edit_user', [
+            'page' => 'Edit User',
+            'data' => $show,
+        ]);
     }
 
     /**

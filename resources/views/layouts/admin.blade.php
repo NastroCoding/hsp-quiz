@@ -168,6 +168,10 @@
     {{-- CUSTOM SCRIPT --}}
     <script src="{{ URL::asset('/dist/js/hspsite.js') }}"></script>
 
+    {{-- JQuery  --}}
+    <script src="{{ URL::asset('/dist/js/jquery.min.js')}}"></script>
+
+    @yield('scripts')
 </body>
 
 </html>

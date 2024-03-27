@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(RouteController::class)->group(function(){
     Route::get('/admin/dashboard', 'admin_dashboard')->middleware('admin');
+    
+    // USER
     Route::get('/admin/users', 'users')->middleware('admin');
 
     // QUIZ
@@ -39,6 +41,8 @@ Route::controller(AuthController::class)->group(function(){
 
 Route::controller(UserController::class)->group(function(){
     Route::post('/admin/user/create', 'store')->middleware('admin');
+    Route::get('/admin/user/delete/{id}', 'destroy')->middleware('admin');
+    Route::get('/admin/user/edit/{id}', 'show')->middleware('admin');
 });
 
 Route::controller(CategoryController::class)->group(function(){
