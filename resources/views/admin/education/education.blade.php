@@ -3,24 +3,19 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
-        @if (session()->has('category_create'))
-        <div class="alert alert-success" role="alert">
-            {{ session('category_create') }}
-        </div>
-        @endif
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Category</h1>
+                <h1>Education</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                    <li class="breadcrumb-item active">Category</li>
+                    <li class="breadcrumb-item active">Education</li>
                 </ol>
             </div>
         </div>
         <div class="row">
-            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#add-user"><i class="fas fa-plus mr-1"></i>Add Category</button>
+            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#add-user"><i class="fas fa-plus mr-1"></i>Add Education</button>
         </div>
     </div>
     <!-- /.container-fluid -->
@@ -29,7 +24,7 @@
 <!-- Main content -->
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Category List</h3>
+        <h3 class="card-title">Education List</h3>
 
         <div class="card-tools">
             <div class="input-group input-group-sm" style="width: 150px">
@@ -49,15 +44,14 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Category Name</th>
+                    <th>Education Name</th>
                     <th class="text-center"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $category)
                 <tr>
-                    <td>{{ $category->id }}</td>
-                    <td>{{ $category->category_name }}</td>
+                    <td>1</td>
+                    <td>8==D</td>
                     <td class="text-center">
                         <a class="btn btn-info btn-sm" href="edit-user.html">
                             Edit
@@ -67,7 +61,6 @@
                         </button>
                     </td>
                 </tr>                    
-                @endforeach
             </tbody>
         </table>
     </div>
@@ -76,18 +69,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add Category</h4>
+                    <h4 class="modal-title">Add Education</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                 <form action="/admin/category/create" method="POST">
-                    @csrf
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputToken">Category Name</label>
-                    <input type="text" name="category_name" class="form-control" id="exampleInputToken" placeholder="Enter Category Name">
+                    <label for="exampleInputToken">Education Name</label>
+                    <input type="text" name="category_name" class="form-control" id="exampleInputToken" placeholder="Enter Education Name">
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -125,4 +117,4 @@
     </div>
 </div>
 <!-- /.content -->
-@endsection
+@endsection 

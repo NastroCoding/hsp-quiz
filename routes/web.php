@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EducationController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,10 @@ Route::controller(RouteController::class)->group(function(){
 
     // CATEGORY
     Route::get('/admin/category', 'category')->middleware('admin');
+    
+    
+    // EDUCATION
+    Route::get('/admin/education', 'education')->middleware('admin');
 });
 
 Route::controller(AuthController::class)->group(function(){
