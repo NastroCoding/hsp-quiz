@@ -1,6 +1,12 @@
 @extends('layouts.admin')
 @section('container')
 <!-- Main content -->
+<style>
+  .input-group {
+    margin-bottom: 10px;
+  }
+</style>
+
 <section class="content">
   <div class="row justify-content-center align-items-center" style="height:100%;">
     <div class="col-md-6 m-auto">
@@ -14,7 +20,16 @@
             <textarea id="inputDescription" class="form-control" rows="4"></textarea>
           </div>
           <div id="optionsContainer" class="form-group">
-            <textarea class="form-control option" style="margin-bottom:10px;" rows="1" placeholder="Option 1"></textarea>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><input type="radio" name="option"></span>
+              </div>
+              <input type="text" class="form-control" placeholder="Option 1">
+              <div class="input-group-append">
+                <span class="input-group-text" style="background-color: red; cursor: pointer;" onclick="removeOption(this)"><i class="fas fa-trash" style="color: white;"></i></span>
+              </div>
+            </div>
+            <!-- /input-group -->
           </div>
           <div class="form-group">
             <button type="button" class="btn btn-success" id="addOptionBtn">Add Option</button>
@@ -25,23 +40,5 @@
       <!-- /.card -->
     </div>
   </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("addOptionBtn").addEventListener("click", function () {
-        // Clone the first textarea element
-        const optionsContainer = document.getElementById("optionsContainer");
-        const optionCount = optionsContainer.querySelectorAll(".option").length + 1;
-        const newOption = document.querySelector('.option').cloneNode(true);
-
-        // Update placeholder and id attributes
-        newOption.placeholder = "Option " + optionCount;
-        newOption.id = "inputOption" + optionCount;
-
-        // Append the cloned textarea to the options container
-        optionsContainer.appendChild(newOption);
-    });
-});
-  </script>
-
 </section>
 @endsection
