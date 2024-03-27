@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('quizes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('updated_by');
             $table->string('token');
             $table->string('title');
             $table->text('description');
             $table->string('slug');
             $table->integer('time');
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('updated_by');
             $table->timestamps();
             $table->softDeletes();
             

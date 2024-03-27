@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('choice_id');
+            $table->enum('is_right', [0,1]);
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
-            $table->enum('is_right', [0,1]);
             $table->timestamps();
             $table->softDeletes();
             

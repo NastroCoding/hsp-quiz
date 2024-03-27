@@ -2,42 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RouteController extends Controller
 {
     public function admin_dashboard()
     {
-        return view('admin.dashboard', ["page" => "Dashboard"]);
+        return view('admin.dashboard', [
+            "page" => "Dashboard"
+        ]);
     }
 
-    public function add_quiz()
+    public function quiz()
     {
-        return view('admin.quiz.add_quiz', [
-            "active" => "active",
+        return view('admin.quiz.quiz', [
             "page" => "Quiz"
+        ]);
+    }
+
+    // QUIZ
+
+    public function users()
+    {
+        $user = User::latest()->get();
+        return view('admin.user.users', [
+            'page' => 'Users',
+            'data' => $user,
         ]);
     }
     public function quiz_question()
     {
-        return view('admin.quiz.add_quest&ans', [
-            "active" => "active",
+        return view('admin.quiz.question', [
             "page" => "Quiz"
         ]);
     }
-
     public function quiz_result(){
         return view('admin.quiz.quiz_result', [
-            "active" => "active",
             "page" => "Quiz"
         ]);
     }
 
-    public function users()
-    {
-        return view('admin.user.users', [
-            "active" => "active",
-            "page" => "Users"
+    // CATEGORY
+
+    public function category(){
+        $category = Category::latest()->get();
+        return view('admin.category.category', [
+            'data' => $category,
+            'page' => 'Category'
         ]);
     }
 }

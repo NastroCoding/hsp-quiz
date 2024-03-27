@@ -117,7 +117,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="" class="nav-link ">
+                                    <a href="/admin/category" class="nav-link ">
                                         <i class="fas fa-list nav-icon"></i>
                                         <p>Category</p>
                                     </a>

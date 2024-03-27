@@ -13,7 +13,7 @@ class QuizController extends Controller
     public function index()
     {
         $quiz = Quiz::all();
-        return view('admin.quiz_result', ['data' => $quiz]);
+        return view('admin.quiz.quiz_result', ['data' => $quiz]);
     }
 
     /**
