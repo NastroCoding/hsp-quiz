@@ -53,4 +53,11 @@ class RouteController extends Controller
             'page' => 'Category'
         ]);
     }
+
+    // EDUCATION
+    public function education(){
+        return view('admin.education.education', [
+            "page" => "Education"
+        ]);
+    }
 }
