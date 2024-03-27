@@ -66,7 +66,7 @@
                             Delete
                         </button>
                     </td>
-                </tr>                    
+                </tr>
                 @endforeach
             </tbody>
         </table>
@@ -82,15 +82,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                <form action="/admin/category/create" method="POST">
-                    @csrf
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="exampleInputToken">Category Name</label>
-                    <input type="text" name="category_name" class="form-control" id="exampleInputToken" placeholder="Enter Category Name">
-                  </div>
-                </div>
-                <!-- /.card-body -->
+                    <form action="/admin/category/create" method="POST">
+                        @csrf
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputToken">Category Name</label>
+                                <input type="text" name="category_name" class="form-control" id="exampleInputToken" placeholder="Enter Category Name">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
