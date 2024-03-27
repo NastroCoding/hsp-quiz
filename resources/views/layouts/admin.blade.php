@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}" />
+    {{-- Animate.css --}}
+    <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}">
 </head>
 <!--
 `body` tag options:

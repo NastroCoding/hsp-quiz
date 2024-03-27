@@ -1,13 +1,13 @@
-
 // adds option and delete
 function removeOption(element) {
     var inputGroup = element.closest(".input-group");
     inputGroup.remove();
-  }
+}
 
-  document.getElementById("addOptionBtn").addEventListener("click", function() {
+document.getElementById("addOptionBtn").addEventListener("click", function () {
     var optionsContainer = document.getElementById("optionsContainer");
-    var optionIndex = optionsContainer.querySelectorAll("input[type='radio']").length + 1;
+    var optionIndex =
+        optionsContainer.querySelectorAll("input[type='radio']").length + 1;
 
     var newInputGroup = document.createElement("div");
     newInputGroup.classList.add("input-group");
@@ -40,8 +40,8 @@ function removeOption(element) {
     trashSpan.classList.add("input-group-text");
     trashSpan.style.backgroundColor = "red";
     trashSpan.style.cursor = "pointer";
-    trashSpan.onclick = function() {
-      removeOption(trashSpan);
+    trashSpan.onclick = function () {
+        removeOption(trashSpan);
     };
 
     var trashIcon = document.createElement("i");
@@ -54,4 +54,5 @@ function removeOption(element) {
     newInputGroup.appendChild(appendDiv);
 
     optionsContainer.appendChild(newInputGroup);
-  });
+});
+

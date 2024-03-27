@@ -46,6 +46,7 @@
                     <tr>
                         <th>Token</th>
                         <th>Email</th>
+                        <th>Education</th>
                         <th>Role</th>
                         <th>Password</th>
                         <th></th>
@@ -56,8 +57,12 @@
                         <tr>
                             <td>{{ $user->token }}</td>
                             <td>{{ $user->email }}</td>
+                            <td>{{ $user->education }}</td>
                             <td>{{ $user->role }}</td>
-                            <td>{{ $user->password }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm reveal-password-btn"
+                                        data-password="{{ $user->password }}">Reveal Password</button>
+                            </td>
                             <td>
                                 <a class="btn btn-info btn-sm" href="/admin/user/edit/{{ $user->id }}">
                                     Edit
@@ -90,6 +95,14 @@
                                     <label for="exampleInputToken">Token</label>
                                     <input type="text" name="token" class="form-control" id="exampleInputToken"
                                         placeholder="Enter Token">
+                                </div>
+                                <div class="form-group">
+                                    <label>Education</label>
+                                    <select class="form-control">
+                                        @foreach ($education as $edu)
+                                        <option value="{{ $edu->education }}">{{ $edu->education }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail">Email</label>
@@ -137,6 +150,26 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+        <div class="modal fade" id="revealPasswordModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Reveal Password</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Password: <span id="revealedPassword"></span></p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
     </div>
     <!-- /.content -->
 @endsection
@@ -152,6 +185,18 @@
                 var deleteUrl = '/admin/user/delete/' + userId;
                 // Set the delete button href attribute
                 $('#deleteButton').attr('href', deleteUrl);
+            });
+        });
+
+        $(document).ready(function() {
+            // Capture reveal password button click event
+            $('.reveal-password-btn').click(function() {
+                // Get the password from the data attribute
+                var password = $(this).data('password');
+                // Set the revealed password in the modal
+                $('#revealedPassword').text(password);
+                // Show the reveal password modal
+                $('#revealPasswordModal').modal('show');
             });
         });
     </script>

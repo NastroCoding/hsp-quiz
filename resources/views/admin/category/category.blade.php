@@ -4,7 +4,7 @@
 <section class="content-header">
     <div class="container-fluid">
         @if (session()->has('category_create'))
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
             {{ session('category_create') }}
         </div>
         @endif

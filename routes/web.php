@@ -48,8 +48,13 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/admin/user/create', 'store')->middleware('admin');
     Route::get('/admin/user/delete/{id}', 'destroy')->middleware('admin');
     Route::get('/admin/user/edit/{id}', 'show')->middleware('admin');
+    Route::post('/admin/user/edit/{id}', 'update')->middleware('admin');
 });
 
 Route::controller(CategoryController::class)->group(function(){
     Route::post('/admin/category/create', 'store')->middleware('admin');
+});
+
+Route::controller(EducationController::class)->group(function(){
+    Route::post('/admin/education/create', 'store')->middleware('admin');
 });

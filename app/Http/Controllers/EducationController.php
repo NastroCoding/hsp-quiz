@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Education;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EducationController extends Controller
 {
@@ -20,7 +21,19 @@ class EducationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'education' => 'required'
+        ]);
+
+        $created_by = Auth::user()->id;
+
+        $education = Education::create([
+            'education' => $request->education,
+            'created_by' => $created_by,
+            'updated_by' => $created_by
+        ]);
+
+        return redirect('/admin/education')->with('education_success', 'Education Berhasil Ditambahkan!');
     }
 
     /**
