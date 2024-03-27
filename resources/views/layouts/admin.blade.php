@@ -100,6 +100,35 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                         with font-awesome or any other icon font library -->
+                        <li class="nav-item myMenu">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/admin/quiz" class="nav-link">
+                                        <i class="fas fa-plus nav-icon"></i>
+                                        <p>Add Quiz</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/admin/quiz/result" class="nav-link">
+                                        <i class="fas fa-square-poll-horizontal nav-icon"></i>
+                                        <p>Quiz Result</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/admin/users" class="nav-link ">
+                                        <i class="fas fa-user nav-icon"></i>
+                                        <p>Users</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="nav-item menu-open">
                             <a href="#" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -160,9 +189,12 @@
     <!-- jQuery -->
     <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap -->
-    <script src="{{ URL::asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{ URL::asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE -->
-    <script src="{{ URL::asset('dist/js/adminlte.js')}}"></script>
+    <script src="{{ URL::asset('dist/js/adminlte.js') }}"></script>
+
+    {{-- CUSTOM SCRIPT --}}
+    <script src="{{ URL::asset('/dist/js/hspsite.js') }}"></script>
 
 </body>
 
