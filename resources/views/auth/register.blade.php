@@ -1,12 +1,28 @@
-@extends('layouts.main')
-
 @if ($errors->any())
-    @foreach ($errors->all() as $error)
-        <div class="alert alert-danger" role="alert">
-            {{ $error }}
-        </div>
-    @endforeach
+@foreach ($errors->all() as $error)
+<div class="alert alert-danger" role="alert">
+    {{ $error }}
+</div>
+@endforeach
 @endif
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HSPnet | Top Navigation</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{{ URL::asset('plugins/fontawesome-free/css/all.min.css') }}" />
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}" />
+    {{-- Animate.css --}}
+    <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}">
+</head>
 
 <body class="hold-transition register-page">
     <div class="register-box">
