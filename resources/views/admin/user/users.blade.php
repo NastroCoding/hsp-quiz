@@ -97,6 +97,13 @@
                                         placeholder="Email">
                                 </div>
                                 <div class="form-group">
+                                    <label>Role</label>
+                                    <select name="role" class="form-control">
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                      </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="exampleInputPassword">Password</label>
                                     <input type="password" name="password" class="form-control" id="exampleInputPassword"
                                         placeholder="Password">
