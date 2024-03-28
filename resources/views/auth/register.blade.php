@@ -1,5 +1,13 @@
 @extends('layouts.main')
 
+@if ($errors->any())
+    @foreach ($errors->all() as $error)
+        <div class="alert alert-danger" role="alert">
+            {{ $error }}
+        </div>
+    @endforeach
+@endif
+
 <body class="hold-transition register-page">
     <div class="register-box">
         <div class="card card-outline card-primary">

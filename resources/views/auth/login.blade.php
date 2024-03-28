@@ -1,18 +1,17 @@
 @extends('layouts.main')
 
-
 @if ($errors->any())
-@foreach ($errors->all() as $error)
-<div class="alert alert-danger" role="alert">
-    {{ $error }}
-</div>
-@endforeach
+    @foreach ($errors->all() as $error)
+        <div class="alert alert-danger" role="alert">
+            {{ $error }}
+        </div>
+    @endforeach
 @endif
 
 @if (session()->has('register_success'))
-<div class="alert alert-success" role="alert">
-    {{ session('register_success') }}
-</div>
+    <div class="alert alert-success" role="alert">
+        {{ session('register_success') }}
+    </div>
 @endif
 
 <body class="hold-transition login-page">
@@ -23,7 +22,7 @@
                 <p href="" class="h1"><b>HSP</b>net</p>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Log in to start your session</p>
                 <form action="/signin" method="POST">
                     @csrf
                     <div class="input-group mb-3">

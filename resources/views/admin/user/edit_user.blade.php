@@ -47,7 +47,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default">Back</button>
+                    <button type="button" onclick="history.back()" class="btn btn-default">Back</button>
                     <input type="submit" name="submit" class="btn btn-success" value="Edit User">
                 </div>
             </form>

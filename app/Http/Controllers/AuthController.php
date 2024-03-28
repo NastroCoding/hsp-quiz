@@ -30,7 +30,7 @@ class AuthController extends Controller
             if($user->role == 'admin'){
                 return view('admin.dashboard');
             }else{
-                return view('user.dashboard');
+                return view('user.index');
             }
         }else{
             return back()->withErrors('Invalid Credentials');

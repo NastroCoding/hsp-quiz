@@ -44,7 +44,7 @@
                         <td>{{ $user->token }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample{{ $user->id }}" aria-controls="collapseExample{{ $user->id }}">
+                            <button class="btn btn-primary" type="button">
                                 Details
                             </button>
                         </td>
