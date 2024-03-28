@@ -57,7 +57,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr class="expandable-body collapse" id="collapseExample{{ $user->id }}">
+                    <tr class="expandable-body collapse" id="collapseExample{{ $user->id }}" style="transition: all 0.3s;">
                         <td colspan="4">
                             <p>A</p>
                         </td>

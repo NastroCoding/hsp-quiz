@@ -34,7 +34,7 @@ class CategoryController extends Controller
             'updated_by' => $created_by
         ]);
 
-        return redirect('/admin/category')->with('category_create', 'Kategori Berhasil Ditambahkan!');
+        return redirect('/admin/category')->with('category_create', 'Category Berhasil Ditambahkan!');
 
     }
 
@@ -63,7 +63,7 @@ class CategoryController extends Controller
             'updated_by' => $updated_by
         ]);
 
-        return redirect('/admin/category')->with('category_success', 'Kategori Berhasil Diedit!');
+        return redirect('/admin/category')->with('category_success', 'Category Berhasil Diedit!');
     }
 
     /**
@@ -71,9 +71,9 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = Category::where('id', $id);
-        $user->delete();
+        $category = Category::where('id', $id);
+        $category->delete();
 
-        return redirect('/admin/category')->with('delete_success', 'Kategori Berhasil Di Hapus!');
+        return redirect('/admin/category')->with('delete_success', 'Category Berhasil Di Hapus!');
     }
 }
