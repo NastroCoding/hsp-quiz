@@ -31,7 +31,7 @@
       <table class="table table-bordered table-hover">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>id</th>
             <th>Title</th>
             <th>Category</th>
             <th>Education</th>
