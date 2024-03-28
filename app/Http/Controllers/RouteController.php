@@ -60,4 +60,12 @@ class RouteController extends Controller
             "page" => "Education"
         ]);
     }
+
+    // INDEX
+
+    public function index(){
+        return view('user.index', [
+            "page" => "Home"
+        ]);
+    }
 }

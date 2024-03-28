@@ -35,6 +35,9 @@ Route::controller(RouteController::class)->group(function(){
     
     // EDUCATION
     Route::get('/admin/education', 'education')->middleware('admin');
+
+    // USER PAGE
+    Route::get('/', 'index')->middleware('auth');
 });
 
 Route::controller(AuthController::class)->group(function(){
