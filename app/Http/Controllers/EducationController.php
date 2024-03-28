@@ -47,16 +47,31 @@ class EducationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Education $education)
+    public function update(Request $request, string $id)
     {
-        //
+        $validate = $request->validate([
+            'education' => 'required'
+        ]);
+
+        $category = Education::where('id', $id);
+        $updated_by = Auth::user()->id;
+
+        $category->update([
+            'education' => $request->education,
+            'updated_by' => $updated_by
+        ]);
+
+        return redirect('/admin/education')->with('education_success', 'Education Berhasil Diedit!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Education $education)
+    public function destroy(string $id)
     {
-        //
+        $education = Education::where('id', $id);
+        $education->delete();
+
+        return redirect('/admin/education')->with('delete_success', 'Education Berhasil Di Hapus!');
     }
 }

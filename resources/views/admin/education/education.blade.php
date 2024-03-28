@@ -58,8 +58,8 @@
                                 <a class="btn btn-info btn-sm" href="#edit-modal{{ $education->id }}" data-toggle="modal">
                                     Edit
                                 </a>
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    data-target="#delete">
+                                <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                    data-id="{{ $education->id }}" data-toggle="modal" data-target="#delete">
                                     Delete
                                 </button>
                             </td>
@@ -114,7 +114,9 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger">Delete</button>
+                        <a id="deleteButton" class="btn btn-danger">
+                            Delete
+                        </a>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -138,8 +140,8 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="exampleInputToken">Education Name</label>
-                                        <input type="text" name="education_name" class="form-control"
-                                            id="exampleInputToken" placeholder="Enter education Name"
+                                        <input type="text" name="education" class="form-control"
+                                            id="exampleInputToken" placeholder="Enter Education"
                                             value="{{ $education->education }}">
                                     </div>
                                 </div>
@@ -158,4 +160,20 @@
         @endif
     </div>
     <!-- /.content -->
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // Capture delete button click event
+            $('.delete-btn').click(function() {
+                // Get the ID of the user
+                var userId = $(this).data('id');
+                // Construct the delete URL
+                var deleteUrl = '/admin/education/delete/' + userId;
+                // Set the delete button href attribute
+                $('#deleteButton').attr('href', deleteUrl);
+            });
+        });
+    </script>
 @endsection
