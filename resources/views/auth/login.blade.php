@@ -47,4 +47,10 @@
         </div>
         <!-- /.card -->
     </div>
+    <!-- jQuery -->
+    <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap -->
+    <script src="{{ URL::asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- AdminLTE -->
+    <script src="{{ URL::asset('dist/js/adminlte.js') }}"></script>
 </body>
