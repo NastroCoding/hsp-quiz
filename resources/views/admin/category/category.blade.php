@@ -62,8 +62,9 @@
                         <a class="btn btn-info btn-sm" href="edit-user.html">
                             Edit
                         </a>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete">
-                            Delete
+                        <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                    data-id="{{ $category->id }}" data-toggle="modal" data-target="#delete">
+                                    Delete
                         </button>
                     </td>
                 </tr>
@@ -116,7 +117,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <a id="deleteButton" class="btn btn-danger">
+                        Delete
+                    </a>                
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -125,4 +128,20 @@
     </div>
 </div>
 <!-- /.content -->
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // Capture delete button click event
+            $('.delete-btn').click(function() {
+                // Get the ID of the user
+                var userId = $(this).data('id');
+                // Construct the delete URL
+                var deleteUrl = '/admin/category/delete/' + userId;
+                // Set the delete button href attribute
+                $('#deleteButton').attr('href', deleteUrl);
+            });
+        });
+    </script>
 @endsection

@@ -56,6 +56,7 @@ Route::controller(UserController::class)->group(function(){
 
 Route::controller(CategoryController::class)->group(function(){
     Route::post('/admin/category/create', 'store')->middleware('admin');
+    Route::get('/admin/category/delete/{id}', 'destroy')->middleware('admin');
 });
 
 Route::controller(EducationController::class)->group(function(){
