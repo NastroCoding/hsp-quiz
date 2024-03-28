@@ -44,7 +44,7 @@
                         <td>{{ $user->token }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample{{ $user->id }}" aria-controls="collapseExample{{ $user->id }}">
                                 Details
                             </button>
                         </td>
@@ -57,7 +57,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr class="expandable-body collapse" id="collapseExample{{ $user->id }}" style="transition: all 0.2s;">
+                    <tr class="expandable-body collapse" id="collapseExample{{ $user->id }}" style="transition: all 0.3s;">
                         <td colspan="4">
                             <p>A</p>
                         </td>
