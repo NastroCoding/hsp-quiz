@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -14,7 +15,9 @@ class UserController extends Controller
     public function index()
     {
         $user = User::all();
-        return view('admin.user.user', ['data' => $user]);
+        return view('admin.user.user', [
+            'data' => $user,
+        ]);
     }
 
     /**
@@ -58,7 +61,25 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validate = $request->validate([
+            'token' => 'required|min:8',
+            'email' => 'required',
+            'password' => 'required|min:8'
+        ]);
+
+        $hash = Hash::make($request->password);
+
+        $user = User::where('id', $id);
+        $updated_by = Auth::user()->id;
+
+        $user->update([
+            'token' => $request->token,
+            'email' => $request->email,
+            'updated_by' => $updated_by,
+            'password' => $request->password
+        ]);
+
+        return redirect('/admin/users')->with('update_success', 'User Berhasil di Update!');
     }
 
     /**

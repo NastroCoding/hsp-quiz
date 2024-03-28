@@ -26,12 +26,12 @@ class CategoryController extends Controller
             'category_name' => 'required',
         ]);
 
-        $created = Auth::user()->id;
+        $created_by = Auth::user()->id;
 
         $category = Category::create([
             'category_name' => $request->category_name,
-            'created_by' => $created,
-            'updated_by' => $created
+            'created_by' => $created_by,
+            'updated_by' => $created_by
         ]);
 
         return redirect('/admin/category')->with('category_create', 'Kategori Berhasil Ditambahkan!');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Education;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -27,9 +28,11 @@ class RouteController extends Controller
     public function users()
     {
         $user = User::latest()->get();
+        $education = Education::latest()->get();
         return view('admin.user.users', [
             'page' => 'Users',
             'data' => $user,
+            'education' => $education
         ]);
     }
     public function quiz_question()
@@ -56,8 +59,10 @@ class RouteController extends Controller
 
     // EDUCATION
     public function education(){
+        $education = Education::latest()->get();
         return view('admin.education.education', [
-            "page" => "Education"
+            'data' => $education,
+            'page' => 'Education'
         ]);
     }
 
