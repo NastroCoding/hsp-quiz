@@ -44,7 +44,7 @@
                         <td>{{ $user->token }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample{{ $user->id }}" aria-controls="collapseExample{{ $user->id }}">
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample{{ $user->id }}" aria-controls="collapseExample{{ $user->id }}">
                                 Details
                             </button>
                         </td>
@@ -57,7 +57,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr class="expandable-body collapse" id="collapseExample{{ $user->id }}" style="transition: all 0.3s;">
+                    <tr class="expandable-body collapse" id="collapseExample{{ $user->id }}" style="transition: all 0.2s;">
                         <td colspan="4">
                             <p>A</p>
                         </td>
@@ -92,6 +92,21 @@
                         <div class="form-group">
                             <label for="exampleInputEmail">Email</label>
                             <input type="email" name="email" class="form-control" id="exampleInputEmail" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Role</label>
+                            <select name="role" id="" class="form-control">
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Education</label>
+                            <select name="education" id="" class="form-control">
+                                @foreach ($education as $edu)
+                                <option value="{{ $edu->id }}">{{ $edu->education }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword">Password</label>

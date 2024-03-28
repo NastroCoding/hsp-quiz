@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('token')->nullable();
             $table->enum('role', ['user', 'admin']);
             $table->string('email')->unique();
-            $table->string('educations')->nullable();
+            $table->string('education')->nullable();
             $table->string('password');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

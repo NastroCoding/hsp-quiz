@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,13 +33,24 @@ class UserController extends Controller
         ]);
 
         $hash = Hash::make($request->password);
-        $default_role = "user";
+        if($request->role == ''){
+            $role = 'user';
+            $created_by = 'System';
+            $updated_by = 'System';
+        }else{
+            $role = $request->role;
+            $created_by = Auth::user()->id;
+            $updated_by = Auth::user()->id;
+        };
+
 
         $user = User::create([
             'email' => $request->email,
             'password' => $hash,
-            'role' => $default_role,
-            'token' => $request->token
+            'role' => $role,
+            'token' => $request->token,
+            'created_by' => $created_by,
+            'updated_by' => $updated_by
         ]);
 
         return redirect('/admin/users')->with('register_success', 'Registrasi Berhasil!');
@@ -87,7 +99,13 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        $whodelete = Auth::user()->id;
+        $dumpemail = Str::upper(Str::random(16));
         $user = User::where('id', $id);
+        $user->update([
+            'email' => $dumpemail,
+            'updated_by' => $whodelete
+        ]);
         $user->delete();
 
         return redirect('/admin/users')->with('delete_success', 'User Berhasil Di Hapus!');

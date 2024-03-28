@@ -9,5 +9,7 @@ class Question extends Model
 {
     use HasFactory;
     
+    protected $dates = ['deleted_at'];
+
     protected $guarded = [];
 }
