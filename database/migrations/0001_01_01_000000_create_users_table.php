@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('updated_by')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->text('dumpemail')->nullable();
             $table->softDeletes();
         });
 

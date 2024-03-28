@@ -45,6 +45,7 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/signin', 'signin')->middleware('guest');
     Route::get('/register', 'register')->middleware('guest');
     Route::post('/signup', 'signup')->middleware('guest');
+    Route::get('/logout', 'logout')->middleware('auth');
 });
 
 Route::controller(UserController::class)->group(function(){

@@ -48,7 +48,7 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Navbar Search -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#" title="Logout">
+                    <a class="nav-link" href="/logout" title="Logout">
                         <i class="fas fa-right-from-bracket"></i>
                     </a>
                 </li>
