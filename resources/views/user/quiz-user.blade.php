@@ -7,12 +7,13 @@
         <div class="container">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Recent Quiz</h1>
+                    <h1 class="m-0">Quiz</h1>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item active">Home</li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Quiz</li>
                     </ol>
                 </div>
                 <!-- /.col -->
@@ -22,7 +23,6 @@
         <!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
     <!-- Main content -->
     <div class="content">
         <div class="container">
@@ -40,7 +40,7 @@
                                 With supporting text below as a natural lead-in to
                                 additional content.
                             </p>
-                            <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Continue</button>
+                            <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Enter</button>
                         </div>
                     </div>
                 </div>
@@ -51,11 +51,12 @@
                         </div>
                         <div class="card-body">
                             <h6 class="card-title">Special title treatment</h6>
+
                             <p class="card-text">
                                 With supporting text below as a natural lead-in to
                                 additional content.
                             </p>
-                            <button class="btn btn-success disabled" href="/quiz" data-toggle="modal" data-target="#modal-default">Finished</button>
+                            <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Enter</button>
                         </div>
                     </div>
                 </div>

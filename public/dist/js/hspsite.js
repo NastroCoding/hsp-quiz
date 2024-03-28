@@ -55,4 +55,3 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
 
     optionsContainer.appendChild(newInputGroup);
 });
-
