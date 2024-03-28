@@ -55,7 +55,7 @@
                             <td>{{ $education->id }}</td>
                             <td>{{ $education->education }}</td>
                             <td class="text-center">
-                                <a class="btn btn-info btn-sm" href="edit-user.html">
+                                <a class="btn btn-info btn-sm" href="#edit-modal{{ $education->id }}" data-toggle="modal">
                                     Edit
                                 </a>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
@@ -121,6 +121,41 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+        @if ($data->isNotEmpty())
+            <div class="modal fade" id="edit-modal{{ $education->id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit Education</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/admin/education/edit/{{ $education->id }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="exampleInputToken">Education Name</label>
+                                        <input type="text" name="education_name" class="form-control"
+                                            id="exampleInputToken" placeholder="Enter education Name"
+                                            value="{{ $education->education }}">
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" name="submit" class="btn btn-success" value="Update Education">
+                        </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        @endif
     </div>
     <!-- /.content -->
 @endsection

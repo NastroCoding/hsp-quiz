@@ -49,9 +49,21 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, string $id)
     {
-        //
+        $validate = $request->validate([
+            'category_name' => 'required'
+        ]);
+
+        $category = Category::where('id', $id);
+        $updated_by = Auth::user()->id;
+
+        $category->update([
+            'category_name' => $request->category_name,
+            'updated_by' => $updated_by
+        ]);
+
+        return redirect('/admin/category')->with('category_success', 'Kategori Berhasil Diedit!');
     }
 
     /**
