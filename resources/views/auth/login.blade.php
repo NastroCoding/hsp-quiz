@@ -41,7 +41,7 @@
                     </div>
                 </form>
                 <p class="mb-0">
-                    <a href="/register" class="text-center">Register</a>
+                    <a href="/register" class="text-center">I don't have an account</a>
                 </p>
             </div>
             <!-- /.card-body -->
