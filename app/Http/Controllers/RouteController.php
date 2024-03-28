@@ -28,9 +28,11 @@ class RouteController extends Controller
     public function users()
     {
         $user = User::latest()->get();
+        $education = Education::latest()->get();
         return view('admin.user.users', [
             'page' => 'Users',
             'data' => $user,
+            'education' => $education
         ]);
     }
     public function quiz_question()
@@ -61,6 +63,14 @@ class RouteController extends Controller
         return view('admin.education.education', [
             'data' => $education,
             'page' => 'Education'
+        ]);
+    }
+
+    // INDEX
+
+    public function index(){
+        return view('user.index', [
+            "page" => "Home"
         ]);
     }
 }
