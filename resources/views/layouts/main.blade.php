@@ -29,9 +29,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
             <div class="container">
-                <a href="" class="navbar-brand">
+                <a href="/" class="navbar-brand">
                     <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8" />
-                    <span class="brand-text font-weight-light">HSPNet</span>
+                    <span class="brand-text font-weight-light">HSPnet</span>
                 </a>
 
                 <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- Left navbar links -->
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Quiz</a>
+                            <a href="/quiz" class="nav-link">Quiz</a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">Score</a>
@@ -90,6 +90,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
             All rights reserved.
         </footer>
+    </div>
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter Quiz</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <div class="modal-body">
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Enter quiz code</label>
+                                <input type="text" class="form-control" id="exampleInputEmail1" placeholder="XXXXXX">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success">Go</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
     <!-- ./wrapper -->
 

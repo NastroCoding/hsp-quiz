@@ -73,4 +73,10 @@ class RouteController extends Controller
             "page" => "Home"
         ]);
     }
+
+    public function user_quiz(){
+        return view('user.quiz-user', [
+            "page" => "quiz"
+        ]);
+    }
 }
