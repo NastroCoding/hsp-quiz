@@ -44,7 +44,7 @@ Route::controller(RouteController::class)->group(function(){
 });
 
 Route::controller(AuthController::class)->group(function(){
-    Route::get('/login', 'login')->middleware('guest');
+    Route::get('/', 'login')->middleware('guest');
     Route::post('/signin', 'signin')->middleware('guest');
     Route::get('/register', 'register')->middleware('guest');
     Route::post('/signup', 'signup')->middleware('guest');
