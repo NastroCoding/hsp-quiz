@@ -1,11 +1,14 @@
 @extends('layouts.quiz')
 @section('container')
+
 <div class="content-wrapper d-flex justify-content-center align-items-center">
+    <a class="btn btn-default" data-widget="pushmenu" href="#" role="button"><i class="fas fa-chevron-right"></i></a>
     <div class="content">
         <div class="container">
             <div class="row">
                 <!-- /.col-md-6 -->
-                <div class="card card-default" style="max-width: 500px;"> <!-- Limiting the width to 500px -->
+                <div class="card card-default" style="max-width: 500px;">
+                    <!-- Limiting the width to 500px -->
                     <div class="card-header">
                         <h3 class="card-title">Question 1</h3>
                     </div>
@@ -39,6 +42,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <!-- /.card-body -->
 
                         <div class="card-footer">
@@ -46,6 +50,7 @@
                             <a type="submit" class="btn btn-primary float-right">Next <i class="fas fa-angle-right"></i></a>
                         </div>
                     </form>
+
                 </div>
                 <!-- /.col-md-6 -->
             </div>
