@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// DEFAULT ROUTE (/home)
+
 Route::controller(RouteController::class)->group(function(){
     // ADMIN
     Route::get('/admin/dashboard', 'admin_dashboard')->middleware('admin');
@@ -38,13 +40,13 @@ Route::controller(RouteController::class)->group(function(){
     Route::get('/admin/education', 'education')->middleware('admin');
 
     // USER PAGE
-    Route::get('/', 'index')->middleware('auth');
+    Route::get('/home', 'index')->middleware('auth');
     Route::get('/quiz', 'user_quiz')->middleware('auth');
     Route::get('/score', 'user_score')->middleware('auth');
 });
 
 Route::controller(AuthController::class)->group(function(){
-    Route::get('/', 'login')->middleware('guest');
+    Route::get('/', 'login')->middleware('guest')->name('login');
     Route::post('/signin', 'signin')->middleware('guest');
     Route::get('/register', 'register')->middleware('guest');
     Route::post('/signup', 'signup')->middleware('guest');

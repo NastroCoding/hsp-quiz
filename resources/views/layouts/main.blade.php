@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>HSPnet | Top Navigation</title>
+    <title>{{ $page }} | HSPnet</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
@@ -58,7 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                             <li><a href="#" class="dropdown-item">User Profile</a></li>
                             <li>
-                                <a href="#" class="dropdown-item">Logout</a>
+                                <a href="/logout" class="dropdown-item">Logout</a>
                             </li>
                         </ul>
                     </li>
