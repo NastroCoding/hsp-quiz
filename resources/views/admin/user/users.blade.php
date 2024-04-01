@@ -135,7 +135,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Are you sure?</p>
+                <p> <b>If you delete this, all the data related will be deleted!</b> <br> <br> Are you sure? </p>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
