@@ -33,124 +33,31 @@
           <tr>
             <th>id</th>
             <th>Title</th>
+            <th>Slug</th>
+            <th>Time</th>
             <th>Category</th>
             <th>Education</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
+          @foreach ($data as $quiz)
+
           <tr data-widget="expandable-table" aria-expanded="false">
-            <td>183</td>
-            <td>John Doe</td>
-            <td>11-7-2014</td>
-            <td>Approved</td>
+            <td>{{ $quiz->id }}</td>
+            <td>{{ $quiz->title }}</td>
+            <td>{{ $quiz->slug }}</td>
+            <td>{{ $quiz->time }}</td>
+            <td>{{ $quiz->category_id }}</td>
+            <td>{{ $quiz->education_id }}</td>
             <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal" data-target="#delete">Delete</button></td>
           </tr>
           <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
+            <td colspan="7">
+              <p>{{ $quiz->description }}</p>
             </td>
           </tr>
-          <tr data-widget="expandable-table" aria-expanded="false">
-            <td>219</td>
-            <td>Alexander Pierce</td>
-            <td>11-7-2014</td>
-            <td>Pending</td>
-            <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1">Delete</button></td>
-          </tr>
-          <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
-            </td>
-          </tr>
-          <tr data-widget="expandable-table" aria-expanded="false">
-            <td>657</td>
-            <td>Alexander Pierce</td>
-            <td>11-7-2014</td>
-            <td>Approved</td>
-            <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1">Delete</button></td>
-          </tr>
-          <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
-            </td>
-          </tr>
-          <tr data-widget="expandable-table" aria-expanded="false">
-            <td>175</td>
-            <td>Mike Doe</td>
-            <td>11-7-2014</td>
-            <td>Denied</td>
-            <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1">Delete</button></td>
-          </tr>
-          <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
-            </td>
-          </tr>
-          <tr data-widget="expandable-table" aria-expanded="false">
-            <td>134</td>
-            <td>Jim Doe</td>
-            <td>11-7-2014</td>
-            <td>Approved</td>
-            <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1">Delete</button></td>
-          </tr>
-          <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
-            </td>
-          </tr>
-          <tr data-widget="expandable-table" aria-expanded="false">
-            <td>494</td>
-            <td>Victoria Doe</td>
-            <td>11-7-2014</td>
-            <td>Pending</td>
-            <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1">Delete</button></td>
-          </tr>
-          <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                8==D
-              </p>
-            </td>
-          </tr>
-          <tr data-widget="expandable-table" aria-expanded="false">
-            <td>832</td>
-            <td>Michael Doe</td>
-            <td>11-7-2014</td>
-            <td>Approved</td>
-            <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1">Delete</button></td>
-          </tr>
-          <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
-            </td>
-          </tr>
-          <tr data-widget="expandable-table" aria-expanded="false">
-            <td>982</td>
-            <td>Rocky Doe</td>
-            <td>11-7-2014</td>
-            <td>Denied</td>
-            <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1">Delete</button></td>
-          </tr>
-          <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
-            </td>
-          </tr>
+          @endforeach          
         </tbody>
       </table>
     </div>
@@ -167,20 +74,25 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="/admin/quiz/create" method="POST">
+          @csrf
           <div class="card-body">
             <div class="form-group">
               <label for="exampleInputTitle">Quiz Title</label>
-              <input type="text" class="form-control" id="exampleInputTitle" placeholder="Enter title">
+              <input type="text" name="title" class="form-control" id="exampleInputTitle" placeholder="Enter title">
             </div>
             <div class="form-group">
               <label for="exampleInputDescription">Description</label>
-              <textarea class="form-control" rows="3" id="exampleInputDescription" placeholder="Enter Description"></textarea>
+              <textarea class="form-control" name="description" rows="3" id="exampleInputDescription" placeholder="Enter Description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputDescription">Token</label>
+              <input type="text" name="token" class="form-control" id="exampleInputTitle" placeholder="Enter title">
             </div>
             <div class="form-group">
               <label for="">Time</label>
               <div class="input-group mb-3">
-                <input type="number" class="form-control" placeholder="Minutes">
+                <input type="number" name="time" class="form-control" placeholder="Minutes">
                 <div class="input-group-append">
                   <span class="input-group-text">min</span>
                 </div>
@@ -192,7 +104,7 @@
                   <!-- select -->
                   <div class="form-group">
                     <label>Category</label>
-                    <select class="form-control">
+                    <select name="category_id" class="form-control">
                       @foreach ($category as $cat)
                       <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
                       @endforeach
@@ -202,7 +114,7 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Education</label>
-                    <select class="form-control">
+                    <select class="form-control" name="education_id">
                       @foreach ($education as $edu)
                       <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
                       @endforeach
@@ -213,12 +125,12 @@
             </div>
           </div>
           <!-- /.card-body -->
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-success" value="Add User">
+        </div>
         </form>
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success">Add User</button>
-      </div>
     </div>
     <!-- /.modal-content -->
   </div>

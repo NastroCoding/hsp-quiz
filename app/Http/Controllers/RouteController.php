@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Education;
+use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -20,10 +21,12 @@ class RouteController extends Controller
     {
         $category = Category::latest()->get();
         $education = Education::latest()->get();
+        $quiz = Quiz::latest()->get();
         return view('admin.quiz.quiz', [
             'page' => 'Quiz',
             'category' => $category,
-            'education' => $education
+            'education' => $education,
+            'data' => $quiz
         ]);
     }
 

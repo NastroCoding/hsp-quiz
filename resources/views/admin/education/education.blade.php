@@ -84,7 +84,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="exampleInputToken">Education Name</label>
-                                    <input type="text" name="education" class="form-control" id="exampleInputToken"
+                                    <input type="text" name="education_name" class="form-control" id="exampleInputToken"
                                         placeholder="Enter Education Name">
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure?</p>
+                        <p> <b>If you delete this, all the data related will be deleted!</b> <br> <br> Are you sure? </p>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -142,7 +142,7 @@
                                         <label for="exampleInputToken">Education Name</label>
                                         <input type="text" name="education" class="form-control"
                                             id="exampleInputToken" placeholder="Enter Education"
-                                            value="{{ $education->education }}">
+                                            value="{{ $education->education_name }}">
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
