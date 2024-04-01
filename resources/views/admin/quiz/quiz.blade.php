@@ -178,6 +178,15 @@
               <textarea class="form-control" rows="3" id="exampleInputDescription" placeholder="Enter Description"></textarea>
             </div>
             <div class="form-group">
+              <label for="">Time</label>
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" placeholder="Minutes">
+                <div class="input-group-append">
+                  <span class="input-group-text">min</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
               <div class="row">
                 <div class="col-sm-6">
                   <!-- select -->
@@ -185,7 +194,7 @@
                     <label>Category</label>
                     <select class="form-control">
                       @foreach ($category as $cat)
-                          <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
+                      <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
                       @endforeach
                     </select>
                   </div>
@@ -195,7 +204,7 @@
                     <label>Education</label>
                     <select class="form-control">
                       @foreach ($education as $edu)
-                          <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
+                      <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
                       @endforeach
                     </select>
                   </div>
