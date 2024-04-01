@@ -45,7 +45,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="/quiz" class="nav-link">Quiz</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Score</a>
+                            <a href="/score" class="nav-link">Score</a>
                         </li>
                     </ul>
                 </div>
@@ -66,7 +66,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </ul>
             </div>
         </nav>
-        @yield('navbar')
+        @yield('container')
         <!-- /.navbar -->
 
 

@@ -79,4 +79,10 @@ class RouteController extends Controller
             "page" => "quiz"
         ]);
     }
+
+    public function user_score(){
+        return view('user.score', [
+            "page" => "score"
+        ]);
+    }
 }
