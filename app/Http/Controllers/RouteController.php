@@ -17,6 +17,8 @@ class RouteController extends Controller
         ]);
     }
 
+    // QUIZ
+
     public function quiz()
     {
         $category = Category::latest()->get();
@@ -30,18 +32,6 @@ class RouteController extends Controller
         ]);
     }
 
-    // QUIZ
-
-    public function users()
-    {
-        $user = User::latest()->get();
-        $education = Education::latest()->get();
-        return view('admin.user.users', [
-            'page' => 'Users',
-            'data' => $user,
-            'education' => $education
-        ]);
-    }
     public function quiz_question()
     {
         return view('admin.quiz.question', [
@@ -51,6 +41,19 @@ class RouteController extends Controller
     public function quiz_result(){
         return view('admin.quiz.quiz_result', [
             'page' => 'Quiz'
+        ]);
+    }
+
+    // ADMIN USERS
+
+    public function users()
+    {
+        $user = User::latest()->get();
+        $education = Education::latest()->get();
+        return view('admin.user.users', [
+            'page' => 'Users',
+            'data' => $user,
+            'education' => $education
         ]);
     }
 
@@ -74,6 +77,7 @@ class RouteController extends Controller
     }
 
     // INDEX
+    
 
     public function index(){
         return view('user.index', [
@@ -82,7 +86,7 @@ class RouteController extends Controller
     }
 
     public function user_quiz(){
-        return view('user.quiz-user', [
+        return view('user.quiz_user', [
             'page' => 'Quiz'
         ]);
     }
@@ -93,9 +97,10 @@ class RouteController extends Controller
         ]);
     }
 
-    public function user_quiz_page(){
-        return view('user.quiz_page', [
+    public function user_quiz_page($slug){
+        $data = Quiz::where('slug', $slug)->first();
+        return view('user.quiz_page',[
             'page' => 'Quiz'
-        ]);
+        ], compact('data'));
     }
 }

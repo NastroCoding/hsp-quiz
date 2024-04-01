@@ -44,7 +44,7 @@ Route::controller(RouteController::class)->group(function(){
     Route::get('/home', 'index')->middleware('auth');
     Route::get('/quiz', 'user_quiz')->middleware('auth');
     Route::get('/score', 'user_score')->middleware('auth');
-    Route::get('/quiz_page', 'user_quiz_page')->middleware('auth');
+    Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
 });
 
 Route::controller(AuthController::class)->group(function(){
