@@ -21,36 +21,33 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="radio1">
-                                    <label class="form-check-label">A</label>
+                                    <input class="form-check-input" type="radio" name="question1" id="radio1">
+                                    <label class="form-check-label" for="radio1">A</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="radio2">
-                                    <label class="form-check-label">B</label>
+                                    <input class="form-check-input" type="radio" name="question1" id="radio2">
+                                    <label class="form-check-label" for="radio2">B</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="radio3">
-                                    <label class="form-check-label">C</label>
+                                    <input class="form-check-input" type="radio" name="question1" id="radio3">
+                                    <label class="form-check-label" for="radio3">C</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="radio4">
-                                    <label class="form-check-label">D</label>
+                                    <input class="form-check-input" type="radio" name="question1" id="radio4">
+                                    <label class="form-check-label" for="radio4">D</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="radio5">
-                                    <label class="form-check-label">E</label>
+                                    <input class="form-check-input" type="radio" name="question1" id="radio5">
+                                    <label class="form-check-label" for="radio5">E</label>
                                 </div>
                             </div>
                         </div>
-
                         <!-- /.card-body -->
-
                         <div class="card-footer">
                             <a type="submit" class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
                             <a type="submit" class="btn btn-primary float-right">Next <i class="fas fa-angle-right"></i></a>
                         </div>
                     </form>
-
                 </div>
                 <!-- /.col-md-6 -->
             </div>
