@@ -26,6 +26,7 @@
     <!-- Main content -->
     <div class="content">
         <div class="container">
+        <button class="btn btn-sm btn-default mb-1" data-toggle="modal" data-target="#modal-filter"><i class="fas fa-sliders"></i></button>
             <div class="row">
                 <!-- /.col-md-6 -->
                 <div class="col-lg-6">
