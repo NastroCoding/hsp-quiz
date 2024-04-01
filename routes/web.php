@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,10 @@ Route::controller(UserController::class)->group(function(){
     Route::get('/admin/user/delete/{id}', 'destroy')->middleware('admin');
     Route::get('/admin/user/edit/{id}', 'show')->middleware('admin');
     Route::post('/admin/user/edit/{id}', 'update')->middleware('admin');
+});
+
+Route::controller(QuizController::class)->group(function(){
+    Route::post('/admin/quiz/create', 'store')->middleware('admin');
 });
 
 Route::controller(CategoryController::class)->group(function(){

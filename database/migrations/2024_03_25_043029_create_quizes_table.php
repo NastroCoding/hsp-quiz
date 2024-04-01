@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quizes', function (Blueprint $table) {
+        Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->string('token');
             $table->string('title');
             $table->text('description');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->integer('time');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');

@@ -39,12 +39,15 @@
           </tr>
         </thead>
         <tbody>
+          @foreach ($data as $quiz)
+
           <tr data-widget="expandable-table" aria-expanded="false">
             <td>183</td>
             <td>John Doe</td>
             <td>11-7-2014</td>
             <td>Approved</td>
             <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal" data-target="#delete">Delete</button></td>
+            @endforeach          
           </tr>
           <tr class="expandable-body">
             <td colspan="5">
@@ -69,7 +72,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="/admin/quiz/create" method="POST">
+          @csrf
           <div class="card-body">
             <div class="form-group">
               <label for="exampleInputTitle">Quiz Title</label>
@@ -80,9 +84,13 @@
               <textarea class="form-control" name="description" rows="3" id="exampleInputDescription" placeholder="Enter Description"></textarea>
             </div>
             <div class="form-group">
+              <label for="exampleInputDescription">Token</label>
+              <input type="text" name="token" class="form-control" id="exampleInputTitle" placeholder="Enter title">
+            </div>
+            <div class="form-group">
               <label for="">Time</label>
               <div class="input-group mb-3">
-                <input type="number" class="form-control" placeholder="Minutes">
+                <input type="number" name="time" class="form-control" placeholder="Minutes">
                 <div class="input-group-append">
                   <span class="input-group-text">min</span>
                 </div>
@@ -115,12 +123,12 @@
             </div>
           </div>
           <!-- /.card-body -->
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-success" value="Add User">
+        </div>
         </form>
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success">Add User</button>
-      </div>
     </div>
     <!-- /.modal-content -->
   </div>
