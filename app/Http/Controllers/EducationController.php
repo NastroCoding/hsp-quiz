@@ -22,13 +22,13 @@ class EducationController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'education' => 'required'
+            'education_name' => 'required'
         ]);
 
         $created_by = Auth::user()->id;
 
         $education = Education::create([
-            'education' => $request->education,
+            'education_name' => $request->education_name,
             'created_by' => $created_by,
             'updated_by' => $created_by
         ]);
@@ -50,14 +50,14 @@ class EducationController extends Controller
     public function update(Request $request, string $id)
     {
         $validate = $request->validate([
-            'education' => 'required'
+            'education_name' => 'required'
         ]);
 
         $category = Education::where('id', $id);
         $updated_by = Auth::user()->id;
 
         $category->update([
-            'education' => $request->education,
+            'education_name' => $request->education_name,
             'updated_by' => $updated_by
         ]);
 
