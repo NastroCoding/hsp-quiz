@@ -86,7 +86,13 @@ class RouteController extends Controller
 
     public function user_score(){
         return view('user.score', [
-            'page' => 'score'
+            'page' => 'Score'
+        ]);
+    }
+
+    public function user_quiz_page(){
+        return view('user.quiz_page', [
+            'page' => 'Quiz'
         ]);
     }
 }
