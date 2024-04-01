@@ -76,7 +76,7 @@ class RouteController extends Controller
 
     public function user_quiz(){
         return view('user.quiz-user', [
-            "page" => "quiz"
+            "page" => "Quiz"
         ]);
     }
 }

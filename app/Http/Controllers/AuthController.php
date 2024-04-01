@@ -30,7 +30,7 @@ class AuthController extends Controller
             if($user->role == 'admin'){
                 return view('admin.dashboard');
             }else{
-                return view('user.index');
+                return redirect('/home');
             }
         }else{
             return back()->withErrors('Invalid Credentials');
@@ -58,13 +58,13 @@ class AuthController extends Controller
             'token' => $default_token
         ]);
 
-        return redirect('/login')->with('register_success', 'Registrasi Berhasil!');
+        return redirect('/')->with('register_success', 'Registrasi Berhasil!');
     }
 
     public function logout(Request $request){
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login')->with('logout_success', 'Logout Successful!');
+        return redirect('/')->with('logout_success', 'Logout Successful!');
     }
 }
