@@ -33,6 +33,8 @@
           <tr>
             <th>id</th>
             <th>Title</th>
+            <th>Slug</th>
+            <th>Time</th>
             <th>Category</th>
             <th>Education</th>
             <th></th>
@@ -42,20 +44,20 @@
           @foreach ($data as $quiz)
 
           <tr data-widget="expandable-table" aria-expanded="false">
-            <td>183</td>
-            <td>John Doe</td>
-            <td>11-7-2014</td>
-            <td>Approved</td>
+            <td>{{ $quiz->id }}</td>
+            <td>{{ $quiz->title }}</td>
+            <td>{{ $quiz->slug }}</td>
+            <td>{{ $quiz->time }}</td>
+            <td>{{ $quiz->category_id }}</td>
+            <td>{{ $quiz->education_id }}</td>
             <td><a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a><button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal" data-target="#delete">Delete</button></td>
-            @endforeach          
           </tr>
           <tr class="expandable-body">
-            <td colspan="5">
-              <p>
-                Description
-              </p>
+            <td colspan="7">
+              <p>{{ $quiz->description }}</p>
             </td>
           </tr>
+          @endforeach          
         </tbody>
       </table>
     </div>
@@ -102,7 +104,7 @@
                   <!-- select -->
                   <div class="form-group">
                     <label>Category</label>
-                    <select class="form-control">
+                    <select name="category_id" class="form-control">
                       @foreach ($category as $cat)
                       <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
                       @endforeach
@@ -112,7 +114,7 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Education</label>
-                    <select class="form-control">
+                    <select class="form-control" name="education_id">
                       @foreach ($education as $edu)
                       <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
                       @endforeach

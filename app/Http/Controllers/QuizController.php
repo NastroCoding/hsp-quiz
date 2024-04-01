@@ -23,7 +23,8 @@ class QuizController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            '$category_id' => 'required',
+            'category_id' => 'required',
+            'education_id' => 'required',
             'token' => 'required',
             'title' => 'required',
             'description' => 'required',
@@ -37,6 +38,7 @@ class QuizController extends Controller
 
         $quiz = Quiz::create([
             'category_id' => $request->category_id,
+            'education_id' => $request->education_id,
             'token' => $request->token,
             'title' => $request->title,
             'description' => $request->description,
@@ -46,7 +48,7 @@ class QuizController extends Controller
             'updated_by' => $updated_by
         ]);
 
-        return view('admin.quiz.quiz')->with('quiz_success', 'Quiz Add Success!');
+        return redirect('/admin/quiz')->with('quiz_success', 'Quiz Add Success!');
     }
 
     /**
