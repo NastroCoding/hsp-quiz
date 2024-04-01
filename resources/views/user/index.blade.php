@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card card-primary card-outline">
+                    <div class="card card-success card-outline">
                         <div class="card-header">
                             <h5 class="card-title m-0">Quiz 2</h5>
                         </div>
@@ -55,7 +55,7 @@
                                 With supporting text below as a natural lead-in to
                                 additional content.
                             </p>
-                            <button class="btn btn-success disabled" href="/quiz" data-toggle="modal" data-target="#modal-default">Finished</button>
+                            <button class="btn btn-success disabled" href="/quiz">Finished</button>
                         </div>
                     </div>
                 </div>
