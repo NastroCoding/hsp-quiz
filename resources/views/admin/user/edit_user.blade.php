@@ -40,6 +40,21 @@
                             value="{{ $user->email }}">
                     </div>
                     <div class="form-group">
+                        <label for="">Role</label>
+                        <select name="role" id="" class="form-control">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Education</label>
+                        <select name="education" id="" class="form-control">
+                            @foreach ($education as $edu)
+                            <option value="{{ $edu->id }}">{{ $edu->education }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="exampleInputPassword">Password</label>
                         <input type="password" name="password" class="form-control" id="exampleInputPassword"
                             placeholder="Password" value="{{ $user->password }}">

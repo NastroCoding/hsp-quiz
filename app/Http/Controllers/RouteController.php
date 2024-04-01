@@ -12,14 +12,18 @@ class RouteController extends Controller
     public function admin_dashboard()
     {
         return view('admin.dashboard', [
-            "page" => "Dashboard"
+            'page' => 'Dashboard'
         ]);
     }
 
     public function quiz()
     {
+        $category = Category::latest()->get();
+        $education = Education::latest()->get();
         return view('admin.quiz.quiz', [
-            "page" => "Quiz"
+            'page' => 'Quiz',
+            'category' => $category,
+            'education' => $education
         ]);
     }
 
@@ -38,12 +42,12 @@ class RouteController extends Controller
     public function quiz_question()
     {
         return view('admin.quiz.question', [
-            "page" => "Quiz"
+            'page' => 'Quiz'
         ]);
     }
     public function quiz_result(){
         return view('admin.quiz.quiz_result', [
-            "page" => "Quiz"
+            'page' => 'Quiz'
         ]);
     }
 
@@ -70,19 +74,19 @@ class RouteController extends Controller
 
     public function index(){
         return view('user.index', [
-            "page" => "Home"
+            'page' => 'Home'
         ]);
     }
 
     public function user_quiz(){
         return view('user.quiz-user', [
-            "page" => "Quiz"
+            'page' => 'Quiz'
         ]);
     }
 
     public function user_score(){
         return view('user.score', [
-            "page" => "score"
+            'page' => 'score'
         ]);
     }
 }

@@ -53,7 +53,7 @@
                     @foreach ($data as $education)
                         <tr>
                             <td>{{ $education->id }}</td>
-                            <td>{{ $education->education }}</td>
+                            <td>{{ $education->education_name }}</td>
                             <td class="text-center">
                                 <a class="btn btn-info btn-sm" href="#edit-modal{{ $education->id }}" data-toggle="modal">
                                     Edit

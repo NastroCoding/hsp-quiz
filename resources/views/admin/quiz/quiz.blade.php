@@ -184,11 +184,9 @@
                   <div class="form-group">
                     <label>Category</label>
                     <select class="form-control">
-                      <option>option 1</option>
-                      <option>option 2</option>
-                      <option>option 3</option>
-                      <option>option 4</option>
-                      <option>option 5</option>
+                      @foreach ($category as $cat)
+                          <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
+                      @endforeach
                     </select>
                   </div>
                 </div>
@@ -196,11 +194,9 @@
                   <div class="form-group">
                     <label>Education</label>
                     <select class="form-control">
-                      <option>option 1</option>
-                      <option>option 2</option>
-                      <option>option 3</option>
-                      <option>option 4</option>
-                      <option>option 5</option>
+                      @foreach ($education as $edu)
+                          <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
+                      @endforeach
                     </select>
                   </div>
                 </div>

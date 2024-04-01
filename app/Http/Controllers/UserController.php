@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Education;
 use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -62,9 +63,11 @@ class UserController extends Controller
     public function show(string $id)
     {
         $show = User::where('id', $id)->get();
+        $education = Education::latest()->get();
         return view('admin.user.edit_user', [
             'page' => 'Edit User',
             'data' => $show,
+            'education' => $education,
         ]);
     }
 
