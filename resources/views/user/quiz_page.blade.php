@@ -19,15 +19,15 @@
                             <div class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="radio1">
-                                    <label class="form-check-label" for="radio1">A</label>
+                                    <label class="form-check-label">A</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="radio2">
-                                    <label class="form-check-label" for="radio2">B</label>
+                                    <label class="form-check-label">B</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="radio3">
-                                    <label class="form-check-label" for="radio3">C</label>
+                                    <label class="form-check-label">C</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="radio4">
