@@ -56,6 +56,7 @@
                                 additional content.
                             </p>
                             <button class="btn btn-success disabled" href="/quiz">Finished</button>
+                            <p class="float-right ">50/100</p>
                         </div>
                     </div>
                 </div>
