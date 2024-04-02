@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\UserController;
@@ -31,7 +32,6 @@ Route::controller(RouteController::class)->group(function(){
     // QUIZ
     Route::get('/admin/quiz', 'quiz')->middleware('admin');
     Route::get('/admin/quiz/result', 'quiz_result')->middleware('admin');
-    Route::get('/admin/quiz/question', 'quiz_question')->middleware('admin');
 
     // CATEGORY
     Route::get('/admin/category', 'category')->middleware('admin');
@@ -64,6 +64,11 @@ Route::controller(UserController::class)->group(function(){
 
 Route::controller(QuizController::class)->group(function(){
     Route::post('/admin/quiz/create', 'store')->middleware('admin');
+});
+
+Route::controller(QuestionController::class)->group(function(){
+    Route::post('/admin/quiz/question/create', 'store')->middleware('admin');
+    Route::get('/admin/quiz/{slug}', 'show')->middleware('admin');
 });
 
 Route::controller(CategoryController::class)->group(function(){

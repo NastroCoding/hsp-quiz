@@ -1,13 +1,13 @@
-// adds option and delete
+// Function to remove option
 function removeOption(element) {
     var inputGroup = element.closest(".input-group");
     inputGroup.remove();
 }
 
+// Add event listener to "Add Option" button
 document.getElementById("addOptionBtn").addEventListener("click", function () {
     var optionsContainer = document.getElementById("optionsContainer");
-    var optionIndex =
-        optionsContainer.querySelectorAll("input[type='radio']").length + 1;
+    var optionIndex = optionsContainer.querySelectorAll(".input-group").length + 1;
 
     var newInputGroup = document.createElement("div");
     newInputGroup.classList.add("input-group");
@@ -20,7 +20,7 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
 
     var radioButton = document.createElement("input");
     radioButton.setAttribute("type", "radio");
-    radioButton.setAttribute("name", "option"); // Set the name attribute
+    radioButton.setAttribute("name", "option");
 
     radioSpan.appendChild(radioButton);
     prependDiv.appendChild(radioSpan);
@@ -30,6 +30,7 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     inputField.setAttribute("type", "text");
     inputField.classList.add("form-control");
     inputField.setAttribute("placeholder", "Option " + optionIndex);
+    inputField.setAttribute("name", "choices[]");
 
     newInputGroup.appendChild(inputField);
 
@@ -41,13 +42,13 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     trashSpan.style.backgroundColor = "red";
     trashSpan.style.cursor = "pointer";
     trashSpan.onclick = function () {
-        removeOption(trashSpan);
+        removeOption(this); // Pass 'this' instead of 'trashSpan' to reference the clicked element
     };
 
     var trashIcon = document.createElement("i");
     trashIcon.classList.add("fas");
     trashIcon.classList.add("fa-trash");
-    trashIcon.style.color = "white"; // Set the color of the trashcan icon to white
+    trashIcon.style.color = "white";
 
     trashSpan.appendChild(trashIcon);
     appendDiv.appendChild(trashSpan);

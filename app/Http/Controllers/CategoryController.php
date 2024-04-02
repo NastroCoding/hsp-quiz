@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -27,11 +28,13 @@ class CategoryController extends Controller
         ]);
 
         $created_by = Auth::user()->id;
+        $slug = Str::slug($request->category_name);
 
         $category = Category::create([
             'category_name' => $request->category_name,
             'created_by' => $created_by,
-            'updated_by' => $created_by
+            'updated_by' => $created_by,
+            'slug' => $slug
         ]);
 
         return redirect('/admin/category')->with('category_create', 'Category Berhasil Ditambahkan!');

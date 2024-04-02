@@ -10,6 +10,17 @@ class Quiz extends Model
     use HasFactory;
 
     protected $dates = ['deleted_at'];
+    protected $guarded = ['id'];
 
-    protected $guarded = [];
+    public function questions(){
+        return $this->hasMany(Question::class);
+    }
+    
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function education(){
+        return $this->belongsTo(Education::class);
+    }
 }

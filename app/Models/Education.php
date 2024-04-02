@@ -10,6 +10,17 @@ class Education extends Model
     use HasFactory;
 
     protected $dates = ['deleted_at'];
+    protected $guarded = ['id'];
 
-    protected $guarded = [];
+    public function users(){
+        return $this->hasMany(User::class);
+    }
+
+    public function questions(){
+        return $this->hasMany(Question::class);
+    }
+
+    public function quizzes(){
+        return $this->hasMany(Quiz::class);
+    }
 }

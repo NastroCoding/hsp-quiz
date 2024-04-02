@@ -10,6 +10,9 @@ class Question_Choice extends Model
     use HasFactory;
 
     protected $dates = ['deleted_at'];
+    protected $guarded = ['id'];
 
-    protected $guarded = [];
+    public function question(){
+        return $this->belongsTo(Question::class);
+    }
 }

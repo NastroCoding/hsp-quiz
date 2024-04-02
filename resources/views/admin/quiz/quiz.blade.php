@@ -53,7 +53,7 @@
                             <a class="btn btn-info btn-sm" href="/admin/quiz/edit/{{ $quiz->id }}" data-toggle="modal" data-target="#edit-user">
                                 Edit
                             </a>
-                            <a class="btn btn-sm btn-info" href="/admin/quiz/question">Manage</a>
+                            <a class="btn btn-sm btn-info" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
                             <button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal" data-target="#delete">Delete</button>
                         </td>
                     </tr>
@@ -142,6 +142,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+@if ($data->isNotEmpty())    
 <div class="modal fade" id="edit-user">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -215,6 +216,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+@endif
 <div class="modal fade" id="delete">
     <div class="modal-dialog">
         <div class="modal-content">

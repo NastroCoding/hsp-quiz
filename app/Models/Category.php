@@ -10,6 +10,9 @@ class Category extends Model
     use HasFactory;
 
     protected $dates = ['deleted_at'];
+    protected $guarded = ['id'];
 
-    protected $guarded = [];
+    public function quizzes(){
+        return $this->hasMany(Quiz::class);
+    }
 }

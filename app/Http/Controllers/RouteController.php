@@ -32,12 +32,6 @@ class RouteController extends Controller
         ]);
     }
 
-    public function quiz_question()
-    {
-        return view('admin.quiz.question', [
-            'page' => 'Quiz'
-        ]);
-    }
     public function quiz_result(){
         return view('admin.quiz.quiz_result', [
             'page' => 'Quiz'
