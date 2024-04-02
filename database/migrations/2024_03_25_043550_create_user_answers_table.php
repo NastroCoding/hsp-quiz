@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->foreign('choice_id')->references('id')->on('question_choices')->onDelete('cascade');
+            $table->foreign('choice_id')->references('id')->on('choices')->onDelete('cascade');
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Choice;
 use App\Models\Question;
 use App\Models\Question_Choice;
 use App\Models\Quiz;
@@ -23,32 +24,37 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-    // Validate input
-    $validatedData = $request->validate([
-        'question' => 'required|string',
-        'choices' => 'required|array',
-        'choices.*' => 'required|string',
-    ]);
-
-    // Create the question
-    $question = Question::create([
-        'question' => $validatedData['question'],
-        'quiz_id' => $request->quiz_id,
-        'created_by' => Auth::user()->id,
-        'updated_by' => Auth::user()->id,
-    ]);
-    // Create choices for the question
-    foreach ($validatedData['choices'] as $choiceText) {
-        Question_Choice::create([
-            'quiz_id' => $request->quiz_id,
-            'question_id' => $question->id,
-            'choice' => $choiceText,
-            'created_by' => Auth::user()->id,
-            'updated_by' => Auth::user()->id,
+        // Validate the request data
+        $validatedData = $request->validate([
+            'question' => 'required|string',
+            'choices' => 'required|array',
+            'choices.*' => 'string',
         ]);
-    }
-    return redirect('/admin/quiz/question')->with('success', 'Question created successfully!');
 
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Create a new question instance
+        $question = new Question();
+        $question->question = $validatedData['question'];
+        $question->quiz_id = $request->quiz_id;
+        $question->created_by = $user->id;
+        $question->updated_by = $user->id;
+        // Additional attributes of the question can be set here
+        $question->save();
+
+        // Save the choices associated with the question
+        foreach ($validatedData['choices'] as $choice) {
+            $questionChoice = new Choice();
+            $questionChoice->question_id = $question->id;
+            $questionChoice->quiz_id = $request->quiz_id;
+            $questionChoice->choice = $choice;
+            $questionChoice->created_by = $user->id;
+            $questionChoice->updated_by = $user->id;
+            // Additional attributes of the choice can be set here
+            $questionChoice->save();
+        }
+        return redirect()->back()->with('success', 'Question created successfully!');
     }
 
     /**
@@ -67,7 +73,7 @@ class QuestionController extends Controller
         // Load the view and pass the quiz data to it
         return view('admin.quiz.question', [
             'page' => $slug,
-        ] ,compact('quiz'));
+        ], compact('quiz'));
     }
 
     /**

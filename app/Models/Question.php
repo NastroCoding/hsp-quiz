@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Console\View\Components\Choice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ class Question extends Model
     protected $guarded = ['id'];
 
     public function question_choices(){
-        return $this->hasMany(Question_Choice::class);
+        return $this->hasMany(Choice::class);
     }
 
     public function quiz(){
