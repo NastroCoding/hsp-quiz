@@ -37,6 +37,13 @@ var CountdownTimer = {
         }, 1000);
     },
 };
+
+// Initialize countdown timer when the page loads
+window.addEventListener("load", function () {
+    CountdownTimer.init("countdownTimer1");
+});
+
+// Add event listener to reset button
 document.getElementById("resetButton").addEventListener("click", function () {
     CountdownTimer.resetCountdown();
 });
