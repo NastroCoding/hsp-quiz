@@ -19,8 +19,21 @@
     <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}">
 </head>
 
-<body class="hold-transition sidebar-collapse">
+<body class="hold-transition sidebar-collapse m-0 p-0">
     <div class="wrapper">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item">
+                    <button id="resetButton">Reset Timer</button>
+                </li>
+                <li class="nav-item"></li>
+            </ul>
+            <!-- Right navbar links -->
+        </nav>
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
             <a href="" class="brand-link">
@@ -32,7 +45,7 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-3">
                     <div class="row m-1">
-                        <p>Time Left: <span id="demo"></span></p>
+                        <p>Time Remaining: <span id="countdownTimer1"></span></p>
                     </div>
                     <div class="row row-cols-5 m-1">
                         <a href="" class="btn btn-default col">1</a>
@@ -74,34 +87,7 @@
     {{-- JQuery  --}}
     <script src="{{ URL::asset('/dist/js/jquery.min.js')}}"></script>
     <script>
-        // Set the date we're counting down to
-        var countDownDate = new Date("Jan 5, 2030 15:37:25").getTime();
-
-        // Update the count down every 1 second
-        var x = setInterval(function() {
-
-            // Get today's date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now and the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Display the result in the element with id="demo"
-            document.getElementById("demo").innerHTML = days + "d " + hours + "h " +
-                minutes + "m " + seconds + "s ";
-
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("demo").innerHTML = "EXPIRED";
-            }
-        }, 1000);
+        CountdownTimer.init("countdownTimer1");
     </script>
 </body>
 

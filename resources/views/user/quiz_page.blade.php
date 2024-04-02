@@ -2,7 +2,6 @@
 @section('container')
 
 <div class="content-wrapper d-flex justify-content-center align-items-center">
-    <a class="btn btn-default" data-widget="pushmenu" href="#" role="button"><i class="fas fa-chevron-right"></i></a>
     <div class="content">
         <div class="container">
             <div class="row">
@@ -11,6 +10,7 @@
                     <!-- Limiting the width to 500px -->
                     <div class="card-header">
                         <h3 class="card-title">Question 1</h3>
+                        <h3 class="card-title text-muted float-right" >Time Remaining: <span id="countdownTimer2"></span></h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -41,6 +41,9 @@
                                     <label class="form-check-label" for="radio5">E</label>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                
+                            </div>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
@@ -56,4 +59,6 @@
         <!-- /.container-fluid -->
     </div>
 </div>
+<script src="{{ URL::asset('/dist/js/hspsite.js') }}"></script>
+<script>CountdownTimer.init("countdownTimer2");</script>
 @endsection
