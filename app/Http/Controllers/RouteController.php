@@ -80,7 +80,9 @@ class RouteController extends Controller
     }
 
     public function user_quiz(){
+        $data = Quiz::latest()->get();
         return view('user.quiz_user', [
+            'data' => $data,
             'page' => 'Quiz'
         ]);
     }

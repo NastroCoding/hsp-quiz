@@ -68,4 +68,36 @@
     </div>
     <!-- /.content -->
 </div>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Enter Quiz</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Enter quiz code</label>
+                            <input type="text" name="token" class="form-control" id="exampleInputEmail1" placeholder="XXXXXX">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-success" value="Go">
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 @endsection

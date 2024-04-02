@@ -22,7 +22,7 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
 
     var radioButton = document.createElement("input");
     radioButton.setAttribute("type", "radio");
-    radioButton.setAttribute("name", "option");
+    radioButton.setAttribute("name", "is_right");
 
     radioSpan.appendChild(radioButton);
     prependDiv.appendChild(radioSpan);

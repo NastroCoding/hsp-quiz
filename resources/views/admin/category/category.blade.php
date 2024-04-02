@@ -2,12 +2,19 @@
 @section('container')
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
-            @if (session()->has('category_create'))
-                <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
-                    {{ session('category_create') }}
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger animate__animated animate__slideInDown" role="alert">
+                    {{ $error }}
                 </div>
-            @endif
+            @endforeach
+        @endif
+        @if (session()->has('category_create'))
+        <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
+            {{ session('category_create') }}
+        </div>
+        @endif
+        <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Category</h1>

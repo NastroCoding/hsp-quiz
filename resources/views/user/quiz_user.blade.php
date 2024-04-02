@@ -29,38 +29,21 @@
         <button class="btn btn-sm btn-default mb-1" data-toggle="modal" data-target="#modal-filter"><i class="fas fa-sliders"></i></button>
             <div class="row">
                 <!-- /.col-md-6 -->
-                <div class="col-lg-6">
+                @foreach ($data as $quiz)
+                <div class="col-lg-4">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h5 class="card-title m-0">Quiz 1</h5>
+                            <h5 class="card-title m-0">{{ $quiz->title }}</h5>
                         </div>
                         <div class="card-body">
-                            <h6 class="card-title">Special title treatment</h6>
-
                             <p class="card-text">
-                                With supporting text below as a natural lead-in to
-                                additional content.
+                                {{ $quiz->description }}
                             </p>
                             <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Enter</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h5 class="card-title m-0">Quiz 2</h5>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title">Special title treatment</h6>
-
-                            <p class="card-text">
-                                With supporting text below as a natural lead-in to
-                                additional content.
-                            </p>
-                            <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">Enter</button>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
                 <!-- /.col-md-6 -->
             </div>
             <!-- /.row -->
@@ -68,5 +51,37 @@
         <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
+</div>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Enter Quiz</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Enter quiz code</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="XXXXXX">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">Go</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>
 @endsection
