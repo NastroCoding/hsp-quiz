@@ -86,6 +86,7 @@
 
     {{-- JQuery  --}}
     <script src="{{ URL::asset('/dist/js/jquery.min.js')}}"></script>
+    <script src="{{ URL::asset('/dist/js/countdown.js')}}"></script>
     <script>
         CountdownTimer.init("countdownTimer1");
     </script>

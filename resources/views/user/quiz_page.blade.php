@@ -10,7 +10,7 @@
                     <!-- Limiting the width to 500px -->
                     <div class="card-header">
                         <h3 class="card-title">Question 1</h3>
-                        <h3 class="card-title text-muted float-right" >Time Remaining: <span id="countdownTimer2"></span></h3>
+                        <h3 class="card-title text-muted float-right">Time Remaining: <span id="countdownTimer2"></span></h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -42,7 +42,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                
+
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -59,6 +59,8 @@
         <!-- /.container-fluid -->
     </div>
 </div>
-<script src="{{ URL::asset('/dist/js/hspsite.js') }}"></script>
-<script>CountdownTimer.init("countdownTimer2");</script>
+<script src="{{ URL::asset('/dist/js/countdown.js') }}"></script>
+<script>
+    CountdownTimer.init("countdownTimer2");
+</script>
 @endsection
