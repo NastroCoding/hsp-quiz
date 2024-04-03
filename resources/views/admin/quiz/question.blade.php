@@ -35,54 +35,96 @@
 
 <section class="content">
     <div class="row">
-        <div class="col-12">
-            <div class="card">
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- form start -->
                 <div class="card-header">
-                    <h3 class="card-title">Question List</h3>
-                    <div class="card-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-default">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
+                    <p class="card-title text-muted">Multiple Choice</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, unde nostrum voluptatem id laboriosam ex eaque alias quam delectus suscipit, a, earum non provident. Quia sapiente deserunt eos aut! Earum.</p>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio</label>
                         </div>
                     </div>
-                    </form>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0" style="height: 300px;">
-                    <table class="table table-head-fixed text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Question</th>
-                                <th>Question Type</th>
-                                <th class="text-center"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-widget="expandable-table" aria-expanded="false">
-                                <td>183</td>
-                                <td>John Doe</td>
-                                <td>Multiple Choice</td>
-                                <td><button type="button" class="btn-sm btn btn-info">Edit</button><button type="button" class="btn-sm btn btn-danger ml-1">Delete</button></td>
-                            </tr>
-                            <tr class="expandable-body">
-                                <td colspan="5">
-                                    <ol type="A">
-                                        <li>Option 1</li>
-                                        <li>Option 2</li>
-                                        <li>Option 3</li>
-                                        <li>Option 4</li>
-                                    </ol>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
                 <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-info">Edit</button>
+                    <button type="submit" class="btn btn-danger float-right">Delete</button>
+                </div>
+            </div>
+            <!-- /.card -->
+        </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- form start -->
+                <div class="card-header">
+                    <p class="card-title text-muted">Essay</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, unde nostrum voluptatem id laboriosam ex eaque alias quam delectus suscipit, a, earum non provident. Quia sapiente deserunt eos aut! Earum.</p>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-info">Edit</button>
+                    <button type="submit" class="btn btn-danger float-right">Delete</button>
+                </div>
+            </div>
+            <!-- /.card -->
+        </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- form start -->
+                <div class="card-header">
+                    <p class="card-title text-muted">Weighted Multiple Choice</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, unde nostrum voluptatem id laboriosam ex eaque alias quam delectus suscipit, a, earum non provident. Quia sapiente deserunt eos aut! Earum.</p>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio <span class="text-muted text-sm">+15 Points</span></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio <span class="text-muted text-sm">+10 Points</span></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio <span class="text-muted text-sm">+5 Points</span></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">Radio <span class="text-muted text-sm">+0 Points</span></label>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-info">Edit</button>
+                    <button type="submit" class="btn btn-danger float-right">Delete</button>
+                </div>
             </div>
             <!-- /.card -->
         </div>
