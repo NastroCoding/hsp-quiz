@@ -15,4 +15,8 @@ class Choice extends Model
     public function question(){
         return $this->belongsTo(Question::class);
     }
+
+    public function userAnswer(){
+        return $this->hasMany(User_Answer::class);
+    }
 }

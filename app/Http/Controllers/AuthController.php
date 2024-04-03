@@ -28,7 +28,7 @@ class AuthController extends Controller
         $user = User::where('token', $request->token)->first();
         if(Auth::attempt($credentials)){
             if($user->role == 'admin'){
-                return view('admin.dashboard');
+                return redirect('/admin/dashboard');
             }else{
                 return redirect('/home');
             }

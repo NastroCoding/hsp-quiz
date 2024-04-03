@@ -12,12 +12,17 @@ class Question extends Model
     
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
-
-    public function question_choices(){
-        return $this->hasMany(Choice::class);
-    }
-
+    
     public function quiz(){
         return $this->belongsTo(Quiz::class);
     }
+
+    public function choices(){
+        return $this->hasMany(Choice::class);
+    }
+
+    public function userAnswer(){
+        return $this->hasMany(User_Answer::class);
+    }
+
 }

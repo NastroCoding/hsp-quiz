@@ -47,8 +47,7 @@ class QuestionController extends Controller
         foreach ($validatedData['choices'] as $choice) {
             $questionChoice = new Choice();
             $questionChoice->question_id = $question->id;
-            $questionChoice->quiz_id = $request->quiz_id;
-            $questionChoice->choice = $choice;
+             $questionChoice->choice = $choice;
             $questionChoice->created_by = $user->id;
             $questionChoice->updated_by = $user->id;
             // Additional attributes of the choice can be set here

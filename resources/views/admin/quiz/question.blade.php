@@ -167,9 +167,7 @@
                             <button type="button" class="btn btn-primary" id="addOptionBtn">
                                 Add Option
                             </button>
-                        </div>
-                        <div class="input-group-append">
-                            <input type="number" name="points[]" class="form-control" placeholder="Points" min="0" style="width: 100px;">
+                            <input type="number" name="points[]" class="form-control float-right" placeholder="Points" min="0" style="width: 100px;">
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
