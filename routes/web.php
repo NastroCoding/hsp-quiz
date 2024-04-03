@@ -68,6 +68,8 @@ Route::controller(QuizController::class)->group(function(){
 
 Route::controller(QuestionController::class)->group(function(){
     Route::post('/admin/quiz/question/create', 'store')->middleware('admin');
+    Route::post('/admin/quiz/question/create/essay', 'essayStore')->middleware('admin');
+    Route::post('/admin/quiz/question/create/weighted', 'weightedStore')->middleware('admin');
     Route::get('/admin/quiz/{slug}', 'show')->middleware('admin');
 });
 

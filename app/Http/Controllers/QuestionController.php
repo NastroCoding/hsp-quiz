@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Choice;
 use App\Models\Question;
-use App\Models\Question_Choice;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,15 +47,68 @@ class QuestionController extends Controller
         $question->save();
 
         // Save the choices associated with the question
-        foreach ($validatedData['choices'] as $choice) {
+        foreach ($validatedData['choices'] as $index => $choice) {
+            $isCorrect = $request->input('is_correct') == $index;
             $questionChoice = new Choice();
             $questionChoice->question_id = $question->id;
             $questionChoice->choice = $choice;
+            $questionChoice->is_correct = $isCorrect;
             $questionChoice->created_by = $user->id;
             $questionChoice->updated_by = $user->id;
             // Additional attributes of the choice can be set here
             $questionChoice->save();
         }
+        return redirect()->back()->with('success', 'Question created successfully!');
+    }
+
+    /**
+     * Store a newly created essay question in storage.
+     */
+    public function essayStore(Request $request)
+    {
+        // Add your code to store essay questions
+    }
+
+    /**
+     * Store a newly created weighted multiple choice question in storage.
+     */
+    public function weightedStore(Request $request)
+    {
+        // Validate the form data
+        $validatedData = $request->validate([
+            'question_type' => 'required|string', // Ensure that 'question_type' is present and a string
+            'quiz_id' => 'required|exists:quizzes,id', // Ensure that 'quiz_id' exists in the 'quizzes' table
+            'question' => 'required|string',
+            'choices' => 'required|array',
+            'choices.*' => 'string',
+            'point_value' => 'required|array',
+            'point_value.*' => 'numeric|min:0', // Ensure that each 'points' value is numeric and greater than or equal to 0
+        ]);
+
+        $created_by = Auth::user()->id;
+
+        // Create the question
+        $question = Question::create([
+            'quiz_id' => $validatedData['quiz_id'],
+            'point_value' => '0',
+            'question' => $validatedData['question'],
+            'question_type' => $validatedData['question_type'],
+            'created_by' => $created_by,
+            'updated_by' => $created_by
+        ]);
+
+        // Attach choices to the question
+        foreach ($validatedData['choices'] as $index => $choice) {
+            $question->choices()->create([
+                'choice' => $choice,
+                'is_correct' => $request->has('is_correct') && $request->input('is_correct') == $index,
+                'point_value' => $validatedData['point_value'][$index],
+                'created_by' => $created_by,
+                'updated_by' => $created_by
+            ]);
+        }
+
+        // Redirect back or return a response
         return redirect()->back()->with('success', 'Question created successfully!');
     }
 
@@ -67,7 +119,7 @@ class QuestionController extends Controller
     {
         // Find the quiz by slug
         $quiz = Quiz::where('slug', $slug)->first();
-
+        $questions = $quiz->questions;
         // If quiz is not found, return a response (you can modify this as per your requirement)
         if (!$quiz) {
             return response()->json(['message' => 'Quiz not found'], 404);
@@ -75,8 +127,8 @@ class QuestionController extends Controller
 
         // Load the view and pass the quiz data to it
         return view('admin.quiz.question', [
-            'page' => $slug,
-        ], compact('quiz'));
+            'page' => $quiz->title,
+        ], compact('quiz', 'questions'));
     }
 
     /**

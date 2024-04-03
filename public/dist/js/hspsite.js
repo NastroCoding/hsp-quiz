@@ -78,7 +78,7 @@ document.getElementById("addWeightedOptionBtn").addEventListener("click", functi
 
     var radioButton = document.createElement("input");
     radioButton.setAttribute("type", "radio");
-    radioButton.setAttribute("name", "is_right");
+    radioButton.setAttribute("name", "is_correct");
 
     radioSpan.appendChild(radioButton);
     prependDiv.appendChild(radioSpan);
@@ -97,7 +97,7 @@ document.getElementById("addWeightedOptionBtn").addEventListener("click", functi
     pointInput.setAttribute("min", "0");
     pointInput.classList.add("form-control");
     pointInput.setAttribute("placeholder", "Points");
-    pointInput.setAttribute("name", "points[]");
+    pointInput.setAttribute("name", "point_value[]");
 
     newInputGroup.appendChild(pointInput);
 
