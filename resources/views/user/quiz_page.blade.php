@@ -6,6 +6,7 @@
         <div class="container">
             <div class="row">
                 <!-- /.col-md-6 -->
+                <!-- Multiple Choice Form -->
                 <div class="card card-default" style="max-width: 500px;">
                     <!-- Limiting the width to 500px -->
                     <div class="card-header">
@@ -41,9 +42,33 @@
                                     <label class="form-check-label" for="radio5">E</label>
                                 </div>
                             </div>
+                            <p class="text-sm text-muted float-right">Multiple Choices</p>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <a type="submit" class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
+                            <a type="submit" class="btn btn-primary float-right">Next <i class="fas fa-angle-right"></i></a>
+                        </div>
+                    </form>
+                </div>
+                <!-- Essay Form -->
+                <div class="card card-default" style="max-width: 500px;">
+                    <!-- Limiting the width to 500px -->
+                    <div class="card-header">
+                        <h3 class="card-title">Question 1</h3>
+                        <h3 class="card-title text-muted float-right">Time Remaining: <span id="countdownTimer3"></span></h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form>
+                        <div class="card-body">
                             <div class="form-group">
-
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus ea at, consequatur earum iure ab totam quibusdam corporis quasi, magni voluptatem quis aperiam aut maiores doloribus! Earum molestiae odio et!</p>
                             </div>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                            </div>
+                            <p class="text-sm text-muted float-right">Essay</p>
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
@@ -62,5 +87,6 @@
 <script src="{{ URL::asset('/dist/js/countdown.js') }}"></script>
 <script>
     CountdownTimer.init("countdownTimer2");
+    CountdownTimer.init("countdownTimer3");
 </script>
 @endsection
