@@ -29,6 +29,7 @@ class QuestionController extends Controller
             'question' => 'required|string',
             'choices' => 'required|array',
             'choices.*' => 'string',
+            'point_value' => 'required'
         ]);
 
         // Get the currently authenticated user
@@ -37,6 +38,7 @@ class QuestionController extends Controller
         // Create a new question instance
         $question = new Question();
         $question->question = $validatedData['question'];
+        $question->point_value = $validatedData['point_value'];
         $question->quiz_id = $request->quiz_id;
         $question->created_by = $user->id;
         $question->updated_by = $user->id;
@@ -47,7 +49,7 @@ class QuestionController extends Controller
         foreach ($validatedData['choices'] as $choice) {
             $questionChoice = new Choice();
             $questionChoice->question_id = $question->id;
-             $questionChoice->choice = $choice;
+            $questionChoice->choice = $choice;
             $questionChoice->created_by = $user->id;
             $questionChoice->updated_by = $user->id;
             // Additional attributes of the choice can be set here

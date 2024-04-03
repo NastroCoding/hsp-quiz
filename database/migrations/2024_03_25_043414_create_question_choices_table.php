@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('question_id');
             $table->text('choice');
             $table->boolean('is_correct')->default(false);
-            $table->integer('point_value');
+            $table->integer('point_value')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
