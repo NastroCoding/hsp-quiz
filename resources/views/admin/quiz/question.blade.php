@@ -22,6 +22,9 @@
     @endif
     <div class="container-fluid">
         <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Question List</h1>
+            </div>
         </div>
         <div class="row">
             <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#add-question"><i class="fas fa-plus mr-1"></i>Add Question</button>
@@ -31,11 +34,6 @@
 </section>
 
 <section class="content">
-    <div class="row justify-content-center align-items-center" style="height:100%;">
-        <div class="col-md-6 m-auto">
-            <!-- /.card -->
-        </div>
-    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -200,15 +198,13 @@
                             <label for="inputName">Question</label>
                             <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
-                                Create
-                            </button>
-                        </div>
                     </div>
                 </form>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
+                        Create
+                    </button>
                 </div>
             </div>
             <!-- /.modal-content -->
