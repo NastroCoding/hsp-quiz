@@ -29,7 +29,8 @@ class QuestionController extends Controller
             'question' => 'required|string',
             'choices' => 'required|array',
             'choices.*' => 'string',
-            'point_value' => 'required'
+            'point_value' => 'required',
+            'question_type' => 'required'
         ]);
 
         // Get the currently authenticated user
@@ -39,6 +40,7 @@ class QuestionController extends Controller
         $question = new Question();
         $question->question = $validatedData['question'];
         $question->point_value = $validatedData['point_value'];
+        $question->question_type = $validatedData['question_type'];
         $question->quiz_id = $request->quiz_id;
         $question->created_by = $user->id;
         $question->updated_by = $user->id;

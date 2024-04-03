@@ -149,7 +149,7 @@
 
                             </div>
                         </div>
-
+                        <input type="hidden" name="question_type" value="multiple_choice">
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                         <div id="optionsContainer" class="form-group">
                             <div class="input-group">
@@ -167,7 +167,7 @@
                             <button type="button" class="btn btn-primary" id="addOptionBtn">
                                 Add Option
                             </button>
-                            <input type="number" name="point_value" class="form-control float-right" placeholder="Points" min="0" style="width: 100px;">
+                            <input type="number" name="point_value" class="form-control float-right" placeholder="Points" min="0" style="width: 100px;" required>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -195,6 +195,8 @@
             <div class="modal-body">
                 <form action="/admin/quiz/question/create" method="POST">
                     @csrf
+                    <input type="hidden" name="question_type" value="essay">
+                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputName">Question</label>
@@ -229,6 +231,8 @@
             </div>
             <form action="/admin/quiz/question/create" method="POST">
                 @csrf
+                <input type="hidden" name="question_type" value="weighted_multiple">
+                <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputName">Question</label>
