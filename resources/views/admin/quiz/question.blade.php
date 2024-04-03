@@ -143,8 +143,13 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputName">Question</label>
-                            <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+
+                            <div class="input-group">
+                                <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+
+                            </div>
                         </div>
+
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                         <div id="optionsContainer" class="form-group">
                             <div class="input-group">
@@ -162,7 +167,9 @@
                             <button type="button" class="btn btn-primary" id="addOptionBtn">
                                 Add Option
                             </button>
-
+                        </div>
+                        <div class="input-group-append">
+                            <input type="number" name="points[]" class="form-control" placeholder="Points" min="0" style="width: 100px;">
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
