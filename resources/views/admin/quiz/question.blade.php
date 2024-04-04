@@ -71,7 +71,7 @@
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-info">Edit</button>
+                            <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#edit-multiple-choice">Edit</button>
                             <a href="/admin/quiz/question/delete/{{ $question->id }}"
                                 class="btn btn-danger float-right">Delete</a>
                         </div>
@@ -122,7 +122,6 @@
         <!-- /.modal-dialog -->
     </div>
 
-    <!-- multiple choice modal -->
     <!-- multiple choice modal -->
     <div class="modal fade" id="multiple-choice">
         <div class="modal-dialog">
