@@ -67,6 +67,7 @@
                                 Edit
                             </a>
                             <a class="btn btn-sm btn-info" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
+                            <a class="btn btn-sm btn-warning" href="/admin/quiz/">Review</a>
                             <button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal" data-target="#delete">Delete</button>
                         </td>
                     </tr>
