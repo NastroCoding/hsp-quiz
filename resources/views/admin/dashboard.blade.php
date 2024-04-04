@@ -20,6 +20,6 @@
             <!-- /.container-fluid -->
         </section>
         <!-- Main content -->
-        <h4 class="col-sm-6">Recent Quiz</h4>
+        <h4 class="col-sm-6 m-1">Recent Quiz</h4>
         <!-- /.content -->
 @endsection
