@@ -1,450 +1,431 @@
 @extends('layouts.admin')
 @section('container')
-    <!-- Main content -->
-    <style>
-        .input-group {
-            margin-bottom: 10px;
-        }
-    </style>
+<!-- Main content -->
+<style>
+    .input-group {
+        margin-bottom: 10px;
+    }
+</style>
 
-    <section class="content-header">
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                <div class="alert alert-danger" role="alert">
-                    {{ $error }}
-                </div>
-            @endforeach
-        @endif
-        @if (session()->has('quiz_success'))
-            <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
-                {{ session('quiz_success') }}
-            </div>
-        @endif
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Question List</h1>
-                </div>
-            </div>
-            <div class="row">
-                <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#add-question"><i
-                        class="fas fa-plus mr-1"></i>Add Question</button>
+<section class="content-header">
+    @if ($errors->any())
+    @foreach ($errors->all() as $error)
+    <div class="alert alert-danger" role="alert">
+        {{ $error }}
+    </div>
+    @endforeach
+    @endif
+    @if (session()->has('quiz_success'))
+    <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
+        {{ session('quiz_success') }}
+    </div>
+    @endif
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Question List</h1>
             </div>
         </div>
-        <!-- /.container-fluid -->
-    </section>
-
-    <section class="content">
         <div class="row">
-            @php
-                $count = 0;
-            @endphp
-            @foreach ($questions as $question)
-                @php
-                    $count++;
-                @endphp
-                <div class="col-md-6">
-                    <div class="card card-default">
-                        <!-- form start -->
-                        <div class="card-header">
-                            <p class="card-title text-muted">{{ $question->question_type }}</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <p>{{ $count }}. {{ $question->question }}</p>
-                            </div>
-                            @if ($question->question_type == 'multiple_choice' || $question->question_type == 'weighted_multiple')
-                                <div class="form-group">
-                                    @foreach ($question->choices as $choice)
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="radio1">
-                                            <label class="form-check-label">{{ $choice->choice }} <span
-                                                    class="text-muted text-sm">
-                                                    @if ($question->question_type == 'weighted_multiple')
-                                                        +{{ $choice->point_value }} Points
-                                                    @endif
-                                                </span></label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-sm btn-info" data-toggle="modal" data-id="{{ $question->id }}"
-                                data-target="#edit-{{ $question->question_type }}">Edit</button>
-                                <button type="button" class="btn btn-danger btn-sm delete-btn float-right"
-                                    data-id="{{ $question->id }}" data-toggle="modal" data-target="#delete">
-                                    Delete
-                                </button>
-                        </div>
-                    </div>
-                    <!-- /.card -->
-                </div>
-            @endforeach
+            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#add-question"><i class="fas fa-plus mr-1"></i>Add Question</button>
         </div>
-    </section>
+    </div>
+    <!-- /.container-fluid -->
+</section>
 
-    <!-- question type modal -->
-    <div class="modal fade" id="add-question">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Choose Question Type</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+<section class="content">
+    <div class="row">
+        @php
+        $count = 0;
+        @endphp
+        @foreach ($questions as $question)
+        @php
+        $count++;
+        @endphp
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- form start -->
+                <div class="card-header">
+                    <p class="card-title text-muted">{{ $question->question_type }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <p>{{ $count }}. {{ $question->question }}</p>
+                    </div>
+                    @if ($question->question_type == 'multiple_choice' || $question->question_type == 'weighted_multiple')
+                    <div class="form-group">
+                        @foreach ($question->choices as $choice)
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio1">
+                            <label class="form-check-label">{{ $choice->choice }} <span class="text-muted text-sm">
+                                    @if ($question->question_type == 'weighted_multiple')
+                                    +{{ $choice->point_value }} Points
+                                    @endif
+                                </span></label>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-sm btn-info" data-toggle="modal" data-id="{{ $question->id }}" data-target="#edit-{{ $question->question_type }}">Edit</button>
+                    <button type="button" class="btn btn-danger btn-sm delete-btn float-right" data-id="{{ $question->id }}" data-toggle="modal" data-target="#delete">
+                        Delete
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 offset-md-3 text-center mb-1">
-                            <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#multiple-choice"
-                                onclick="closeQuestionModal()">Multiple Choice</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 offset-md-3 text-center mt-1 mb-1">
-                            <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#essay"
-                                onclick="closeQuestionModal()">Essay</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 offset-md-3 text-center mt-1">
-                            <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#weighted-mc"
-                                onclick="closeQuestionModal()">Weighted Multiple
-                                Choice</button>
-                        </div>
+            </div>
+            <!-- /.card -->
+        </div>
+        @endforeach
+    </div>
+</section>
+
+<!-- question type modal -->
+<div class="modal fade" id="add-question">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Choose Question Type</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 text-center mb-1">
+                        <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#multiple-choice" onclick="closeQuestionModal()">Multiple Choice</button>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 text-center mt-1 mb-1">
+                        <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#essay" onclick="closeQuestionModal()">Essay</button>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 text-center mt-1">
+                        <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#weighted-mc" onclick="closeQuestionModal()">Weighted Multiple
+                            Choice</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- multiple choice modal -->
+<div class="modal fade" id="multiple-choice">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Multiple Choice</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/quiz/question/create" method="POST">
+                    @csrf
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="inputQuestion">Question</label>
+                            <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
+                        </div>
+                        <input type="hidden" name="question_type" value="multiple_choice">
+                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                        <div id="optionsContainer" class="form-group">
+                            <!-- Options will be added dynamically here -->
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="addOptionBtn">
+                                Add Option
+                            </button>
+                            <input type="number" name="point_value" class="form-control float-right" placeholder="Points" min="0" style="width: 100px;" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">Create</button>
+                    </div>
+                </form>
             </div>
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
     </div>
+</div>
 
-    <!-- multiple choice modal -->
-    <div class="modal fade" id="multiple-choice">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Multiple Choice</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/question/create" method="POST">
-                        @csrf
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="inputQuestion">Question</label>
-                                <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
-                            </div>
-                            <input type="hidden" name="question_type" value="multiple_choice">
-                            <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                            <div id="optionsContainer" class="form-group">
-                                <!-- Options will be added dynamically here -->
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" id="addOptionBtn">
-                                    Add Option
-                                </button>
-                                <input type="number" name="point_value" class="form-control float-right"
-                                    placeholder="Points" min="0" style="width: 100px;" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success float-right"
-                                id="createQuestionBtn">Create</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
+<!-- Essay modal -->
+<div class="modal fade" id="essay">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Essay</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
-
-    <!-- Essay modal -->
-    <div class="modal fade" id="essay">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Essay</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/question/create/essay" method="POST">
-                        @csrf
-                        <input type="hidden" name="question_type" value="essay">
-                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="inputName">Question</label>
-                                <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
-                                Create
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
-
-    <!-- Weighted Multiple Choice Question Modal -->
-    <div class="modal fade" id="weighted-mc">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Weighted Multiple Choice</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="/admin/quiz/question/create/weighted" method="POST">
+            <div class="modal-body">
+                <form action="/admin/quiz/question/create/essay" method="POST">
                     @csrf
-                    <input type="hidden" name="question_type" value="weighted_multiple">
+                    <input type="hidden" name="question_type" value="essay">
                     <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                    <div class="modal-body">
+                    <div class="card-body">
                         <div class="form-group">
                             <label for="inputName">Question</label>
                             <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                         </div>
-                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div class="form-group" id="weighted-optionsContainer">
-                            <div class="input-group weighted-input-group">
-                                <input type="text" name="choices[]" class="form-control" placeholder="Option 1" />
-                                <input type="number" name="point_value[]" class="form-control" placeholder="Points"
-                                    min="0" />
-                                <div class="input-group-append">
-                                    <span class="input-group-text btn-danger btn" style="cursor: pointer"
-                                        onclick="removeWeightedOption(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add Option</button>
-                        </div>
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success float-right">Create</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit modal -->
-    <!-- multiple choice modal -->
-    <div class="modal fade" id="edit-multiple_choice">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Multiple Choice</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/question/create" method="POST">
-                        @csrf
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="inputName">Question</label>
-
-                                <div class="input-group">
-                                    <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-
-                                </div>
-                            </div>
-                            <input type="hidden" name="question_type" value="multiple_choice">
-                            <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                            <div id="optionsContainer" class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><input type="radio" name="is_correct" /></span>
-                                    </div>
-                                    <input type="text" name="choices[]" class="form-control"
-                                        placeholder="Option 1" />
-                                    <div class="input-group-append">
-                                        <span class="input-group-text btn-danger btn" style=" cursor: pointer"
-                                            onclick="removeOption(this)"><i class="fas fa-trash"></i></span>
-                                    </div>
-                                </div>
-                                <!-- /input-group -->
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" id="addOptionBtn">
-                                    Add Option
-                                </button>
-                                <input type="number" name="point_value" class="form-control float-right"
-                                    placeholder="Points" min="0" style="width: 100px;" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success float-right"
-                                id="createQuestionBtn">Create</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
-
-    <!-- Essay modal -->
-    <div class="modal fade" id="edit-essay">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Essay</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/question/create/essay" method="POST">
-                        @csrf
-                        <input type="hidden" name="question_type" value="essay">
-                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="inputName">Question</label>
-                                <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-                            </div>
-                        </div>
-                    </form>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
                             Create
                         </button>
                     </div>
-                </div>
-                <!-- /.modal-content -->
+                </form>
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+<!-- Weighted Multiple Choice Question Modal -->
+<div class="modal fade" id="weighted-mc">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Weighted Multiple Choice</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/admin/quiz/question/create/weighted" method="POST">
+                @csrf
+                <input type="hidden" name="question_type" value="weighted_multiple">
+                <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputName">Question</label>
+                        <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+                    </div>
+                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                    <div class="form-group" id="weighted-optionsContainer">
+                        <div class="input-group weighted-input-group">
+                            <input type="text" name="choices[]" class="form-control" placeholder="Option 1" />
+                            <input type="number" name="point_value[]" class="form-control" placeholder="Points" min="0" />
+                            <div class="input-group-append">
+                                <span class="input-group-text btn-danger btn" style="cursor: pointer" onclick="removeWeightedOption(this)">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add Option</button>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success float-right">Create</button>
+                </div>
+            </form>
+
         </div>
     </div>
+</div>
 
-    <!-- Weighted Multiple Choice Question Modal -->
-    <div class="modal fade" id="edit-weighted_multiple">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Weighted Multiple Choice</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="/admin/quiz/question/create/weighted" method="POST">
+<!-- Edit modal -->
+<!-- multiple choice modal -->
+<div class="modal fade" id="edit-multiple_choice">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Multiple Choice</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/quiz/question/create" method="POST">
                     @csrf
-                    <input type="hidden" name="question_type" value="weighted_multiple">
-                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                    <div class="modal-body">
+                    <div class="card-body">
                         <div class="form-group">
                             <label for="inputName">Question</label>
-                            <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+
+                            <div class="input-group">
+                                <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+
+                            </div>
                         </div>
+                        <input type="hidden" name="question_type" value="multiple_choice">
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div class="form-group" id="weighted-optionsContainer">
-                            <div class="input-group weighted-input-group">
+                        <div id="optionsContainer" class="form-group">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><input type="radio" name="is_correct" /></span>
                                 </div>
                                 <input type="text" name="choices[]" class="form-control" placeholder="Option 1" />
-                                <input type="number" name="point_value[]" class="form-control" placeholder="Points"
-                                    min="0" />
                                 <div class="input-group-append">
-                                    <span class="input-group-text btn-danger btn" style="cursor: pointer"
-                                        onclick="removeWeightedOption(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
+                                    <span class="input-group-text btn-danger btn" style=" cursor: pointer" onclick="removeOption(this)"><i class="fas fa-trash"></i></span>
                                 </div>
                             </div>
+                            <!-- /input-group -->
                         </div>
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add Option</button>
+                            <button type="button" class="btn btn-primary" id="addOptionBtn">
+                                Add Option
+                            </button>
+                            <input type="number" name="point_value" class="form-control float-right" placeholder="Points" min="0" style="width: 100px;" required>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success float-right">Create</button>
+                        <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">Create</button>
                     </div>
                 </form>
-
             </div>
+            <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
     </div>
+</div>
 
-    <!-- Delete Modal -->
-    <div class="modal fade" id="delete">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Delete</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p> <b>If you delete this, all the data related will be deleted!</b> <br> <br> Are you sure? </p>
-                </div>
+<!-- Essay modal -->
+<div class="modal fade" id="edit-essay">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Essay</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/quiz/question/create/essay" method="POST">
+                    @csrf
+                    <input type="hidden" name="question_type" value="essay">
+                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="inputName">Question</label>
+                            <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+                        </div>
+                    </div>
+                </form>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a id="deleteButton" class="btn btn-danger">
-                        Delete
-                    </a>
+                    <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
+                        Create
+                    </button>
                 </div>
             </div>
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
     </div>
+</div>
 
-    <script>
-        function closeQuestionModal() {
-            var modal = document.getElementById('add-question');
-            var modalBackdrop = document.querySelector('.modal-backdrop');
-            modalBackdrop.parentNode.removeChild(modalBackdrop);
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-        }
+<!-- Weighted Multiple Choice Question Modal -->
+<div class="modal fade" id="edit-weighted_multiple">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Weighted Multiple Choice</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/admin/quiz/question/create/weighted" method="POST">
+                @csrf
+                <input type="hidden" name="question_type" value="weighted_multiple">
+                <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputName">Question</label>
+                        <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+                    </div>
+                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                    <div class="form-group" id="weighted-optionsContainer">
+                        <div class="input-group weighted-input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><input type="radio" name="is_correct" /></span>
+                            </div>
+                            <input type="text" name="choices[]" class="form-control" placeholder="Option 1" />
+                            <input type="number" name="point_value[]" class="form-control" placeholder="Points" min="0" />
+                            <div class="input-group-append">
+                                <span class="input-group-text btn-danger btn" style="cursor: pointer" onclick="removeWeightedOption(this)">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add Option</button>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success float-right">Create</button>
+                </div>
+            </form>
 
-    </script>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p> <b>If you delete this, all the data related will be deleted!</b> <br> <br> Are you sure? </p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <a id="deleteButton" class="btn btn-danger">
+                    Delete
+                </a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<script>
+    function closeQuestionModal() {
+        var modal = document.getElementById('add-question');
+        var modalBackdrop = document.querySelector('.modal-backdrop');
+        modalBackdrop.parentNode.removeChild(modalBackdrop);
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    }
+</script>
 @endsection
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            // Capture delete button click event
-            $('.delete-btn').click(function() {
-                // Get the ID of the user
-                var userId = $(this).data('id');
-                // Construct the delete URL
-                var deleteUrl = '/admin/quiz/question/delete/' + userId;
-                // Set the delete button href attribute
-                $('#deleteButton').attr('href', deleteUrl);
-            });
+<script>
+    $(document).ready(function() {
+        // Capture delete button click event
+        $('.delete-btn').click(function() {
+            // Get the ID of the user
+            var userId = $(this).data('id');
+            // Construct the delete URL
+            var deleteUrl = '/admin/quiz/question/delete/' + userId;
+            // Set the delete button href attribute
+            $('#deleteButton').attr('href', deleteUrl);
         });
-    </script>
+    });
+</script>
 @endsection
- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur ut vel saepe veniam voluptatibus vero maiores deleniti nostrum placeat incidunt debitis accusantium doloribus, assumenda eum odio aliquam architecto cumque quae rerum dignissimos. Iste optio, dolorum vitae laudantium quod unde velit molestias cum dignissimos? Nisi accusantium nobis animi quia ut, sapiente quae a ex excepturi? Et suscipit libero dignissimos velit blanditiis eum doloribus soluta asperiores qui repellendus sequi dolorem molestias, ad fuga sint ipsum non! Ut deleniti nulla expedita et praesentium nihil sint esse quod dolore molestiae rerum, veniam ea perspiciatis. Ipsa perspiciatis voluptas necessitatibus provident officiis saepe commodi odit harum, quia ut ratione vero laboriosam odio, tenetur quis culpa voluptates tempore doloribus. Aperiam deserunt, dicta perspiciatis iure incidunt voluptatem fuga ab fugit quae dolore voluptatibus nisi quo modi tenetur cupiditate perferendis facilis sapiente deleniti rerum laudantium? Laboriosam aperiam illum quo expedita natus nobis cupiditate ipsum impedit temporibus mollitia. Voluptas odit modi pariatur assumenda inventore necessitatibus enim distinctio laborum! Consectetur similique totam dignissimos amet tempora maxime cupiditate facilis quisquam consequuntur. Delectus, dolorum consectetur repellendus tempore sunt illum accusantium amet vel unde enim earum iusto maiores necessitatibus consequatur, iste esse aliquam, reiciendis repudiandae ut veritatis quasi porro eum corporis rem. Iure voluptatem facilis quas eligendi nulla illum laboriosam magni repellendus itaque illo similique dolor quisquam aliquam, nesciunt eaque voluptate esse recusandae quibusdam. Quod aliquid, perferendis rem impedit aperiam error non consectetur velit expedita est nesciunt at quisquam voluptas. Reiciendis delectus libero dolor, minima vitae aspernatur aliquid voluptate atque rem eum quidem porro iure ipsa excepturi! Praesentium soluta quidem ea, accusamus facere animi molestias ipsa quod eveniet a laboriosam doloribus ullam recusandae similique explicabo modi sit quisquam dicta deleniti fugit aperiam. Obcaecati eaque ullam quae ex, odio voluptatibus tempora repudiandae aut dolorum nihil laborum, quas alias aliquid distinctio assumenda sequi eligendi iste voluptate deserunt voluptatem molestiae ea laudantium harum? Suscipit assumenda quisquam unde culpa ipsum dignissimos. Eius tempore ad id, perspiciatis sit facilis eum inventore accusamus doloremque explicabo quasi quo corrupti voluptatum itaque numquam dolorum repellat repellendus perferendis distinctio rerum. Veniam inventore numquam, voluptas error quia eligendi asperiores officiis fuga assumenda, reprehenderit, possimus eius repudiandae aperiam accusantium. Et, ratione laborum? Corporis illum odit ducimus, tenetur perspiciatis, sapiente quod dignissimos, alias dolores quam distinctio est! Distinctio incidunt laboriosam, quam veniam cum temporibus veritatis et magnam deserunt doloribus corporis doloremque itaque quidem accusantium accusamus eveniet. Vero iusto excepturi non nemo qui? Iusto, dolorem exercitationem alias aspernatur nihil nulla rem quas dignissimos praesentium perspiciatis tempore molestias, quidem inventore consectetur. Quos minus nam voluptatibus. Rem asperiores ipsam, illo reiciendis quia voluptatibus voluptates beatae quidem magni placeat sed commodi maiores debitis sint tempora temporibus quasi magnam veniam explicabo molestias quibusdam dignissimos consequuntur eos! Perspiciatis ratione veritatis voluptates aliquam quidem consectetur labore officia sapiente libero tenetur sequi quis possimus eum, itaque cumque temporibus exercitationem ducimus mollitia laborum quasi tempore? Explicabo impedit fugit autem quaerat facilis nisi nemo, ipsum tempora aspernatur vitae magni atque rem? Unde voluptas nihil, corrupti ex consequatur quo voluptatem recusandae, iste modi error officia veniam commodi eum pariatur cupiditate nesciunt dolorum dicta? Sit nesciunt ducimus ipsam adipisci animi dolores fugit cupiditate temporibus exercitationem, ratione architecto in omnis fuga porro praesentium numquam culpa maxime quia minima consectetur minus? Illum nihil esse, quia nesciunt beatae necessitatibus recusandae illo sunt aliquid voluptas facilis, a unde tenetur minima mollitia sapiente! Veniam sunt atque et alias non animi eos accusamus voluptates perspiciatis, amet distinctio esse, quo voluptatem nihil rerum harum! Reprehenderit repudiandae voluptate quisquam expedita, commodi tempora? Dolorem architecto atque animi, officiis enim non, ratione nam reprehenderit consectetur eum qui officia cupiditate quia odio voluptates a aut ab eveniet. Nostrum dicta vero quae nemo possimus beatae maxime esse magnam enim numquam, provident accusamus suscipit voluptatibus ipsum, delectus ut quas culpa, placeat nam exercitationem veritatis unde debitis laborum laboriosam. Dolor officia inventore sequi culpa doloremque in quas animi, architecto ullam, aperiam omnis delectus. Nihil voluptatem aliquam, ratione aliquid beatae itaque amet maiores cum, debitis quidem alias tenetur placeat esse, cupiditate illo. Illo recusandae iste dolorem id corrupti enim nam, hic distinctio quaerat quia? Dignissimos ducimus sapiente corporis iure, quasi facere ipsum rerum, nihil, ea officiis harum perspiciatis. Excepturi ad voluptates deleniti nostrum quas temporibus neque consequatur ipsum officiis inventore, voluptatem vel eum perspiciatis molestias nihil quae molestiae! Necessitatibus debitis nisi ad soluta maiores velit at unde rerum nihil nobis minima quisquam dolore et, explicabo sint voluptate neque ab quo placeat! Repellendus voluptatibus dignissimos est rerum dolore. Sint consequuntur et, illo nobis saepe aspernatur nostrum praesentium commodi libero, neque nisi error suscipit! Temporibus officiis eaque quas, aperiam nihil ab optio unde eligendi est et dolorum tenetur aspernatur! Explicabo expedita consequatur eum! Deserunt voluptatem exercitationem nobis nulla eum, suscipit non? Ex itaque porro harum perferendis, quibusdam excepturi dicta eligendi, at sed obcaecati dignissimos temporibus saepe eius voluptatem repudiandae praesentium assumenda fugit? Eius corporis est quam libero magnam. Officiis qui ipsum quis alias. Ea, ducimus amet sapiente earum totam unde quaerat repudiandae nihil placeat commodi, minus explicabo soluta? Soluta mollitia molestias laborum voluptatum. Molestias, ad quia architecto illo dolorem, ab sed quas alias veniam eligendi error veritatis necessitatibus molestiae quod reiciendis quam explicabo sapiente labore qui repudiandae nesciunt? Voluptates quae culpa exercitationem enim? Sapiente illum deleniti distinctio, saepe suscipit atque autem aspernatur vitae, minus cumque et. Culpa nulla distinctio earum, rem perferendis corrupti blanditiis numquam sit maxime ipsam eos expedita quia et nisi dicta, quaerat commodi deleniti ipsum molestias repellat veniam vero nostrum! Voluptas deserunt, error reiciendis nesciunt esse sequi, reprehenderit quam nihil recusandae numquam eius cupiditate! Pariatur natus fugiat vitae dolorum quibusdam error eveniet earum tempora enim dolor aliquam alias consequatur, molestias quasi hic, est quia voluptates voluptate, laudantium facilis! Dicta ipsa, repudiandae mollitia voluptas maiores eveniet nobis iure molestiae amet magni? Debitis, nobis illum ullam dignissimos quidem numquam cumque molestiae accusantium. Tempore rem, voluptatum minus at voluptatibus magnam illo non maiores debitis ipsa quas tempora quia accusantium laborum assumenda praesentium nobis deserunt explicabo autem rerum natus est molestiae modi quasi? Deleniti rerum sint eveniet, ipsum quis officiis, quisquam, alias similique consectetur nobis dicta quas maiores facere laborum dolores tempore ipsam repellendus repudiandae eligendi libero eaque iure voluptatibus autem. Ullam rerum, fugiat in autem quia placeat magni esse minima totam modi. Fugit repellat, ipsa quod amet pariatur reiciendis explicabo facilis sed similique, tempora iusto. Delectus facilis minima voluptas consectetur cum vitae, mollitia nulla laborum aliquid facere tempore sed inventore quidem expedita id voluptatem perspiciatis natus. A quaerat eum explicabo illo ullam commodi, ad perferendis ex atque repellendus tempore unde molestias. Ipsum iusto provident voluptates reprehenderit ad laudantium illum, non corporis temporibus porro dolor eius odit nesciunt iure qui dicta quae beatae. Unde nemo, id obcaecati magnam iusto voluptatum, itaque voluptates nihil commodi expedita doloremque modi! Nulla nisi soluta ipsam nesciunt numquam eaque ad veritatis, aliquam quidem adipisci sapiente aspernatur facilis natus fugit possimus! Quaerat ex voluptatum quas minus at, odit repellendus amet deleniti voluptatem eligendi eveniet obcaecati aliquid, debitis atque eaque vitae omnis iure fugiat illo velit modi molestiae, exercitationem enim quis! Natus error omnis possimus architecto rem quas exercitationem aperiam eveniet tenetur, facilis odit earum repudiandae, repellat enim amet porro rerum temporibus. Quod quisquam iusto quaerat nostrum dicta fugiat voluptatem! Alias, ipsam illum? Aut, sed. Sed autem quae, sapiente velit temporibus dolorum obcaecati nostrum in suscipit dignissimos facilis eligendi aspernatur possimus! Delectus repudiandae nulla architecto eligendi similique accusamus tempora cumque, debitis accusantium quisquam vel distinctio ipsam deserunt omnis consectetur incidunt, doloremque modi tempore veritatis, ullam odit eveniet. Tempora excepturi commodi repellendus necessitatibus quos inventore nulla doloremque ea, fugit ducimus eos dolorum exercitationem eaque, voluptate quasi aliquid praesentium modi, quas numquam alias est. Deserunt eum optio a possimus libero, doloribus eius cum tempore neque dolore mollitia sapiente vel cumque nostrum unde ea quasi ipsum dolorem! Sit delectus natus, libero veritatis quod perspiciatis cum officia rerum necessitatibus quam eveniet. Similique reiciendis molestiae voluptatem consequatur nulla laborum inventore cupiditate dolorum quos ipsa, expedita nobis, soluta voluptate aliquam libero necessitatibus tempora eveniet. Minima molestiae magnam porro tempore suscipit eveniet quis saepe voluptates? Ad voluptates ullam incidunt deserunt cum tempore similique suscipit totam a quisquam soluta dolor modi libero, ea illo corporis esse maiores iure quam. Tempore tenetur iusto nemo error molestiae corrupti minus corporis voluptatum, culpa quos accusantium qui eos excepturi similique ea inventore at. Quaerat quo atque odio laudantium nobis perferendis dignissimos tempora quas quae laboriosam iure cupiditate possimus rem, doloribus, error dicta ipsa assumenda harum sunt nostrum? Accusamus consequatur unde vero et obcaecati aspernatur quod ea sequi voluptas excepturi? Consequuntur numquam, blanditiis, odio nihil sunt, nam quod soluta in molestiae rerum ullam impedit. Id, ratione. Suscipit molestias aut corporis odio adipisci iste, culpa ducimus dolor voluptates beatae rem, magni esse, assumenda sunt quia vero natus. Facere ut dolore commodi quaerat quibusdam temporibus vitae excepturi officia ex ipsa aperiam laudantium earum nulla necessitatibus at, sit iste fuga? Aut, officiis quas suscipit culpa quod enim dolorem error nihil quam inventore excepturi omnis vitae voluptatibus voluptas reiciendis repellat voluptate provident nisi. Ab iure voluptas totam quae, labore eaque repudiandae accusamus fugiat iusto? Explicabo autem, maxime quisquam porro magnam aliquid ullam. Amet porro, recusandae tempore provident impedit suscipit explicabo praesentium, dolor iusto laborum quis quaerat ab! Neque autem nihil laborum quae? Assumenda distinctio aliquid ab totam illo, perspiciatis accusantium nesciunt dolorum molestias, vel blanditiis mollitia. Odio ad laboriosam in, harum ab magni perspiciatis quod similique assumenda rerum? Reprehenderit reiciendis consectetur, quod doloremque, harum impedit, corporis nostrum explicabo enim minus consequatur iusto voluptas quam sit expedita dignissimos. Iste, quasi dicta laborum nisi optio cum et fugit fugiat nam laudantium aperiam aliquam! Laudantium praesentium, quod, aspernatur soluta dolor blanditiis id harum repellat saepe, deleniti cumque nesciunt adipisci ullam sint doloremque! Nihil, dicta architecto laudantium ad ea sint! Laboriosam, ex accusamus quia similique fugit temporibus dolorum iusto ipsum corporis ducimus magni modi perferendis laborum itaque, animi, veniam saepe aperiam delectus harum maxime. Dolor ipsum sequi id asperiores recusandae illum iste nam omnis voluptate. Velit nulla voluptatibus, dolore eum alias, non amet suscipit quae tenetur sed iure ipsum maiores optio perferendis! Modi animi quod unde repellat consequuntur quos maiores aspernatur, error dolorum laboriosam excepturi ad nemo inventore obcaecati numquam, blanditiis sit officia nisi nostrum repudiandae autem magni? Asperiores nesciunt deleniti fuga maxime beatae velit explicabo labore distinctio, accusamus illo animi voluptate voluptatibus reprehenderit ut odit quia consequuntur consequatur? Magnam itaque neque temporibus reprehenderit voluptatibus ex, unde, aspernatur eveniet praesentium expedita pariatur. Ratione unde laudantium nam dolore impedit praesentium excepturi exercitationem rem, magnam perspiciatis? Quos, iste id odit cumque assumenda iure. Pariatur similique sit, excepturi laborum quibusdam voluptatibus facilis suscipit eos, sint illo incidunt corporis omnis beatae assumenda totam aliquam ab esse aliquid molestias nobis voluptas eaque corrupti. Eum, pariatur consectetur similique alias fugit asperiores ipsum quae debitis rerum, quia obcaecati itaque est optio vel, iste autem molestias animi amet commodi perspiciatis sequi beatae aliquam! Rem, reiciendis ipsam laboriosam rerum optio tempora eum doloremque! Iusto voluptatem maiores expedita soluta reprehenderit eum, excepturi sapiente nesciunt voluptatibus quae. Odit, quaerat eligendi deleniti beatae iure fuga, reprehenderit quasi earum, ipsum nihil quas. Sapiente error quas provident cumque iste dolore nemo repudiandae. Alias aliquam ex vitae! Consequuntur corporis iure, vel blanditiis recusandae libero temporibus molestias, suscipit maxime dolorum repellendus eligendi hic magni aliquam. Quos cumque nobis, aliquid libero commodi inventore reiciendis, exercitationem voluptate, atque deleniti assumenda cupiditate temporibus molestiae adipisci aliquam excepturi culpa quidem saepe. Inventore velit officia eligendi odio. Blanditiis, quis quisquam. Corporis aliquid quia perferendis, sapiente praesentium ipsum hic voluptate! Pariatur eos explicabo voluptatum, officiis distinctio nihil tempore sit? Incidunt molestiae reprehenderit earum accusamus deserunt sit impedit natus delectus quia, illum quibusdam reiciendis nemo! Voluptas beatae molestiae commodi officia ab quia. Laudantium architecto recusandae, excepturi quas eaque atque, temporibus nam quia tempora reprehenderit tempore sapiente molestias quibusdam modi reiciendis quam assumenda dolore veritatis officiis nostrum, repellat inventore sunt deleniti? Iusto quam, consequatur sed possimus beatae neque culpa debitis natus nam illum pariatur ex quae excepturi itaque eaque fugiat consectetur voluptate quas blanditiis commodi reiciendis odio iste! Earum laboriosam quasi rem nemo quidem, quisquam nesciunt amet, ea ut, unde dolore qui. Minus, eligendi. Reiciendis provident itaque alias dolores consequatur ullam beatae error, quo voluptas quod. Ducimus tempore, obcaecati modi quisquam voluptates enim quo. Corporis, magnam dolores illum eveniet natus totam voluptatem repellendus illo ex nemo pariatur vitae officia commodi laudantium porro asperiores! Obcaecati error aliquid dolorum nesciunt! Assumenda a magnam quis cumque fuga reprehenderit modi aliquam blanditiis ab non! Placeat nulla nobis ratione dicta a enim laboriosam voluptate, accusamus possimus architecto perferendis aut voluptas delectus. Dolorum exercitationem non unde sit eaque optio iusto nobis tempore corporis nemo doloremque repellat et neque rerum, commodi autem deserunt voluptatum aperiam. Labore, ut est totam facilis esse deserunt eius aliquam explicabo aperiam, omnis tenetur. In voluptas, quo eaque ratione assumenda architecto nihil cupiditate recusandae animi, facere, illo obcaecati dignissimos totam provident. Aliquam dolorem numquam soluta corrupti nostrum. Quod assumenda vitae expedita mollitia repudiandae, consequatur eveniet, earum dolorem fugiat necessitatibus dolore fugit veniam eius error ipsa? Optio repellendus exercitationem voluptate, eveniet nisi impedit? Veniam obcaecati, nobis ratione dolor corporis temporibus. Minus amet quia, enim cum architecto, impedit facere officiis quasi numquam a quisquam, quas voluptas accusamus. Error neque libero obcaecati, commodi cumque facilis aperiam sed, eveniet dignissimos eaque voluptatum, distinctio ipsa! Deleniti quasi facere atque nihil amet autem ad, officiis repellendus, voluptatem distinctio sapiente architecto voluptates ipsum earum animi ipsam, ratione ducimus. Quod modi et doloribus tempore! Soluta eos omnis beatae sequi maxime voluptate ipsa, ab debitis porro. Corporis optio necessitatibus dolorem, labore cupiditate maxime ut. Consectetur obcaecati fuga dicta earum et, quod odio eveniet atque repellendus nam omnis quibusdam nemo quis ut veritatis non cumque ipsum repudiandae excepturi ullam? Repellat, facilis, voluptatum doloremque voluptate ducimus quod, explicabo mollitia voluptatem soluta quis ratione. Assumenda consectetur quam laudantium ea minus delectus et amet architecto nihil? Nesciunt, unde magni tempora eius magnam ullam, eligendi eum facilis quidem in vel modi aperiam beatae quis, eos laboriosam tenetur illum quod ad repellendus corrupti impedit. Error veritatis voluptatum consectetur, explicabo sit quia beatae tempore corporis, recusandae laudantium sed asperiores tempora reprehenderit ipsa, impedit ratione? Recusandae aliquam ducimus dolores maxime alias deserunt provident quo eligendi adipisci rerum quam, minus ab odio molestias ipsa, cupiditate magni facere perferendis, tempora quis sit! Saepe, illo sed tenetur quaerat laudantium, dolor quisquam eaque illum sit ducimus enim, hic laboriosam earum nobis nulla sint culpa? Incidunt aut minus reiciendis amet. Voluptatum debitis officia sit enim quo, minus aliquid repellendus. Possimus maiores, modi nemo culpa veritatis alias rem itaque in dolor voluptatem fugiat dolorem quaerat corporis sed labore? Praesentium velit quas facere reiciendis, adipisci error veritatis deleniti recusandae excepturi sit nobis architecto placeat vero corporis, incidunt voluptate rerum, pariatur optio ipsam quibusdam! Veritatis voluptate ducimus in itaque laudantium incidunt est sequi temporibus, perferendis fugit asperiores praesentium odit reiciendis, sapiente soluta? Sunt pariatur impedit, reiciendis, aliquam atque ea saepe alias, iure debitis dolores accusantium est cumque doloremque quod. Pariatur cumque error nihil exercitationem provident mollitia dignissimos assumenda nisi, odit sint, perferendis, nostrum ea. Reiciendis placeat, quam blanditiis accusamus eum porro ab. Sint laboriosam explicabo iure sit vel tempore, voluptas eveniet odio impedit nulla reiciendis facilis quam officiis? Quis dolor veritatis nam architecto similique obcaecati possimus, corporis ducimus officiis quo non, eos cumque molestiae eveniet at est voluptatum, earum consectetur expedita vel omnis! Quod totam impedit iusto adipisci enim aperiam. Explicabo a quo asperiores ea aperiam quis ut quam sed fuga cumque pariatur quia voluptatum nisi, molestiae tenetur culpa ullam deserunt doloremque? Tempore quasi distinctio autem quidem dolor, voluptatem animi quia omnis molestiae cumque ratione blanditiis doloribus, optio ducimus nulla est officia esse ipsam eveniet veniam hic ipsa? Id similique laborum possimus quo, ad tenetur ea nemo rem error, illo dolorem dolores quae molestiae. Quod similique, iusto blanditiis fugiat rerum facere dolore. Culpa totam rerum eum sit voluptatibus. Rem, nulla maiores? Sunt asperiores nesciunt, rem nihil eius velit! Laboriosam, dolores eligendi? Dolores fuga odio atque reiciendis explicabo laborum consequatur, dolore tenetur facilis expedita sed qui excepturi dicta quisquam accusamus! Corporis, veniam animi eaque labore quibusdam ducimus minus in, aliquam officia aut voluptas odio eveniet iusto voluptatum obcaecati fugiat magni eum maiores esse! Aliquid earum, quod nostrum blanditiis magnam nam, rerum molestias neque natus obcaecati eos architecto, sed quas consequatur quos et. Numquam debitis reiciendis, recusandae earum, deserunt adipisci accusamus ipsum provident incidunt iste velit, harum sit. Perspiciatis accusamus excepturi eligendi dolore, dolorum nesciunt veritatis ea dolores eum omnis vitae quisquam incidunt amet corrupti dolorem fugit asperiores quia molestiae ipsum quidem quam quasi minima inventore maxime? Ad illum sed nulla doloremque temporibus officiis animi possimus enim laborum molestiae maxime quibusdam, cum distinctio porro totam inventore magni. Molestias porro hic dignissimos. Omnis quibusdam ducimus hic debitis fuga. Fugiat suscipit maiores porro aliquam ullam quos hic tempora minima neque reiciendis in consequatur autem veritatis, non, nam aperiam qui voluptatem. Ipsum eaque possimus ipsa iusto facere cumque eum esse reprehenderit dolores, quibusdam id ab repudiandae recusandae ut nobis odit distinctio nihil quae rerum repellat unde eius aliquid optio eveniet! Eos, molestias at a quibusdam nam ea sunt voluptatum quod repellendus explicabo impedit rerum dolorem, possimus minus excepturi quidem et voluptas architecto, animi consectetur! Porro, vitae. Quos, corporis? Tempora excepturi dignissimos ratione, consequatur omnis nemo, architecto doloribus dolore, saepe natus totam atque reiciendis amet quis possimus mollitia ipsam blanditiis autem fugiat deserunt quae sit temporibus. Nesciunt architecto tempora placeat esse! Accusantium illum omnis dignissimos vel consequatur velit minus recusandae, maxime ipsa exercitationem amet tempora architecto rem animi consequuntur labore possimus. Laboriosam, molestiae voluptatum. Incidunt voluptatum commodi aliquid deleniti consequuntur nobis ea labore fugiat in enim neque ut cupiditate sunt hic esse quisquam at nostrum distinctio, autem iste, nam facilis aut. Inventore labore, excepturi soluta dolorum omnis voluptates molestias voluptatum eius. Mollitia temporibus recusandae eveniet doloremque, laudantium nihil tempore soluta sit illum error ratione quasi iure inventore voluptas? Dolore, eius iusto? Culpa ipsa, asperiores nam nulla reiciendis labore. Consequatur dolorum minima inventore facere repellat voluptatem. Quos, alias deserunt quo labore voluptatibus molestiae illo numquam iste fuga. Laudantium placeat possimus, aliquid ullam voluptate soluta unde nihil, cumque explicabo, cupiditate eum aperiam. Ipsa reiciendis sapiente placeat necessitatibus deleniti odio voluptatum dolor. Natus, earum debitis. Cupiditate quae consequuntur architecto fugiat, numquam ea obcaecati, fugit quaerat maiores officiis totam. Perspiciatis temporibus sequi sed laudantium itaque impedit, quos fugit reiciendis obcaecati ullam dolores recusandae repellendus quasi optio accusamus delectus eveniet ex saepe nam dolor at pariatur incidunt voluptates tempora! Ut ipsam esse cumque reiciendis totam, autem eos facere ex quos non iste mollitia dolor delectus modi asperiores nisi necessitatibus quod temporibus consequuntur accusantium aliquid vel dolorem. Libero, illum. Facere mollitia quis deleniti recusandae, laborum quaerat, atque suscipit, neque fugit nobis a! Excepturi, quidem fuga quod et asperiores alias voluptates assumenda iure adipisci. Placeat, amet praesentium earum vero nisi velit iste, deleniti doloribus quas quam nihil nemo itaque. Officia dolorum culpa illum fugiat mollitia veritatis ad, voluptas, beatae debitis optio placeat animi atque minima autem dolores odit at pariatur quod numquam eos. Culpa ducimus reiciendis temporibus ipsa? Pariatur obcaecati quod exercitationem aliquid ipsa? Nemo consequuntur ipsum rerum possimus incidunt, obcaecati quia doloremque ut cum alias illo exercitationem est facere velit quisquam praesentium voluptatum assumenda corrupti quasi necessitatibus adipisci earum! Nihil accusantium, itaque, eligendi ipsa deserunt odio et assumenda vero adipisci velit rem at voluptatibus nobis nam. Ex maiores distinctio ipsum! Doloremque suscipit laboriosam nihil voluptatum voluptas pariatur adipisci, reprehenderit ipsum deleniti eum excepturi porro laudantium minus voluptate minima necessitatibus amet, rerum hic quasi. Soluta, commodi tenetur? Mollitia maiores labore molestias necessitatibus, reiciendis, excepturi doloremque recusandae veniam, fugit dolor quas aut ipsum! Sunt nulla ducimus ea nostrum quos eius, amet expedita eveniet laudantium, exercitationem eligendi numquam tempora facere distinctio repellendus neque libero iste reprehenderit? Reiciendis dolorem dignissimos possimus dolorum voluptatibus unde nostrum amet quos! Nam consequatur eius ducimus repudiandae accusamus animi, nesciunt cum aliquid voluptatum assumenda enim amet a veniam quo facilis ipsam quasi nemo deserunt ab, alias officia sunt sed et harum? Sapiente temporibus nisi, expedita, ipsa optio doloremque quo necessitatibus praesentium non enim nam aliquam odio? Debitis, alias. Accusantium, illum? Tenetur quidem eveniet dignissimos, quos expedita fugiat sint nesciunt exercitationem? Enim quasi quisquam est minima, repudiandae officia totam deleniti aspernatur quod odio quis fuga nobis labore eius delectus blanditiis obcaecati dicta itaque sunt magni sed! Accusantium dicta iusto id ad, officia quis nemo soluta voluptas dolor, tenetur dolorum vitae deserunt, eligendi labore. Impedit, cum, saepe modi, hic ullam error odio velit nisi aspernatur nihil enim dignissimos rerum earum itaque quibusdam. Repellendus ipsum similique sequi aperiam ea magni repudiandae veniam facilis, explicabo incidunt iure impedit ratione doloribus nihil! In temporibus quis cumque? Aut impedit modi, nam rem eius architecto quos error iusto. Non ipsum quae eos veniam ullam, cum ut distinctio sequi voluptates esse. Corrupti deleniti distinctio tenetur nam sint laboriosam provident? Ipsam veniam quos maxime voluptatem perferendis quas fuga, at minus quidem molestiae similique. Corrupti modi reprehenderit quos maiores commodi officia natus nulla est. Ratione sequi deleniti dolorum temporibus molestias fugiat, nihil, alias ipsum sunt quia aspernatur atque ad possimus expedita assumenda aperiam cum autem, dolorem quaerat fugit. Odio totam sequi in non suscipit obcaecati, vitae voluptatum, minima consequatur, veritatis expedita assumenda! Veniam itaque dolor quidem quod est cum eius iure consequuntur, enim eveniet, assumenda quaerat incidunt deserunt fuga voluptatum quas magnam iste ad, eum ipsum non omnis neque nostrum nihil! Architecto totam quia alias obcaecati laborum eius eveniet at laboriosam beatae, deleniti adipisci, sunt ut autem, sit minima tempora unde suscipit quo. Amet odio commodi quisquam odit tempora deleniti, repellendus nam vitae? Impedit ipsum autem qui quidem nesciunt adipisci quo non facere, quod nobis id debitis ut culpa illo saepe laboriosam voluptatum natus recusandae animi quos illum inventore dolorum nulla. Optio molestias ut, amet hic quasi laudantium quidem fuga doloribus magni provident et officiis voluptatem cumque dicta quo est laborum rerum doloremque distinctio odit. Qui voluptates exercitationem quae iusto magnam! Quibusdam ex autem aperiam consectetur, deleniti delectus ea repellat aliquid pariatur, fugiat non cum sint placeat, in enim illum dicta. At explicabo ad commodi ea minus placeat ipsa delectus ducimus perferendis ab, deserunt obcaecati ullam, fugiat quia perspiciatis molestias dolorum ipsum nostrum expedita, dicta in? Quisquam blanditiis distinctio animi alias nemo quia aliquid ea, ab deserunt temporibus labore cupiditate veritatis libero itaque accusantium cum voluptates odio qui ipsa eos molestias voluptatem autem pariatur ut. Porro blanditiis quibusdam eaque similique totam excepturi nesciunt, corrupti nostrum vitae odio consequatur repellat, distinctio eligendi iusto ea deserunt alias id aspernatur debitis laudantium. Dolorem tempora vel dolores modi rerum ullam error itaque pariatur commodi ducimus? Praesentium iusto illo quasi possimus, assumenda explicabo voluptatum alias atque quaerat omnis dicta soluta quibusdam aspernatur eligendi corporis aliquid ipsam incidunt, libero sequi distinctio inventore in exercitationem ad? Natus ipsum quam officia repellendus culpa, aliquam sit sed ut et quisquam iure quia illum ipsa architecto. Magnam qui minus architecto provident tenetur id vero, accusantium magni tempora similique porro aliquid fugiat molestias quisquam inventore quos enim ducimus vel veritatis sapiente corrupti nostrum debitis labore eaque. Praesentium mollitia quidem ipsa totam reprehenderit odio recusandae autem. Unde recusandae atque iste perferendis ullam aliquid quod, exercitationem, saepe eos cumque amet, non earum quam commodi voluptate quibusdam? Rem saepe autem sed, similique vitae eaque dolores delectus, perferendis quo consequuntur quis ipsam recusandae repellendus incidunt, maxime exercitationem magni repellat ad nam cupiditate neque ratione dignissimos. Repudiandae, atque cumque. Dolorem error iste quisquam ratione inventore at, eligendi consectetur ut, assumenda a vitae numquam cupiditate velit molestias odit eveniet incidunt sed qui laborum asperiores quis, earum molestiae. Laudantium quaerat ducimus pariatur eaque exercitationem soluta, omnis asperiores modi architecto nisi id accusamus amet? Iure, quasi quas, voluptate distinctio, inventore architecto aperiam assumenda libero asperiores autem facilis dignissimos earum a! Iste distinctio saepe optio atque? Quod eos perferendis natus dignissimos corrupti vel odio facilis culpa fugit eaque, recusandae minima voluptates ducimus ratione pariatur? Velit nihil vel odit maiores aliquid dolorum enim temporibus sint alias a aspernatur itaque quaerat natus, distinctio adipisci eum repudiandae, sequi sunt repellat libero veniam perferendis delectus unde. Veritatis et fugit eaque voluptatibus hic qui quibusdam voluptatem incidunt eligendi, id itaque nam deserunt nulla facere voluptatum unde! Dolorum, excepturi ex ab assumenda dolor autem optio voluptate dignissimos expedita consequuntur quidem non! Commodi fugit, numquam, cupiditate totam molestias tenetur tempore accusamus accusantium ea qui nisi quidem ipsum earum suscipit mollitia illum voluptas vero rem et debitis quis ratione soluta iure! Deserunt suscipit minus fugit ex! Minima id asperiores sapiente quo accusantium voluptates tempora at doloribus, rerum natus sed magnam, vel consequuntur non eaque modi debitis animi enim excepturi velit accusamus, ullam inventore. Doloremque corrupti nesciunt rem aliquid eveniet mollitia ratione quo dicta ipsa minima veniam quidem cum aliquam sunt voluptatum nulla laudantium rerum, blanditiis quaerat velit? Doloremque, officiis deserunt! Et beatae unde reprehenderit blanditiis amet alias expedita. Dicta commodi velit quisquam nulla, praesentium impedit sint qui suscipit deserunt, voluptates consequatur eligendi temporibus ut facere vel cum rem quidem earum eos possimus quaerat minima id! Repudiandae ut, quae cum, voluptas delectus asperiores eaque qui aspernatur culpa nam ex est fuga eum nostrum. Nostrum dolore velit hic minima fugit! Aliquid rerum soluta nulla voluptatem dolore quia provident asperiores tempora beatae dolor assumenda quos culpa sit aspernatur, nobis unde magnam consequatur eligendi eum sint enim labore nam aperiam quo. Explicabo exercitationem, veniam accusamus non esse assumenda sit alias magni blanditiis natus id voluptates autem debitis sapiente in pariatur dolores possimus, tempora dolorem aspernatur recusandae distinctio quia ullam fugiat! Similique suscipit consectetur sapiente doloremque dolore ullam quae laborum ex expedita nobis odit quidem dolorum officia aperiam minus corporis saepe nostrum omnis labore nam, architecto rem fugiat? Maxime nostrum delectus officia tempore quos est tenetur maiores voluptate fugit optio quia molestiae distinctio architecto voluptatibus corrupti quas, labore recusandae saepe ad! Beatae id odio distinctio doloremque ratione? Quae velit eaque tenetur sed? Adipisci, tempora soluta quibusdam dolorum quas maiores voluptate beatae ipsa dolore impedit, animi hic consequatur provident rem doloremque at. Iusto iure provident temporibus placeat deserunt, eius optio, alias iste qui debitis aspernatur quae, quo veniam explicabo exercitationem! Provident eveniet quo, in quasi libero vel exercitationem ab dolore voluptatum aliquam soluta mollitia ipsam hic tenetur rem officiis. Iste, delectus consectetur rerum nemo corrupti possimus maiores inventore sint aperiam molestias optio perferendis! Minus, libero sunt? Quidem esse nemo non rem et labore commodi voluptatem aspernatur! Quo dolorem ratione iusto! Sapiente autem tenetur aliquam fugiat eveniet nisi beatae sunt dolor est, provident fuga! Perspiciatis, culpa. Dolore est at corrupti quis nobis reprehenderit. Omnis accusamus a cupiditate. Nihil dicta dolor totam sunt dolore alias nobis, molestiae laboriosam necessitatibus non corrupti laudantium assumenda quaerat asperiores laborum illum excepturi sequi, repellendus nostrum iste earum voluptatum eos! Voluptatem tempora dolore accusantium cum, aut voluptas eaque veniam culpa maxime voluptates. Voluptatibus qui ut quaerat ab, obcaecati sunt fugiat sequi inventore corrupti repellat blanditiis atque eum, sit, mollitia repudiandae. Dolore eos nemo excepturi ad architecto, ea reiciendis magnam quia voluptas libero saepe laudantium exercitationem quis dicta ipsum, similique velit perferendis totam harum. Veniam fuga, tenetur saepe aspernatur earum consequatur? Alias error expedita assumenda eaque obcaecati minima amet ipsum necessitatibus nulla, omnis repudiandae laudantium vel autem ea. Nemo, sunt velit iusto pariatur, maxime corporis commodi ratione ut assumenda temporibus ducimus. Natus dicta recusandae numquam eos eligendi vel dolores consectetur omnis voluptatem voluptate maiores expedita tenetur quisquam quod accusamus neque, mollitia voluptatum aliquid molestias maxime qui. Velit maxime quaerat odit ipsa voluptatum blanditiis eius fugit, officia quasi saepe expedita recusandae quis fuga tempora praesentium laboriosam ratione iure numquam iusto rerum natus voluptate perferendis? Facere laudantium sit, repellendus libero sint eius facilis incidunt soluta maiores sed! Vitae iste dolorum obcaecati magnam delectus nemo possimus. Pariatur quibusdam, provident mollitia et unde quaerat, laborum ratione autem minima harum dolores commodi nostrum ea placeat beatae quo veniam vel similique dolorem ipsum optio rem. Aut vero at ipsa rerum consectetur quidem soluta quaerat, consequatur repudiandae officia ut doloremque sunt animi voluptatem sed voluptate? Impedit sunt quae possimus reiciendis. Officia amet inventore totam officiis quos tempora animi pariatur adipisci mollitia modi velit dolor et, earum quae reiciendis laborum, repellat facere voluptates! Totam magnam, facilis, sed, dolor nostrum similique ullam itaque sit natus iure ea dolores repellendus commodi harum! Excepturi unde sapiente tempore totam dolorum incidunt debitis numquam? Dolor maxime rem natus placeat dolore. Illo molestias labore explicabo provident neque. Quam tenetur aliquam, in laborum, reprehenderit molestiae harum laudantium minus delectus eligendi hic architecto maxime aspernatur fugit, facilis dicta at corporis ipsa sint culpa. Quo, explicabo! Ad, blanditiis perferendis porro libero facere dolorem numquam voluptate soluta adipisci iste quos distinctio quae consectetur incidunt tempore exercitationem pariatur ipsa explicabo fuga nostrum unde dolores voluptates laudantium? Ex dolorum odio quam expedita illum, placeat tenetur soluta sunt facilis alias accusamus sequi ipsum quaerat maiores vero dolore debitis exercitationem corrupti laborum dolorem ab consequatur quas officiis. Consectetur sint optio vitae, est alias impedit itaque! Rerum sapiente ex repellat libero vero alias totam eaque. Ex, ullam nobis? Repellat animi consequatur perferendis quis exercitationem nemo at odit ipsa? Aliquam perspiciatis adipisci, maiores tenetur architecto possimus porro aperiam fugit numquam corporis quisquam sequi inventore doloremque, maxime tempore autem incidunt a eos tempora quia consectetur dolor quaerat! Reprehenderit dolore odit, autem ipsum repudiandae, deserunt repellat et dolores voluptates blanditiis quibusdam a sit quo numquam incidunt nihil quis laudantium sapiente impedit officiis iure repellendus mollitia, officia ab! Ducimus eligendi quis, dolor deleniti eius commodi quo dolorem quod molestiae, cumque tempore sit repellat rerum quia! Quam eos ex quos, reiciendis laboriosam beatae vero recusandae. Quaerat nam non pariatur numquam soluta hic rem laboriosam cum illum voluptatem impedit repudiandae, porro dolor nemo magni ullam adipisci consectetur temporibus nulla facilis error distinctio nihil! Numquam tenetur fugit vitae esse totam quia beatae rem odio obcaecati explicabo! Accusantium est soluta minima eius, totam, obcaecati tenetur nulla explicabo asperiores quo quasi culpa aliquid fugit temporibus accusamus voluptas dolorem sint error? Quo, rem illo. Laborum minima, nobis delectus eum ea aut quasi, eligendi aliquid dicta sunt accusamus, incidunt ad eos repellat quia doloremque molestias quae? Pariatur vitae, minus, reprehenderit optio corporis distinctio officia odit ad quibusdam, quod fuga et. Explicabo, quidem? Facere, facilis. Saepe obcaecati ipsa quidem. Aliquid voluptas architecto tempora sapiente possimus necessitatibus fugit reiciendis voluptatibus similique unde quam esse repellat assumenda tenetur eligendi dolores quos aliquam, iure dignissimos? Praesentium optio atque a quisquam eum delectus asperiores distinctio reiciendis! Autem, minus iste ducimus officia laborum perspiciatis, cum illo voluptatem nihil, temporibus a provident magnam fuga dolorum ipsam mollitia quidem in? Necessitatibus, veritatis doloribus aspernatur fuga distinctio odio id natus iste sequi error dicta, perspiciatis quisquam, nostrum amet itaque ut illo numquam debitis voluptatem commodi autem. Error vero animi beatae consequatur porro eveniet omnis veniam, dolores ex accusantium cumque ipsam iusto quos sed. Nihil blanditiis sed tempora neque ipsa sequi fuga, quisquam quam dolorem accusamus perferendis ut dicta officia possimus perspiciatis, et pariatur enim similique. Asperiores itaque adipisci molestiae aliquam quisquam cumque. Pariatur, expedita veritatis? Aspernatur omnis, voluptatibus laboriosam nihil, iste totam sint amet maiores eveniet, illo nostrum a necessitatibus distinctio commodi? Sequi corrupti odio praesentium, esse nisi incidunt earum minus, aut nam enim cum quam officia laboriosam! Vel porro modi veniam eligendi consequuntur beatae adipisci ut dolorum cum! Quas nulla optio illo tempore aliquid ad ea possimus consectetur odit animi, fuga nisi iusto ullam libero dolores distinctio qui dolorum placeat at recusandae? Harum est quo doloribus saepe maxime nam deleniti suscipit at ad assumenda voluptatem quia iure, mollitia sequi esse aspernatur consequatur corrupti, tempora labore? Quasi minus eligendi in deserunt nemo facere neque! Incidunt sit reiciendis vel, quibusdam voluptates, quia iusto sint nisi, ullam illo numquam eos doloremque perspiciatis a laborum distinctio ea. Saepe quas animi, ut, sint amet doloribus vitae necessitatibus id cupiditate repellat voluptates, ab cum. Quos, suscipit eum. Dolore nulla cum ducimus? Unde autem atque officiis adipisci corrupti molestias eius velit nostrum! Quasi totam corrupti, dignissimos maiores dolor repudiandae molestias id quae sequi consequatur, repellendus itaque eveniet repellat debitis fugiat consectetur esse. Soluta at maxime veniam dolorum error, quidem quaerat! Ducimus, consequatur! Vel in vero at. Magnam cupiditate alias eaque qui, autem odio nihil expedita eveniet numquam velit culpa accusamus vero ut ratione aliquid officia doloremque ipsam a harum omnis, quaerat dicta rem deleniti. Cumque eveniet veniam ab illum repellendus animi voluptatem quo est, reiciendis et rerum! Accusantium in laudantium voluptatem laboriosam tenetur, explicabo commodi unde dolorum, temporibus nemo quia officia odio debitis aliquam nobis distinctio corrupti ratione pariatur, fugiat maiores ducimus assumenda. Reprehenderit possimus, veritatis ab sapiente architecto voluptate, blanditiis, cupiditate non asperiores autem dolorum. Nam eos architecto quidem hic quisquam, nesciunt sed commodi ipsam. Ex molestiae odit tempore obcaecati harum libero quam reprehenderit cupiditate quibusdam eius animi aut, iure numquam praesentium consectetur, eaque nihil tempora doloremque ipsam voluptatem impedit? Vel, suscipit culpa voluptate quas nulla modi quasi? Repellendus consequuntur nulla, repudiandae molestias quasi unde tempore maiores consectetur sapiente accusamus facere officia ad mollitia quos pariatur tempora blanditiis esse iure corporis quisquam vitae incidunt autem illum. Voluptatibus dicta veniam cumque non qui odio natus, cum odit vel quaerat sit reiciendis ab vero aperiam aut facilis minima. Molestiae atque quibusdam, minus consectetur asperiores blanditiis, necessitatibus nobis quos fugiat aut nostrum ab labore molestias quia ratione modi pariatur suscipit! Illum fugit aut, quis distinctio vitae quas cumque? Officiis doloribus libero officia qui voluptate maiores, mollitia consequuntur obcaecati pariatur. Sit minima temporibus quam voluptate voluptatem cupiditate totam fugit ad inventore provident, repudiandae doloribus neque, hic quos nihil eius sunt quisquam accusamus. Esse fuga repellendus voluptate corporis sint vitae voluptatum assumenda, corrupti adipisci veniam. Eius repellendus deleniti voluptates, culpa quia aspernatur eaque necessitatibus cumque nisi aliquam rerum perspiciatis suscipit minus mollitia eum ut harum quod accusantium ad quidem inventore ducimus esse delectus aliquid. Minus aliquam veritatis fugit non repellat voluptas officiis nulla nisi placeat quam esse, libero eaque et aspernatur explicabo sunt quibusdam nobis, consectetur accusantium veniam? Illo quae dolorum at expedita nostrum id ipsa. Incidunt tempora necessitatibus quibusdam ullam quod quidem dolores autem architecto voluptatibus temporibus! Fugit consectetur sunt natus libero reiciendis laudantium cumque pariatur odit voluptas nostrum! Optio porro excepturi exercitationem iusto id tempora maxime nisi fuga debitis. Inventore dolorem officiis neque ad doloribus, dolorum, maiores tempore fugiat culpa ipsa excepturi. Impedit voluptas fugiat ex fugit quaerat porro similique sapiente enim aut, tempora omnis, ipsum culpa recusandae nostrum velit distinctio! Quis, tempora nobis repudiandae libero facilis officia aliquid illo, dicta perspiciatis eveniet reprehenderit odio rem eos, deleniti fugit dolor alias! Hic enim nemo aliquid harum delectus quo dolore quidem quia, nulla praesentium reiciendis, facilis expedita possimus alias perferendis nesciunt corrupti? Dolorum ex accusamus voluptatem id sequi autem doloremque. Error odit, architecto quis soluta hic temporibus? Soluta tempora corporis atque accusamus incidunt et voluptatibus quae, quo optio, dolorem officia ipsam aliquam, vero nemo! Sunt rem aspernatur fuga aliquam harum voluptas delectus eveniet qui impedit at non optio asperiores, aperiam mollitia. Deserunt culpa doloremque voluptates voluptate labore, ratione temporibus iste optio nisi, quis ea iusto magni recusandae cum. Asperiores nostrum veritatis a distinctio aliquam nemo beatae nam, rem nesciunt illo ullam similique officia officiis dolore labore voluptatem adipisci fugiat quidem non nulla magnam libero sit! Eaque accusamus, quos officia soluta a voluptatem labore et nemo deserunt esse eveniet praesentium quas beatae? Numquam ullam inventore eius, natus itaque consequatur quas sint at optio quis quam error recusandae minima voluptate corporis temporibus iure nostrum quia voluptatum adipisci quasi perferendis dicta enim earum! Veniam molestias labore ullam quae sit cupiditate suscipit sunt ipsum obcaecati, dicta, doloremque, nemo fuga et similique corrupti aspernatur! Accusamus aliquam voluptates odit ut natus libero delectus, necessitatibus et ex doloribus dolore fugiat similique vel nemo nihil alias aspernatur provident quisquam quis atque quae repellendus eius temporibus. Est fugit quibusdam illum sit laudantium veritatis, fuga cum eum vitae quas, provident animi unde quisquam doloribus mollitia explicabo doloremque et minima harum nisi laborum sint consequuntur ratione. Ratione repudiandae quis corrupti cum obcaecati dolore culpa, autem tempora facilis voluptatibus ducimus, consequuntur laboriosam tenetur nobis voluptas magnam omnis deleniti quibusdam sint dignissimos voluptate. Sed repudiandae officia dignissimos tenetur aspernatur voluptates quos! Corrupti ducimus a commodi dignissimos cum asperiores eius exercitationem, et accusamus dolores necessitatibus, ut nisi distinctio. Provident error quisquam voluptatibus voluptates fugiat voluptatum, atque nobis dicta culpa expedita voluptas nisi inventore eius! Molestiae vel autem veritatis amet tempore neque reiciendis sunt modi perspiciatis, accusamus necessitatibus similique, aperiam molestias. Soluta voluptate deleniti quibusdam! Dicta velit temporibus autem possimus, labore eveniet incidunt, adipisci, facilis saepe qui libero voluptatem esse quos? Doloremque eaque inventore cupiditate repellat sequi dolores voluptatem rem perspiciatis! Vel quae maiores non adipisci perspiciatis tempora similique sed est blanditiis impedit, fugiat, rem totam ipsam ab laborum incidunt porro vitae eaque dicta recusandae esse. Vero temporibus ipsum error adipisci. Deleniti autem distinctio nobis fuga facere? Expedita, minima. Similique hic nisi blanditiis adipisci illum nemo dolore ut sunt illo rerum at exercitationem, possimus excepturi ea quia. Vel recusandae cum voluptatem, fugiat assumenda odio. Facere fugiat molestiae illum minima consequatur necessitatibus amet accusamus exercitationem eos. Repudiandae asperiores, voluptatum, nam tenetur eligendi accusantium iste et voluptates quam dolorum veniam debitis suscipit dolores vitae facilis minus magni earum totam. Eius consequuntur est mollitia vero animi unde enim molestias exercitationem et vitae, modi eos explicabo eligendi, esse soluta consequatur facilis voluptatum aliquam a debitis minima adipisci? Natus suscipit laborum eum quasi fugiat! Qui repudiandae error aut quae. Nesciunt quis omnis et reprehenderit possimus, earum illo fuga eveniet hic sunt cum sint mollitia explicabo tenetur id. Accusamus nostrum et pariatur unde id? Reprehenderit officia corporis voluptatum officiis porro! Neque laborum quidem rem voluptatibus? Sit, neque. Odit id quidem, nobis maiores expedita pariatur, sit architecto, accusamus nam nostrum minus! Dolores modi quam enim quas architecto possimus dolore laudantium, quaerat necessitatibus ipsum esse eum minus similique veritatis natus quod et quos incidunt. Aliquam maxime soluta eos ducimus neque illum enim quam obcaecati corporis quos officia quidem, eum distinctio aliquid aut reprehenderit fugit est voluptate harum iste. Blanditiis explicabo ipsam modi ratione ipsum quod necessitatibus ducimus fugiat corrupti et, deserunt dolorem error! Perspiciatis, harum? Consequuntur, hic! Accusamus voluptate illo natus suscipit explicabo tempore, ipsam quis dolore, dolor eius vel rerum saepe? Eius quos doloremque ea sequi cum eos architecto quasi minus nostrum voluptatibus aliquam velit laborum officia non magni, nisi voluptates, molestiae vel et. Ipsum corporis voluptatibus quia facilis consequatur, quod voluptatem ratione a est minus! Fugit veritatis officiis libero soluta fugiat ad totam voluptas tempore, praesentium temporibus impedit nisi odit et odio vitae, consequatur blanditiis doloremque quae labore veniam. Qui, dignissimos reiciendis inventore enim quas vero impedit laudantium quo numquam ipsum harum quia fugit labore nobis eos obcaecati laboriosam unde placeat veniam dicta sequi pariatur alias. Culpa in veniam debitis similique dolorem architecto eos perferendis enim, facilis repudiandae facere dolor error quo vel. Laudantium, eligendi, quam nihil recusandae dolor cupiditate commodi earum velit accusantium sint nobis animi, autem quibusdam. Hic nihil itaque autem incidunt dignissimos totam asperiores tempore tenetur accusantium consequuntur repellat delectus ut aliquid mollitia laboriosam qui harum, adipisci, id rerum, doloremque eum dolorum sint nemo. Et mollitia sed odit perspiciatis, id distinctio dolore dicta quia voluptates, perferendis optio at facere error cupiditate nostrum ex tempore quos? Deserunt officiis autem in nulla veritatis qui numquam, quo voluptatem porro sapiente officia hic odit laudantium eveniet cupiditate ipsa excepturi ex cum at minus temporibus ducimus quod perspiciatis itaque! Facilis nemo earum accusamus, quod ea sunt reiciendis cum explicabo, amet minus, fugit possimus veniam. Laborum eligendi laboriosam sit vitae facere excepturi obcaecati natus iure. Possimus hic saepe provident id natus inventore aspernatur neque, quisquam, deleniti ullam asperiores atque nam consectetur. Tempore facilis id omnis, neque officiis, esse necessitatibus amet aliquam eligendi provident eveniet quisquam delectus adipisci corporis laboriosam reprehenderit cumque? Quibusdam harum culpa obcaecati dolorem est magnam natus, provident dicta eligendi eius reiciendis cupiditate sed porro assumenda. Est possimus numquam impedit inventore, necessitatibus vero. Quam exercitationem corrupti ipsa voluptas voluptatibus laudantium, praesentium magnam, consequuntur itaque illo quis id placeat soluta fugit facilis laborum dolorem necessitatibus nemo error velit alias a, optio ullam dolorum? Sed, adipisci. Ex culpa a dolor exercitationem odit architecto debitis. Placeat ipsa sequi, rem quia eum voluptate aspernatur molestias! Temporibus ullam, totam voluptas eos in, maiores consequatur sint recusandae neque deleniti eum corrupti hic tenetur necessitatibus. Modi, eveniet. Consequuntur quos unde voluptate dolore a, ut vero? Mollitia illum quidem ducimus nobis dolorum accusantium, minus ipsum alias debitis itaque voluptatum fugit fugiat reiciendis sapiente? Tempora, natus. Deleniti aut, laborum officiis consequuntur blanditiis excepturi et laboriosam vero atque sint eum maiores dignissimos saepe repellat. Aperiam nihil autem ex dolores dolorum praesentium sed ea cupiditate accusamus debitis odio quas ducimus laborum non nam, qui voluptatibus esse a porro vel nostrum quaerat tempore quidem. Dolor ullam maxime beatae perspiciatis iste, atque dignissimos deleniti ut ipsa, officiis mollitia tempora molestias. Ad excepturi saepe temporibus earum veniam aperiam repudiandae, similique laudantium quia doloribus minima dignissimos quae sed quasi est id incidunt. Iste tempore voluptatem, distinctio beatae dolorem corporis sapiente numquam inventore minima ullam rem consequuntur quia et iusto qui porro enim praesentium veritatis quisquam sed ratione excepturi. Explicabo, soluta aspernatur, vitae in ducimus reprehenderit id, deleniti optio dolorum dicta corrupti? Ducimus aut neque fugiat asperiores officiis quam in dolorem sunt ad dolorum, suscipit iusto necessitatibus tempora et. Culpa eaque consequatur magni, blanditiis delectus praesentium fugit quis in veritatis nesciunt omnis suscipit incidunt ducimus, mollitia sapiente similique molestias temporibus? Error tempore veniam fugiat non deserunt, sed quos expedita atque nam, eius et architecto vel voluptatum quam inventore modi dignissimos soluta quis quasi repellendus? Quibusdam at ab vel beatae nostrum, accusantium laudantium reprehenderit impedit in doloribus est ad iusto pariatur mollitia sit quasi illo praesentium facere necessitatibus officiis. Voluptatem recusandae, odit dolore, eos voluptas tempore nulla voluptate iste error ipsam hic dolor dolorem itaque beatae voluptatibus sit porro quis harum sapiente quod corporis saepe alias. Iusto ipsam libero, ea quae minus accusamus, molestias autem quasi at, corrupti esse praesentium nulla? Praesentium saepe nobis dignissimos voluptas aliquid vero laudantium, non pariatur. Laudantium ratione unde saepe voluptate dolores est sapiente animi? Beatae eos, doloribus, laudantium dolorum placeat fugit quos dignissimos explicabo dolor sequi ad nihil harum veniam alias commodi non aspernatur repellendus quidem. Mollitia tempora ipsum laudantium obcaecati? Fugiat architecto voluptatem voluptates distinctio harum officiis corporis assumenda neque repellat ad minus laboriosam, sunt possimus minima consectetur quidem aperiam enim modi quos fuga, beatae ipsam? Rem, aperiam expedita tempora temporibus sed harum nostrum inventore sequi. Quia alias animi aliquid odio. Optio, minus vitae et id doloribus nostrum fugiat soluta nisi explicabo numquam animi repudiandae magnam earum. Non amet sequi obcaecati illo animi dicta hic quos eligendi omnis consequuntur suscipit deleniti laborum saepe id, cupiditate qui. Porro praesentium beatae explicabo voluptatibus recusandae cum, voluptas saepe temporibus sint dolorum doloremque officiis voluptate exercitationem, sequi esse. Consequatur suscipit eveniet molestiae sed quis sint a ab sequi corrupti fugit deleniti deserunt, reprehenderit delectus eos minima voluptas soluta corporis quam. Qui fuga eius quos aut perspiciatis reiciendis dignissimos! Velit, cumque animi dolores voluptatem quia ducimus. Debitis aliquid iure deleniti minus voluptas sequi qui iusto sed, earum doloribus nostrum vero soluta nemo consequatur tempora dolores fuga magni expedita ab enim. Hic nobis saepe consectetur porro laborum expedita soluta aspernatur omnis ad dolorem tempora, repudiandae, quidem, quam impedit provident voluptates recusandae quisquam repellat nemo voluptatem ratione obcaecati! Voluptas ipsam, hic iusto corrupti recusandae sint sit. Tenetur, dolores. Quod, quos iste quisquam tempora totam itaque illum dolorum possimus natus, et omnis, expedita veniam assumenda ducimus quaerat. Sit recusandae rem incidunt blanditiis dignissimos voluptatibus excepturi. Nihil voluptates unde error nisi voluptatibus ipsum reiciendis numquam rem temporibus, assumenda accusantium asperiores soluta nulla fugit velit. Veniam temporibus nostrum dolores ex reprehenderit repellendus in, dicta perferendis, explicabo iste minima est blanditiis expedita veritatis fuga corrupti architecto possimus nesciunt consectetur quam suscipit soluta ipsam. Nulla dolor laudantium vero voluptatum sapiente nemo excepturi cumque! Consequatur veniam recusandae laboriosam quidem ullam voluptatem, temporibus accusantium beatae maiores obcaecati et quod fuga culpa reprehenderit libero amet repudiandae illum non magni aut saepe natus maxime nisi soluta? Ratione, hic, doloremque assumenda praesentium voluptas maxime odit fuga minima beatae fugiat, laborum cum. Quae architecto possimus dolore, rerum neque consequuntur eius nulla aspernatur, corporis eaque nobis et minus. Odio velit eaque assumenda vero officiis, explicabo sunt dignissimos tempora mollitia omnis dolorem recusandae a molestias consequuntur illum. Voluptatibus officia saepe voluptatem facere quasi! Sequi necessitatibus harum animi nostrum quia labore placeat non voluptates atque, facilis accusamus magnam odio eius iste laudantium dicta enim consequuntur quae porro commodi soluta architecto! Iure sequi qui dolorum consequatur sit inventore consequuntur eos nulla tempore libero quam, quae accusantium tenetur voluptatem voluptas rem eum odio eaque, architecto eligendi placeat culpa? Sunt ullam laborum delectus facilis dignissimos? Repellendus quia expedita, vero quos reiciendis earum commodi voluptatum. Nisi quis adipisci quaerat expedita. Esse culpa odit necessitatibus dolorem enim consequatur veniam quam, similique in iusto. Eos ab expedita consequatur tempore quos natus libero dolorum impedit omnis iste cum voluptatem commodi, nam aliquam ipsa quisquam aut saepe rerum quas. Porro architecto itaque saepe id. Inventore, officiis. Doloremque, nisi incidunt velit in reiciendis numquam laboriosam natus corporis modi a, aliquid pariatur, consectetur dignissimos officia voluptatum harum iure voluptas possimus debitis? Mollitia nulla molestiae, laborum alias quam exercitationem saepe, minima sit ipsam laboriosam, tempora sint voluptatibus. Quisquam tempora laboriosam quae quos. Dicta sint deleniti nemo. Alias dolorum consequuntur corrupti accusamus atque aperiam voluptas ducimus? Provident, voluptatem illo minima quisquam aspernatur porro minus enim saepe iusto consectetur rerum nesciunt architecto quidem excepturi, unde natus optio eius laborum vel iure, exercitationem ab voluptas similique? Eaque inventore voluptate autem repellat veritatis fuga qui placeat temporibus iste culpa est repellendus quos labore perspiciatis aliquam quam reiciendis tempora, consequuntur excepturi quod consectetur quaerat iure vero recusandae? Tempore est ipsa sed corrupti. Deserunt quas iusto itaque animi distinctio voluptas sapiente nihil sequi nostrum magnam porro nesciunt, placeat repudiandae commodi magni accusamus ea dignissimos laudantium ipsam perspiciatis modi quo. Minima quaerat ducimus mollitia. Enim laudantium incidunt vel sint? Labore nam consequatur possimus nesciunt quisquam soluta reiciendis autem veritatis sint. Accusamus consequuntur, blanditiis, pariatur enim eveniet nam quae eaque minus eos provident unde illum sunt iste obcaecati cum harum optio? Quos mollitia dolorem maiores alias, corrupti ipsa repellat! Qui ratione officia voluptatum laboriosam quis ut vitae, maxime nesciunt suscipit consectetur dolorum rerum amet ab quos distinctio velit enim eum error dignissimos eveniet quia nobis! Odit velit perspiciatis exercitationem error consequatur reiciendis incidunt sit amet officia optio placeat repellendus, facere excepturi sunt rem fuga cumque! Odio sed magnam labore! Repellat doloribus dignissimos repellendus ipsam laborum, delectus rerum explicabo nulla saepe nisi suscipit ex quod omnis accusamus quam modi! Hic magni molestias delectus illum odio consequatur voluptatum, magnam animi numquam natus vitae suscipit quis voluptate saepe deserunt distinctio illo. Iste, rerum quidem quae molestiae nulla quod totam iusto alias aspernatur! Error iste eius explicabo, accusantium sequi itaque rerum, pariatur quae perferendis in impedit! Odio libero voluptatum dolore nesciunt amet qui aut eveniet alias unde quidem commodi officiis a porro ipsa nulla ipsam sequi maiores, numquam omnis! Labore corrupti natus, voluptatum laborum magnam officia perspiciatis voluptatem! Amet provident incidunt consequatur commodi, rem voluptate cupiditate aut at quae, non quas dolore quia molestiae eos, temporibus nihil officiis maxime delectus. Quisquam exercitationem ea distinctio. Quam consectetur consequatur unde qui debitis animi soluta eligendi, expedita voluptatibus, vitae ab voluptates architecto corrupti a. Nostrum sed quia in ducimus laborum facilis, possimus perferendis omnis deserunt officiis quis maiores doloremque fugit, deleniti debitis! Voluptate similique dolore placeat neque ex itaque nobis totam facere inventore recusandae, voluptatum nihil delectus optio magnam deleniti odit aperiam beatae fugiat maiores atque quod dolorum mollitia eligendi. Aliquid laboriosam blanditiis sed perferendis ipsum cupiditate culpa delectus molestias tempore fugiat pariatur reiciendis, consequatur illum aspernatur natus obcaecati iusto architecto cumque repellat non, iste esse totam debitis rerum. Consectetur inventore ipsa ab deleniti libero, adipisci quia harum hic commodi, corporis temporibus! Reiciendis architecto ratione, iure eos qui sed rem laborum harum quae recusandae sequi. Esse, minima animi? Iste nam labore ex, nemo reprehenderit corporis magni. Nesciunt, minus? Non velit, eligendi quas illo est repellendus! Architecto adipisci doloribus odio sunt! Voluptatum soluta qui eius. Obcaecati facilis debitis vitae. Vero, totam? Odit quaerat illum obcaecati mollitia soluta esse quod cum ipsum laudantium provident dolorum et adipisci vel ut neque expedita quo quam explicabo eius, incidunt optio. Exercitationem ex, autem corrupti numquam ipsum sapiente maiores eveniet adipisci eligendi facilis eius accusantium provident vel voluptate vitae architecto sequi quis odit possimus repellat alias natus nemo. Temporibus dolore eos pariatur natus asperiores esse perferendis unde laboriosam sapiente vitae vero, assumenda voluptas aspernatur sunt. Totam, eveniet dolores laudantium dignissimos iusto quas molestiae aperiam error odio facilis quasi sint obcaecati sunt illum optio, perspiciatis hic enim, sequi saepe adipisci voluptatum itaque autem omnis. Odit earum eaque fugiat asperiores totam non, nisi, error dignissimos, fugit minus illo at consequatur quidem quia voluptatum cupiditate architecto harum doloremque voluptates veniam ea in dolores repudiandae consequuntur. Consequuntur, rerum ipsam at, quidem neque doloremque dolor voluptates illum in modi dolores facere, quis quibusdam doloribus? Sed dignissimos provident quo sit, cupiditate molestias aliquid amet excepturi voluptate minima corporis. Dolore deleniti dolorem corrupti voluptas, hic officiis at praesentium quasi eum, iure et tempore ex! Porro, necessitatibus repudiandae reprehenderit obcaecati pariatur quasi. Esse delectus ducimus numquam cupiditate consequatur quidem tenetur, quae, facilis voluptate voluptatibus voluptatem deserunt eius. Explicabo sed sunt reprehenderit nesciunt totam odio! Tenetur molestias, omnis et, qui ipsum beatae sit culpa mollitia recusandae doloremque natus porro, saepe voluptas fugit. Neque, consectetur quas! Dolore officia autem harum quisquam eum explicabo, iure totam soluta odio ipsa quibusdam ipsam minima non dolorum optio molestiae, sed obcaecati itaque, possimus magnam debitis in? Doloribus veniam vel explicabo itaque sapiente fugit ab in, voluptas tempore modi distinctio ad commodi eius rem. Perspiciatis numquam optio nulla tempora reprehenderit fugit aut fuga ab molestiae commodi, quas consequatur quo facilis vitae, similique blanditiis quam, deserunt labore ipsum. Rem, quisquam! Impedit vero molestiae nihil, laborum, numquam error magni corporis quis modi, doloremque non tempore? Doloribus excepturi et, assumenda cumque consequuntur ab suscipit nesciunt hic accusamus aperiam perspiciatis deserunt consectetur error, autem asperiores harum. Velit aliquam ab perferendis totam eligendi rerum cupiditate perspiciatis non magni illum culpa iusto eaque omnis eos ea optio, eum inventore exercitationem, minima harum distinctio. Possimus nam assumenda ipsa esse, fugit dolore vel ipsum nostrum? Labore laboriosam blanditiis natus harum laborum est tenetur optio perferendis! Excepturi rem laborum id assumenda est hic placeat dignissimos voluptate. Autem aspernatur numquam nobis itaque enim illum atque maiores rerum ex exercitationem sunt debitis suscipit, magnam ab facilis molestiae dolorem velit quidem quam ullam, quae quaerat animi? Deleniti, praesentium recusandae? Officiis repellat totam perferendis, reprehenderit dolorem maxime voluptatibus in labore non blanditiis omnis ipsum. Labore nihil itaque ad, repudiandae deleniti esse et mollitia facilis. Est sed sit dolore consequatur maiores. Ipsam quaerat veritatis deserunt, repellendus aspernatur deleniti. Iusto earum voluptate magnam consectetur repellat ratione perspiciatis, neque molestias adipisci, tempora laborum, aliquid placeat explicabo sed quia animi quidem vitae fugiat pariatur? Soluta, incidunt non modi est ullam facilis possimus libero optio tempora. Eligendi optio eos pariatur sequi necessitatibus asperiores. Quas autem minima aliquid necessitatibus quasi ipsa ipsam hic quibusdam fugit alias accusamus maiores voluptatem officiis laborum architecto neque corporis itaque, unde, libero iste a minus mollitia! Odio dolores doloremque esse explicabo est modi eos fuga quaerat. Cupiditate doloremque ipsum voluptatem, suscipit quam ratione necessitatibus expedita culpa quod repellat eligendi, eius aspernatur harum facilis temporibus ad dolorem illo, dolores optio consequuntur. Nobis dolore repudiandae magnam corporis commodi. Nobis, repellat sint! Recusandae culpa nostrum porro. Impedit ab animi recusandae! Nihil autem rerum optio. Laudantium, distinctio. Modi totam repellendus ad eaque fuga non maxime sed odio amet veritatis officia nisi a velit minima sint, ipsam, labore nihil voluptates. Aliquid tempora dolorum temporibus dolor cumque esse nulla, quas voluptas eaque voluptate blanditiis aut ab veniam itaque obcaecati voluptatem quaerat dicta, incidunt mollitia. Corrupti, ducimus. Sed laudantium voluptates ipsam quas. Molestias voluptatem laboriosam odit ipsa maxime illo animi commodi impedit dicta tempore, nesciunt mollitia veritatis deserunt aut beatae necessitatibus dolore reprehenderit quia labore error perferendis placeat? Voluptatibus iste placeat sapiente odit, enim eaque accusantium rerum quibusdam laudantium id inventore quasi laboriosam provident et ab ratione labore, aliquid vel autem nihil voluptatum, possimus fugit? Voluptatum dolorum voluptatibus nam quo dignissimos aliquid? Exercitationem pariatur porro recusandae dolorum illo eius eum modi nobis nam, libero, expedita harum distinctio, totam ad consequuntur sint consectetur perspiciatis laboriosam blanditiis assumenda sit nemo? Accusantium eius deleniti sint a atque voluptatibus aut, inventore ipsam repellat perferendis nemo, iste eligendi laboriosam ad! Incidunt veritatis accusamus, laborum voluptatibus hic doloremque eligendi quos dicta pariatur deleniti sed? Harum, voluptates quisquam ipsum illum exercitationem natus sit non facilis laboriosam impedit tempora expedita debitis. In nam nesciunt dolorum impedit placeat corporis saepe, nobis ea deserunt earum, natus voluptatum porro libero amet. Debitis dolore numquam molestiae obcaecati quasi cupiditate, nulla rem quia fugit corrupti! Ad facere enim magni doloremque velit a consectetur placeat, nobis quo perspiciatis nisi eaque reiciendis qui doloribus officia porro architecto fugit praesentium distinctio. Adipisci quo alias ex temporibus nobis dolor voluptatem reprehenderit mollitia exercitationem nostrum enim, fugiat ad! Ipsa ea est expedita aut cumque ut minus sint eius quod a! Illum natus perspiciatis nesciunt, impedit tempore reprehenderit consequatur officia, vitae maiores sapiente dolores illo, soluta ipsam magni nemo tenetur veniam. Animi facilis libero, aspernatur ratione hic veniam qui minima quos dignissimos praesentium autem, vero quod cum ea expedita ad? Mollitia beatae cupiditate quos consequatur ad similique reprehenderit libero quia impedit asperiores. Similique voluptatum vitae autem harum soluta repellendus. Recusandae voluptatem odio optio, autem facere eaque laudantium natus suscipit quam consequatur architecto corrupti amet quos temporibus! Voluptates neque in sapiente temporibus ullam itaque facilis est sunt? Odio neque tenetur excepturi consequatur minus nostrum, enim quibusdam eaque, assumenda impedit ea repudiandae aliquid quod ad inventore, iusto libero dicta dolor maiores commodi? Soluta explicabo illum, perferendis quo natus numquam corrupti eos tempora delectus, quaerat sit mollitia minus quos ex distinctio ducimus voluptas nihil, voluptatem recusandae repudiandae quod impedit nam excepturi? Impedit adipisci amet quae quos exercitationem magnam fugiat sapiente repudiandae nam magni id, nostrum autem, natus beatae facere fugit. Consequatur sint esse, ab debitis est sed dolorum dolor natus in aperiam autem incidunt rerum reprehenderit quo vel eum consequuntur. Voluptatum cumque numquam quas fuga exercitationem inventore nemo, voluptates quia minus modi. Delectus voluptatum tempore facere quos quod, deleniti incidunt sed eius neque nihil sapiente, excepturi temporibus perferendis deserunt. Iure unde illo reprehenderit labore autem ut facilis hic in nulla dolores at nisi voluptas, ex reiciendis ratione deleniti? Earum harum alias facere. Maxime unde impedit cum quas, nesciunt voluptates labore commodi dolorem quia sit. Ipsam ratione ducimus tempora omnis, reprehenderit exercitationem perspiciatis. Maiores velit eos id enim placeat earum totam? Tempore pariatur temporibus assumenda aut laboriosam harum delectus officia architecto quaerat voluptatem laborum autem, et facilis consequuntur at exercitationem qui accusantium, sint aperiam dignissimos a illum. Hic quae corporis obcaecati iure tenetur laboriosam, quam error, animi accusantium enim rerum culpa placeat maxime ex sit aut soluta sequi mollitia odio odit. Assumenda quasi quibusdam labore, quisquam dolorum ut dolorem temporibus, molestias ad numquam deserunt dolore. Nemo fuga vero dolorem rerum porro. Enim corrupti distinctio repellendus a magni itaque ea exercitationem iure quasi voluptas doloribus nam, commodi dolore consequuntur debitis est. Inventore dolore id beatae unde sed officiis, natus eos possimus, recusandae ex, nihil explicabo ratione dicta exercitationem tempora sapiente iusto provident illo! Velit voluptatibus perferendis, vero maiores exercitationem eum quo expedita labore modi distinctio laborum nobis ut. Architecto qui libero aperiam doloribus labore omnis! Aspernatur in rem magnam vitae vero ut id modi? Temporibus tempore quae iste obcaecati omnis dicta, dolor, magni inventore quasi odio quia explicabo. Vero dolorum autem possimus natus libero, non quia quam ut enim et blanditiis eveniet fugiat sunt, dolores itaque veritatis necessitatibus tenetur molestias! Quisquam id, ratione, dolore sequi distinctio unde ad laborum expedita neque voluptates sapiente rem saepe voluptatum accusantium, consequuntur et repellendus dolor ex. Cum veniam quo amet repellat reprehenderit quaerat est debitis obcaecati? Necessitatibus sapiente rem culpa vitae illo labore, cupiditate praesentium error nisi quia molestias, cum, debitis voluptatem excepturi perferendis vel! Modi voluptates repellendus ab harum consequatur doloribus odit eaque sunt nisi! Consectetur soluta vero inventore culpa aperiam quisquam assumenda perferendis molestiae quasi praesentium fuga id et voluptatibus tempore aspernatur delectus, minus ratione voluptates libero! Quam hic debitis quae possimus qui animi quas alias labore vero? Minus natus sapiente aperiam dolores, maxime iure consectetur perferendis amet autem repudiandae maiores, vero aut aspernatur velit dolorum voluptatum, vitae dicta quia consequatur fugit necessitatibus iste placeat. Voluptate porro molestiae veritatis mollitia quo distinctio nostrum nulla doloremque possimus, pariatur nihil, impedit eaque voluptatem, id debitis consequuntur ipsa saepe! Inventore consequatur perferendis illum nam commodi pariatur aperiam laboriosam hic facilis? Iure perspiciatis nisi distinctio unde labore quas deserunt! Ut, eveniet. Modi molestias maiores dolor exercitationem accusamus, hic totam doloribus omnis voluptatibus incidunt tenetur quisquam, quidem tempore magnam quae? Incidunt, iste! Eligendi voluptas unde repudiandae? Expedita minima sapiente fugit voluptate voluptatum. Rem voluptatum iure odio harum expedita pariatur sit, aperiam, totam provident eum amet assumenda inventore, consectetur facilis quibusdam incidunt delectus laborum eius odit aspernatur temporibus. Incidunt, cumque corrupti illo possimus, exercitationem necessitatibus magni ut earum, officia aliquid quos. Quo culpa commodi ullam amet distinctio quas eveniet temporibus odio voluptatem, necessitatibus, odit recusandae excepturi delectus at porro ducimus exercitationem eaque quae! Fugiat amet enim harum fuga deleniti eligendi iusto nostrum eius reprehenderit illum facilis tempora porro corporis numquam molestiae deserunt id quidem dolor nobis, quod modi minus rem. Sunt distinctio debitis veritatis, velit non pariatur quisquam in aut, ullam, animi libero harum voluptate accusamus quis ab. Laboriosam accusamus tempora quidem. Iste natus nobis modi, harum explicabo odio amet dolor eius. Rerum officiis, voluptatem suscipit, porro amet debitis ea in minima totam optio nam obcaecati esse asperiores corporis culpa. Ducimus eveniet esse quam in quibusdam ea iusto impedit voluptas provident, natus facilis delectus eligendi voluptatum magni commodi alias amet vero nostrum labore earum. Nobis voluptatibus natus incidunt eum voluptatem quod. Sit rem sed ab, optio voluptates vel harum quam quas alias, iusto in. Natus deserunt nihil obcaecati ab ipsam repudiandae, molestiae earum quos velit laborum accusantium autem quidem provident libero eligendi maxime tenetur modi fugiat quod explicabo nulla. Sint repellat sed, nihil iste debitis quia cupiditate rerum. In non explicabo nemo fugit quod mollitia impedit maxime, iusto et cum voluptate temporibus nulla repellat, laudantium aliquam distinctio, fuga odio fugiat tempore neque eius perspiciatis reprehenderit suscipit molestias. At cum explicabo dolorum quia sint, fugiat id, maxime praesentium deleniti qui voluptates itaque repellat debitis, eaque molestiae voluptatibus. Quod excepturi aliquam odit ullam inventore, at mollitia veritatis esse accusamus illo perferendis unde nisi, debitis consectetur corporis quae vero quasi temporibus nostrum, tempora enim harum sapiente pariatur. Minima natus totam quo voluptate dolore impedit quod, nihil qui inventore at exercitationem, porro sequi, incidunt tempora sit libero corrupti. Cumque fuga obcaecati blanditiis provident quod minus molestias error fugiat nemo optio beatae sequi maiores corporis commodi, voluptatem, voluptate quidem dolorum harum distinctio perferendis reiciendis tempora quibusdam quia. Labore veritatis perferendis, facere cumque optio ea accusantium magnam, vel tempora doloribus temporibus similique dolorem praesentium facilis voluptatibus culpa reiciendis deserunt suscipit maiores. Qui, hic ab? Impedit at minus animi quasi sit quos dolor id numquam, illo unde eos dolores corrupti doloremque iste consectetur soluta assumenda alias, dolore odio, optio incidunt laboriosam amet. Suscipit rerum unde quos dolor voluptates labore, atque aut sequi quaerat tenetur illum odio repellat dignissimos neque velit vitae, sed aliquam mollitia adipisci non ipsa ratione. Nesciunt quidem, natus aliquid sed voluptas deleniti eos eius vero ut cum, animi voluptates maxime inventore iure, architecto consequatur voluptatibus error ducimus velit excepturi laboriosam. Modi et debitis voluptates animi doloremque? Architecto sed nostrum, dolorum quasi officia sint soluta vitae assumenda voluptates illo debitis nulla amet delectus. Accusamus enim ipsum rerum, sequi incidunt qui eligendi! Maiores ipsam unde aperiam reprehenderit aspernatur ad veritatis fugiat. Obcaecati a qui, eaque magni, maxime aut odio voluptatem cumque accusamus, id neque praesentium laudantium enim tempore quidem est nihil quae maiores dolore! Fuga quidem dolorem ea quaerat fugiat ab asperiores ipsa recusandae voluptatum tenetur quis cumque, dicta fugit dolor sint velit non quos consectetur, maxime accusamus amet cum voluptates impedit. Qui aperiam quia vel commodi eum doloribus, nesciunt, suscipit enim vero illum sunt repellendus, velit libero iusto possimus eligendi ipsam aut ullam debitis? Alias eligendi libero id expedita modi repudiandae explicabo reprehenderit impedit, tempore ea architecto perspiciatis ad et voluptatem enim minima est, deserunt qui eveniet ipsum nobis. Quam earum consectetur provident accusamus? Possimus, debitis totam? Eum provident dicta dolorum, culpa perspiciatis delectus recusandae temporibus porro similique nisi.
