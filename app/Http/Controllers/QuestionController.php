@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Choice;
+use App\Models\Education;
 use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class QuestionController extends Controller
             'question' => 'required|string',
             'choices' => 'required|array',
             'choices.*' => 'string',
+            'is_correct' => 'required|array', // Validate the is_correct field
             'point_value' => 'required',
             'question_type' => 'required'
         ]);
@@ -48,14 +50,13 @@ class QuestionController extends Controller
 
         // Save the choices associated with the question
         foreach ($validatedData['choices'] as $index => $choice) {
-            $isCorrect = $request->input('is_correct') == $index;
             $questionChoice = new Choice();
             $questionChoice->question_id = $question->id;
             $questionChoice->choice = $choice;
-            $questionChoice->is_correct = $isCorrect;
+            // Check if the current choice is marked as correct
+            $questionChoice->is_correct = isset($validatedData['is_correct'][$index]);
             $questionChoice->created_by = $user->id;
             $questionChoice->updated_by = $user->id;
-            // Additional attributes of the choice can be set here
             $questionChoice->save();
         }
         return redirect()->back()->with('success', 'Question created successfully!');
@@ -66,7 +67,28 @@ class QuestionController extends Controller
      */
     public function essayStore(Request $request)
     {
-        // Add your code to store essay questions
+        // Validate the request data
+        $validatedData = $request->validate([
+            'question_type' => 'required|string',
+            'quiz_id' => 'required|exists:quizzes,id',
+            'question' => 'required|string',
+        ]);
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Create the essay question
+        $question = new Question();
+        $question->quiz_id = $validatedData['quiz_id'];
+        $question->point_value = 0; // Default value for essays
+        $question->question = $validatedData['question'];
+        $question->question_type = $validatedData['question_type'];
+        $question->created_by = $user->id;
+        $question->updated_by = $user->id;
+        $question->save();
+
+        // Redirect back or return a response
+        return redirect()->back()->with('success', 'Essay question created successfully!');
     }
 
     /**
@@ -142,8 +164,11 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Question $question)
+    public function destroy(string $id)
     {
-        //
+        $question = Question::where('id', $id);
+        $question->delete();
+
+        return redirect()->back()->with('success', 'Question deleted successfully!');
     }
 }
