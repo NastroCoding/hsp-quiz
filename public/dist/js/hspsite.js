@@ -9,11 +9,9 @@ function removeWeightedOption(element) {
     inputGroup.remove();
 }
 
-// Add event listener to "Add Option" button
 document.getElementById("addOptionBtn").addEventListener("click", function () {
     var optionsContainer = document.getElementById("optionsContainer");
-    var optionIndex =
-        optionsContainer.querySelectorAll(".input-group").length + 1;
+    var optionIndex = optionsContainer.querySelectorAll(".input-group").length + 1;
 
     var newInputGroup = document.createElement("div");
     newInputGroup.classList.add("input-group");
@@ -21,15 +19,15 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     var prependDiv = document.createElement("div");
     prependDiv.classList.add("input-group-prepend");
 
-    var radioSpan = document.createElement("span");
-    radioSpan.classList.add("input-group-text");
+    var checkboxSpan = document.createElement("span");
+    checkboxSpan.classList.add("input-group-text");
 
-    var radioButton = document.createElement("input");
-    radioButton.setAttribute("type", "radio");
-    radioButton.setAttribute("name", "is_right");
+    var checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("name", "is_correct[]");
 
-    radioSpan.appendChild(radioButton);
-    prependDiv.appendChild(radioSpan);
+    checkboxSpan.appendChild(checkbox);
+    prependDiv.appendChild(checkboxSpan);
     newInputGroup.appendChild(prependDiv);
 
     var inputField = document.createElement("input");
@@ -47,7 +45,7 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     trashSpan.classList.add("input-group-text", "btn-danger", "btn");
     trashSpan.style.cursor = "pointer";
     trashSpan.onclick = function () {
-        removeOption(this); // Pass 'this' instead of 'trashSpan' to reference the clicked element
+        removeOption(this);
     };
 
     var trashIcon = document.createElement("i");
@@ -60,6 +58,34 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     optionsContainer.appendChild(newInputGroup);
 });
 
+function removeOption(element) {
+    var option = element.closest(".input-group");
+    option.parentNode.removeChild(option);
+}
+
+// Function to mark the correct answer when checkbox is clicked
+document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        var isChecked = this.checked;
+        var inputField = this.parentNode.parentNode.nextElementSibling.querySelector('input[type="text"]');
+        inputField.dataset.correct = isChecked ? '1' : '0';
+    });
+});
+
+// Update the correct answer status in the hidden input
+document.getElementById('questionForm').addEventListener('submit', function() {
+    var inputs = document.querySelectorAll('input[type="text"]');
+    inputs.forEach(function(input) {
+        var checkbox = input.previousElementSibling.querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+            // Set the value as integer 1 for correct answer
+            input.setAttribute('data-correct', '1');
+        } else {
+            // Set the value as integer 0 for incorrect answer
+            input.setAttribute('data-correct', '0');
+        }
+    });
+});
 
 
 // Add event listener to "Add Weighted Option" button

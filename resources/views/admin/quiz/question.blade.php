@@ -72,55 +72,13 @@
                         <!-- /.card-body -->
                         <div class="card-footer">
                             <button type="submit" class="btn btn-info">Edit</button>
-                            <button type="submit" class="btn btn-danger float-right">Delete</button>
+                            <a href="/admin/quiz/question/delete/{{ $question->id }}"
+                                class="btn btn-danger float-right">Delete</a>
                         </div>
                     </div>
                     <!-- /.card -->
                 </div>
             @endforeach
-            <div class="col-md-6">
-                <div class="card card-default">
-                    <!-- form start -->
-                    <div class="card-header">
-                        <p class="card-title text-muted">Essay</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, unde nostrum voluptatem id
-                                laboriosam ex eaque alias quam delectus suscipit, a, earum non provident. Quia sapiente
-                                deserunt eos aut! Earum.</p>
-                        </div>
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-info">Edit</button>
-                        <button type="submit" class="btn btn-danger float-right">Delete</button>
-                    </div>
-                </div>
-                <!-- /.card -->
-            </div>
-            <div class="col-md-6">
-                <div class="card card-default">
-                    <!-- form start -->
-                    <div class="card-header">
-                        <p class="card-title text-muted">Weighted Multiple Choice</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, unde nostrum voluptatem id
-                                laboriosam ex eaque alias quam delectus suscipit, a, earum non provident. Quia sapiente
-                                deserunt eos aut! Earum.</p>
-                        </div>
-
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-info">Edit</button>
-                        <button type="submit" class="btn btn-danger float-right">Delete</button>
-                    </div>
-                </div>
-                <!-- /.card -->
-            </div>
         </div>
     </section>
 
@@ -165,6 +123,7 @@
     </div>
 
     <!-- multiple choice modal -->
+    <!-- multiple choice modal -->
     <div class="modal fade" id="multiple-choice">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -179,28 +138,13 @@
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="inputName">Question</label>
-
-                                <div class="input-group">
-                                    <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-
-                                </div>
+                                <label for="inputQuestion">Question</label>
+                                <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
                             </div>
                             <input type="hidden" name="question_type" value="multiple_choice">
                             <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                             <div id="optionsContainer" class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><input type="radio" name="is_correct"/></span>
-                                    </div>
-                                    <input type="text" name="choices[]" class="form-control"
-                                        placeholder="Option 1" />
-                                    <div class="input-group-append">
-                                        <span class="input-group-text btn-danger btn" style=" cursor: pointer"
-                                            onclick="removeOption(this)"><i class="fas fa-trash"></i></span>
-                                    </div>
-                                </div>
-                                <!-- /input-group -->
+                                <!-- Options will be added dynamically here -->
                             </div>
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" id="addOptionBtn">
@@ -244,13 +188,13 @@
                                 <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                             </div>
                         </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
+                                Create
+                            </button>
+                        </div>
                     </form>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
-                            Create
-                        </button>
-                    </div>
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -280,9 +224,6 @@
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                         <div class="form-group" id="weighted-optionsContainer">
                             <div class="input-group weighted-input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><input type="radio" name="is_correct"/></span>
-                                </div>
                                 <input type="text" name="choices[]" class="form-control" placeholder="Option 1" />
                                 <input type="number" name="point_value[]" class="form-control" placeholder="Points"
                                     min="0" />
