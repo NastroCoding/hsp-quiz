@@ -71,12 +71,13 @@
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-sm btn-info" data-toggle="modal" data-id="{{ $question->id }}"
+                            <button type="submit" class="btn btn-sm btn-info" data-toggle="modal"
+                                data-id="{{ $question->id }}"
                                 data-target="#edit-{{ $question->question_type }}">Edit</button>
-                                <button type="button" class="btn btn-danger btn-sm delete-btn float-right"
-                                    data-id="{{ $question->id }}" data-toggle="modal" data-target="#delete">
-                                    Delete
-                                </button>
+                            <button type="button" class="btn btn-danger btn-sm delete-btn float-right"
+                                data-id="{{ $question->id }}" data-toggle="modal" data-target="#delete">
+                                Delete
+                            </button>
                         </div>
                     </div>
                     <!-- /.card -->
@@ -429,7 +430,6 @@
             modal.classList.remove('show');
             modal.style.display = 'none';
         }
-
     </script>
 @endsection
 @section('scripts')
