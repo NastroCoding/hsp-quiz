@@ -64,7 +64,8 @@ Route::controller(UserController::class)->group(function(){
 
 Route::controller(QuizController::class)->group(function(){
     Route::post('/admin/quiz/create', 'store')->middleware('admin');
-    
+    Route::post('/admin/quiz/edit/{id}', 'update')->middleware('admin');
+    Route::post('/quiz/view/{id}', 'quiz_view')->middleware('auth');
 });
 
 Route::controller(QuestionController::class)->group(function(){

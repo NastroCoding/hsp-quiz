@@ -66,7 +66,7 @@
                             <a class="btn btn-info btn-sm" href="/admin/quiz/edit/{{ $quiz->id }}" data-toggle="modal" data-target="#edit-user">
                                 Edit
                             </a>
-                            <a class="btn btn-sm btn-info" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
+                            <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
                             <a class="btn btn-sm btn-warning" href="/admin/quiz/">Review</a>
                             <button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal" data-target="#delete">Delete</button>
                         </td>
@@ -167,7 +167,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/admin/quiz/create" method="POST">
+                <form action="/admin/quiz/edit/{{ $quiz->id }}" method="POST">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
