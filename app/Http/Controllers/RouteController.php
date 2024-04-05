@@ -74,28 +74,28 @@ class RouteController extends Controller
     
 
     public function index(){
-        return view('user.index', [
+        return view('views.index', [
             'page' => 'Home'
         ]);
     }
 
     public function user_quiz(){
         $data = Quiz::latest()->get();
-        return view('user.quiz_user', [
+        return view('views.quiz_user', [
             'data' => $data,
             'page' => 'Quiz'
         ]);
     }
 
     public function user_score(){
-        return view('user.score', [
+        return view('views.score', [
             'page' => 'Score'
         ]);
     }
 
     public function user_quiz_page($slug){
         $data = Quiz::where('slug', $slug)->first();
-        return view('user.quiz_page',[
+        return view('views.quiz_page',[
             'page' => 'Quiz'
         ], compact('data'));
     }
