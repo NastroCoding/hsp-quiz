@@ -54,20 +54,30 @@ class QuizController extends Controller
     /**
      * Display the specified resource.
      */
-    public function quiz_view(Request $request, string $id)
+    public function quiz_view(Request $request, string $slug)
     {
         $validate = $request->validate([
             'token' => 'required',
         ]);
-
-        $quiz = Quiz::findOrFail($id);
-        if ( $request->token == $quiz->token ){
-            return view('views.quiz_page',[
-                'page' => $quiz->title
-            ], compact('quiz'));
-        } else {
-            return redirect('/quiz')->with('failed', 'Quiz not Found!');
+    
+        $quiz = Quiz::where('slug', $slug)->first();
+    
+        if (!$quiz) {
+            return redirect('/quiz')->with('failed', 'Quiz not found!');
         }
+    
+        if ($request->token != $quiz->token) {
+            return redirect('/quiz')->with('failed', 'Invalid token!');
+        }
+    
+        // Load questions associated with the quiz
+        $questions = $quiz->questions;
+    
+        return view('views.quiz_page', [
+            'page' => $quiz->title,
+            'quiz' => $quiz,
+            'questions' => $questions, // Pass the questions to the view
+        ]);
     }
 
     /**
@@ -106,8 +116,11 @@ class QuizController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Quiz $quiz)
+    public function destroy(string $id)
     {
-        //
+        $quiz = Quiz::where('id', $id);
+        $quiz->delete();
+
+        return redirect()->back()->with('success', 'Quiz deleted successfully!');
     }
 }

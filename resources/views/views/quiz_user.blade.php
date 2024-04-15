@@ -56,6 +56,8 @@
         <!-- /.content -->
     </div>
 
+    @if ($data->isNotEmpty())
+
     <div class="modal fade" id="modal-quiz">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -65,7 +67,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="/quiz/view/{{ $quiz->id }}" method="POST">
+                <form action="/quiz/view/{{ $quiz->slug }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="card-body">
@@ -87,4 +89,6 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+            
+    @endif
 @endsection

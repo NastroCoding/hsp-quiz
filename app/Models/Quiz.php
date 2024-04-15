@@ -13,7 +13,7 @@ class Quiz extends Model
     protected $guarded = ['id'];
 
     public function questions(){
-        return $this->hasMany(Question::class);
+        return $this->hasMany(Question::class, 'quiz_id');
     }
     
     public function category(){

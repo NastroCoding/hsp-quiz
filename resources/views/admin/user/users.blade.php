@@ -54,24 +54,30 @@
                                         data-toggle="modal" data-target="#edit-user">
                                         Edit
                                     </a>
-                                    <button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal"
-                                        data-target="#delete">Delete</button>
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
+                                        data-id="{{ $user->id }}" data-toggle="modal" data-target="#delete">
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                             <tr class="expandable-body">
                                 <td colspan="6">
                                     <p>
-                                        Created at : {{ $user->created_at->format('Y-m-d') }} <br>
-                                        Updated at : {{ $user->updated_at->format('Y-m-d') }}
+                                        Created at : {{ $user->created_at->format('H:m:s__Y-m-d') }} <br>
+                                        Updated at : {{ $user->updated_at->format('H:m:s__Y-m-d') }}
                                     </p>
 
-                                    <p class="align-right">
+                                    <p>
                                         Created by : @if ($user->created_by == '')
                                             System
+                                        @else
+                                            {{ $user->updated_by }}
                                         @endif
                                         <br>
                                         Updated by : @if ($user->created_by == '')
                                             System
+                                        @else
+                                            {{ $user->updated_by }}
                                         @endif
                                     </p>
                                 </td>

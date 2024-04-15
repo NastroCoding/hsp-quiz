@@ -44,7 +44,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>id</th>
+                        <th>Id</th>
                         <th>Title</th>
                         <th>Slug</th>
                         <th>Time</th>
@@ -68,12 +68,15 @@
                             </a>
                             <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
                             <a class="btn btn-sm btn-warning" href="/admin/quiz/">Review</a>
-                            <button type="button" class="btn btn-sm btn-danger ml-1" data-toggle="modal" data-target="#delete">Delete</button>
-                        </td>
+                            <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
+                            data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
+                            Delete
+                        </button>                        
+                    </td>
                     </tr>
                     <tr class="expandable-body">
                         <td colspan="7">
-                            <p>{{ $quiz->description }}</p>
+                            <p> Description : {{ $quiz->description }} <br> Token :  {{ $quiz->token }}</p>
                         </td>
                     </tr>
                     @endforeach
@@ -148,7 +151,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-success" value="Add User">
+                <input type="submit" class="btn btn-success" value="Add Quiz">
             </div>
             </form>
         </div>
@@ -246,11 +249,30 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+                <a id="deleteButton" class="btn btn-danger">
+                    Delete
+                </a>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
 </div>
+@endsection
+
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            // Capture delete button click event
+            $('.delete-btn').click(function() {
+                // Get the ID of the user
+                var quizId = $(this).data('id');
+                // Construct the delete URL
+                var deleteUrl = '/admin/quiz/delete/' + quizId;
+                // Set the delete button href attribute
+                $('#deleteButton').attr('href', deleteUrl);
+            });
+        });
+    </script>
 @endsection

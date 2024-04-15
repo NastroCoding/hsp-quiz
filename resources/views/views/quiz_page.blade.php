@@ -7,10 +7,11 @@
             <div class="row">
                 <!-- /.col-md-6 -->
                 <!-- Multiple Choice Form -->
+                @foreach ($questions as $que)
                 <div class="card card-default" style="max-width: 500px;">
                     <!-- Limiting the width to 500px -->
                     <div class="card-header">
-                        <h3 class="card-title">Question 1</h3>
+                        <h3 class="card-title">{{ $que->question_type }}</h3>
                         <h3 class="card-title text-muted float-right">Time Remaining: <span id="countdownTimer2"></span></h3>
                     </div>
                     <!-- /.card-header -->
@@ -50,7 +51,8 @@
                             <a type="submit" class="btn btn-primary float-right">Next <i class="fas fa-angle-right"></i></a>
                         </div>
                     </form>
-                </div>
+                </div> 
+                @endforeach
                 <!-- Essay Form -->
                 <div class="card card-default" style="max-width: 500px;">
                     <!-- Limiting the width to 500px -->
