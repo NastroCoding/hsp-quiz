@@ -146,6 +146,7 @@
                             </div>
                             <input type="hidden" name="question_type" value="multiple_choice">
                             <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                            <input type="hidden" name="number" value="{{ $lastQuestionNumber}}">
                             <div id="optionsContainer" class="form-group">
                                 <!-- Options will be added dynamically here -->
                             </div>
@@ -423,6 +424,20 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var lastQuestionNumber = "{{ $lastQuestionNumber }}";
+            var questionNumberInput = document.getElementById('question_number');
+
+            if (lastQuestionNumber != "") {
+                // If lastQuestionNumber exists, increment it by one
+                var nextQuestionNumber = parseInt(lastQuestionNumber) + 1;
+                questionNumberInput.value = nextQuestionNumber;
+            } else {
+                // If it's the first question, set the question number to 1
+                questionNumberInput.value = 1;
+            }
+        });
+
         function closeQuestionModal() {
             var modal = document.getElementById('add-question');
             var modalBackdrop = document.querySelector('.modal-backdrop');

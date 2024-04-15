@@ -60,8 +60,8 @@
                         <td>{{ $quiz->title }}</td>
                         <td>{{ $quiz->slug }}</td>
                         <td>{{ $quiz->time }}</td>
-                        <td>{{ $quiz->category_id }}</td>
-                        <td>{{ $quiz->education_id }}</td>
+                        <td>{{ $quiz->category->category_name }}</td>
+                        <td>{{ $quiz->education->education_name }}</td>
                         <td>
                             <a class="btn btn-info btn-sm" href="/admin/quiz/edit/{{ $quiz->id }}" data-toggle="modal" data-target="#edit-user">
                                 Edit

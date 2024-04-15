@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('quiz_id');
+            $table->integer('number');
             $table->string('question');
             $table->integer('point_value');
             $table->enum('question_type', ['essay', 'multiple_choice', 'weighted_multiple']);

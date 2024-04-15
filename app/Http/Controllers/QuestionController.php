@@ -30,13 +30,15 @@ class QuestionController extends Controller
             'choices' => 'required|array',
             'choices.*' => 'string',
             'is_correct' => 'required|array', // Validate the is_correct field
+            'number' => 'required',
             'point_value' => 'required',
             'question_type' => 'required'
         ]);
 
         // Get the currently authenticated user
         $user = Auth::user();
-
+        $lastQuestionNumber = Question::where('quiz_id', $request->quiz_id)->max('number') ?? 0;
+        
         // Create a new question instance
         $question = new Question();
         $question->question = $validatedData['question'];
@@ -45,6 +47,7 @@ class QuestionController extends Controller
         $question->quiz_id = $request->quiz_id;
         $question->created_by = $user->id;
         $question->updated_by = $user->id;
+        $question->number = $lastQuestionNumber+1;
         // Additional attributes of the question can be set here
         $question->save();
 
@@ -76,6 +79,7 @@ class QuestionController extends Controller
 
         // Get the currently authenticated user
         $user = Auth::user();
+        $lastQuestionNumber = Question::where('quiz_id', $request->quiz_id)->max('number') ?? 0;
 
         // Create the essay question
         $question = new Question();
@@ -85,10 +89,11 @@ class QuestionController extends Controller
         $question->question_type = $validatedData['question_type'];
         $question->created_by = $user->id;
         $question->updated_by = $user->id;
+        $question->number = $lastQuestionNumber+1;
         $question->save();
 
         // Redirect back or return a response
-        return redirect()->back()->with('success', 'Essay question created successfully!');
+        return redirect()->back()->with('success', 'Essay question created successfully!', ['lastQuestionNumber' => $lastQuestionNumber]);
     }
 
     /**
@@ -108,6 +113,7 @@ class QuestionController extends Controller
         ]);
 
         $created_by = Auth::user()->id;
+        $lastQuestionNumber = Question::where('quiz_id', $request->quiz_id)->max('number') ?? 0;
 
         // Create the question
         $question = Question::create([
@@ -116,7 +122,8 @@ class QuestionController extends Controller
             'question' => $validatedData['question'],
             'question_type' => $validatedData['question_type'],
             'created_by' => $created_by,
-            'updated_by' => $created_by
+            'updated_by' => $created_by,
+            'number' => $lastQuestionNumber+1
         ]);
 
         // Attach choices to the question
@@ -131,7 +138,7 @@ class QuestionController extends Controller
         }
 
         // Redirect back or return a response
-        return redirect()->back()->with('success', 'Question created successfully!');
+        return redirect()->back()->with('success', 'Question created successfully!', ['lastQuestionNumber' => $lastQuestionNumber]);
     }
 
     /**
@@ -146,10 +153,12 @@ class QuestionController extends Controller
         if (!$quiz) {
             return response()->json(['message' => 'Quiz not found'], 404);
         }
+        $lastQuestionNumber = Question::max('number') ?? 0;
 
         // Load the view and pass the quiz data to it
         return view('admin.quiz.question', [
             'page' => $quiz->title,
+            'lastQuestionNumber' => $lastQuestionNumber
         ], compact('quiz', 'questions'));
     }
 
