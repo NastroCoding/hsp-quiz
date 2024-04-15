@@ -24,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 
 <body class="hold-transition layout-top-nav ">
-    
+
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -41,6 +41,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="collapse navbar-collapse order-3" id="navbarCollapse">
                     <!-- Left navbar links -->
                     <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link">Home</a>
+                        </li>
                         <li class="nav-item">
                             <a href="/quiz" class="nav-link">Quiz</a>
                         </li>
