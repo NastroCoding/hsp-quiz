@@ -67,16 +67,15 @@
                                 Edit
                             </a>
                             <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
-                            <a class="btn btn-sm btn-warning" href="/admin/quiz/">Review</a>
-                            <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
-                            data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
-                            Delete
-                        </button>                        
-                    </td>
+                            <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal" data-target="#review">Review</a>
+                            <button type="button" class="btn btn-danger btn-sm delete-btn ml-1" data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                     <tr class="expandable-body">
                         <td colspan="7">
-                            <p> Description : {{ $quiz->description }} <br> Token :  {{ $quiz->token }}</p>
+                            <p> Description : {{ $quiz->description }} <br> Token : {{ $quiz->token }}</p>
                         </td>
                     </tr>
                     @endforeach
@@ -234,6 +233,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 @endif
 <div class="modal fade" id="delete">
     <div class="modal-dialog">
@@ -258,21 +258,90 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+<div class="modal fade" id="review">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Review</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Participated users</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>User</th>
+                                            <th>Score</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>183</td>
+                                            <td>John Doe</td>
+                                            <td>90/100</td>
+                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>183</td>
+                                            <td>John Doe</td>
+                                            <td>90/100</td>
+                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>183</td>
+                                            <td>John Doe</td>
+                                            <td>90/100</td>
+                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>183</td>
+                                            <td>John Doe</td>
+                                            <td>90/100</td>
+                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 @endsection
 
 
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            // Capture delete button click event
-            $('.delete-btn').click(function() {
-                // Get the ID of the user
-                var quizId = $(this).data('id');
-                // Construct the delete URL
-                var deleteUrl = '/admin/quiz/delete/' + quizId;
-                // Set the delete button href attribute
-                $('#deleteButton').attr('href', deleteUrl);
-            });
+<script>
+    $(document).ready(function() {
+        // Capture delete button click event
+        $('.delete-btn').click(function() {
+            // Get the ID of the user
+            var quizId = $(this).data('id');
+            // Construct the delete URL
+            var deleteUrl = '/admin/quiz/delete/' + quizId;
+            // Set the delete button href attribute
+            $('#deleteButton').attr('href', deleteUrl);
         });
-    </script>
+    });
+</script>
 @endsection
