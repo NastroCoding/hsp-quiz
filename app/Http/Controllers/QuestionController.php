@@ -154,11 +154,10 @@ class QuestionController extends Controller
             return response()->json(['message' => 'Quiz not found'], 404);
         }
         $lastQuestionNumber = Question::max('number') ?? 0;
-
         // Load the view and pass the quiz data to it
         return view('admin.quiz.question', [
             'page' => $quiz->title,
-            'lastQuestionNumber' => $lastQuestionNumber
+            'lastQuestionNumber' => $lastQuestionNumber,
         ], compact('quiz', 'questions'));
     }
 

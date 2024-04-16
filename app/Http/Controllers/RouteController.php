@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Education;
+use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,7 +33,8 @@ class RouteController extends Controller
         ]);
     }
 
-    public function quiz_result(){
+    public function quiz_result()
+    {
         return view('admin.quiz.quiz_result', [
             'page' => 'Quiz'
         ]);
@@ -53,7 +55,8 @@ class RouteController extends Controller
 
     // CATEGORY
 
-    public function category(){
+    public function category()
+    {
         $category = Category::latest()->get();
         return view('admin.category.category', [
             'data' => $category,
@@ -62,7 +65,8 @@ class RouteController extends Controller
     }
 
     // EDUCATION
-    public function education(){
+    public function education()
+    {
         $education = Education::latest()->get();
         return view('admin.education.education', [
             'data' => $education,
@@ -71,15 +75,17 @@ class RouteController extends Controller
     }
 
     // INDEX
-    
 
-    public function index(){
+
+    public function index()
+    {
         return view('views.index', [
             'page' => 'Home'
         ]);
     }
 
-    public function user_quiz(){
+    public function user_quiz()
+    {
         $data = Quiz::latest()->get();
         return view('views.quiz_user', [
             'data' => $data,
@@ -87,16 +93,21 @@ class RouteController extends Controller
         ]);
     }
 
-    public function user_score(){
+    public function user_score()
+    {
         return view('views.score', [
             'page' => 'Score'
         ]);
     }
 
-    public function user_quiz_page($slug){
+    public function user_quiz_page($slug)
+    {
         $data = Quiz::where('slug', $slug)->first();
-        return view('views.quiz_page',[
-            'page' => 'Quiz'
-        ], compact('data'));
+        $lastQuestionNumber = Question::where('quiz_id', $data->id)->max('number') ?? 0;
+        return view('views.quiz_page', [
+            'page' => 'Quiz',
+            'data' => $data,
+            'lastQuestionNumber' => $lastQuestionNumber,
+        ]);
     }
 }

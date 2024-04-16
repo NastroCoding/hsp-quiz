@@ -36,13 +36,7 @@
 
     <section class="content">
         <div class="row">
-            @php
-                $count = 0;
-            @endphp
             @foreach ($questions as $question)
-                @php
-                    $count++;
-                @endphp
                 <div class="col-md-6">
                     <div class="card card-default">
                         <!-- form start -->
@@ -51,7 +45,7 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <p>{{ $count }}. {{ $question->question }}</p>
+                                <p>{{ $question->number }}. {{ $question->question }}</p>
                             </div>
                             @if ($question->question_type == 'multiple_choice' || $question->question_type == 'weighted_multiple')
                                 <div class="form-group">

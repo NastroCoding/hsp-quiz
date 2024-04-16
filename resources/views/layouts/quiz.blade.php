@@ -48,16 +48,9 @@
                         <p>Time Remaining: <span id="countdownTimer1"></span></p>
                     </div>
                     <div class="row row-cols-5 m-1">
-                        <a href="" class="btn btn-default col">1</a>
-                        <a href="" class="btn btn-default col">2</a>
-                        <a href="" class="btn btn-default col">3</a>
-                        <a href="" class="btn btn-default col">4</a>
-                        <a href="" class="btn btn-default col">5</a>
-                        <a href="" class="btn btn-default col">6</a>
-                        <a href="" class="btn btn-default col">7</a>
-                        <a href="" class="btn btn-default col">8</a>
-                        <a href="" class="btn btn-default col">9</a>
-                        <a href="" class="btn btn-default col">10</a>
+                        @for ($i = 1; $i <= $lastQuestionNumber; $i++)
+                        <a href="#" class="btn btn-default col">{{ $i }}</a>
+                        @endfor
                     </div>
                     <div></div>
                     <div class="row m-1">
