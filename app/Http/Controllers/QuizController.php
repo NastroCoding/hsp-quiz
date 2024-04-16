@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -59,25 +60,60 @@ class QuizController extends Controller
         $validate = $request->validate([
             'token' => 'required',
         ]);
-    
+
         $quiz = Quiz::where('slug', $slug)->first();
-    
+
         if (!$quiz) {
             return redirect('/quiz')->with('failed', 'Quiz not found!');
         }
-    
+
         if ($request->token != $quiz->token) {
             return redirect('/quiz')->with('failed', 'Invalid token!');
         }
-    
+
         // Load questions associated with the quiz
         $questions = $quiz->questions;
-    
+        $lastQuestionNumber = Question::where('quiz_id', $quiz->id)->max('number') ?? 0;
+
         return view('views.quiz_page', [
             'page' => $quiz->title,
             'quiz' => $quiz,
-            'questions' => $questions, // Pass the questions to the view
+            'questions' => $questions,
+            'lastQuestionNumber' => $lastQuestionNumber,
+            'slug' => $quiz->slug
+            // Pass the questions to the view
         ]);
+    }
+
+    public function quiz_num($slug, $number)
+    {
+        $quiz = Quiz::where('slug', $slug)->first();
+        if (!$quiz) {
+            // Handle case where quiz is not found
+            return response()->json(['message' => 'Quiz not found'], 404);
+        }
+
+        $question = Question::where('quiz_id', $quiz->id)
+            ->where('number', $number)
+            ->first();
+
+        $questions = $quiz->questions;
+        $lastQuestionNumber = Question::where('quiz_id', $quiz->id)->max('number') ?? 0;
+
+        if (!$question) {
+            // Handle case where question is not found
+            return response()->json(['message' => 'Question not found'], 404);
+        }
+
+        return view('views.quiz_page', [
+            'page' => 'Quiz',
+            'page' => $quiz->title,
+            'quiz' => $quiz,
+            'questions' => $questions,
+            'lastQuestionNumber' => $lastQuestionNumber,
+            'slug' => $quiz->slug,
+            'question_number' => $number
+        ], compact('question'));
     }
 
     /**

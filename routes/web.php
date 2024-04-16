@@ -66,7 +66,7 @@ Route::controller(QuizController::class)->group(function(){
     Route::post('/admin/quiz/create', 'store')->middleware('admin');
     Route::post('/admin/quiz/edit/{id}', 'update')->middleware('admin');
     Route::get('/admin/quiz/delete/{id}', 'destroy')->middleware('admin');
-    Route::post('/quiz/view/{slug}/{number}', 'quiz_num')->middleware('auth');
+    Route::get('/quiz/view/{slug}/{number}', 'quiz_num')->middleware('auth');
     Route::post('/quiz/view/{slug}', 'quiz_view')->middleware('auth');
 });
 

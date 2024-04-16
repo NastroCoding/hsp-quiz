@@ -103,11 +103,9 @@ class RouteController extends Controller
     public function user_quiz_page($slug)
     {
         $data = Quiz::where('slug', $slug)->first();
-        $lastQuestionNumber = Question::where('quiz_id', $data->id)->max('number') ?? 0;
         return view('views.quiz_page', [
             'page' => 'Quiz',
             'data' => $data,
-            'lastQuestionNumber' => $lastQuestionNumber,
         ]);
     }
 }
