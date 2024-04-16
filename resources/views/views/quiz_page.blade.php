@@ -54,9 +54,6 @@
                                     <!-- Limiting the width to 500px -->
                                     <div class="card-header">
                                         <h3 class="card-title">Question 1</h3>
-                                        <h3 class="card-title text-muted float-right">Time Remaining: <span
-                                                id="countdownTimer3"></span>
-                                        </h3>
                                     </div>
                                     <!-- /.card-header -->
                                     <!-- form start -->
