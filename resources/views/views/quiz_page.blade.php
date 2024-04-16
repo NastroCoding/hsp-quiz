@@ -16,12 +16,10 @@
                     @foreach ($questions as $que)
                         @if ($que->number == $question_number)
                             @if ($que->question_type == 'multiple_choice')
-                                <div class="card card-default" style="max-width: 500px;">
+                                <div class="card card-default" style="max-width: 500px; width:500px;">
                                     <!-- Limiting the width to 500px -->
                                     <div class="card-header">
                                         <h3 class="card-title">{{ $que->question_type }}</h3>
-                                        <h3 class="card-title text-muted float-right">Time Remaining: <span
-                                                id="countdownTimer2"></span></h3>
                                     </div>
                                     <!-- /.card-header -->
                                     <!-- form start -->

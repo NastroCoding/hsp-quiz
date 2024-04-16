@@ -34,6 +34,11 @@
                 <li class="nav-item"></li>
             </ul>
             <!-- Right navbar links -->
+            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link disabled">Time Remaining: <span id="countdownTimer1"></span></a>
+                </li>
+            </ul>
         </nav>
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
@@ -45,9 +50,6 @@
             <div class="sidebar">
                 <!-- Sidebar Menu -->
                 <nav class="mt-3">
-                    <div class="row m-1">
-                        <p>Time Remaining: <span id="countdownTimer1"></span></p>
-                    </div>
                     <div class="row row-cols-5 m-1">
                         @yield('number')
                     </div>
