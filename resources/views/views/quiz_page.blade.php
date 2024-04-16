@@ -35,15 +35,15 @@
                     <!-- Multiple Choice Form -->
                     @foreach ($questions as $que)
                         @if ($que->number == $question_number)
-                            @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
-                                <div class="card card-default col-8" id="responsive">
-                                    <!-- Setting a minimum width of 300px and a maximum width of 90% -->
-                                    <div class="card-header">
-                                        <h3 class="card-title">Number {{ $que->number }}</h3>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <!-- form start -->
-                                    <form>
+                            <div class="card card-default col-8" id="responsive">
+                                <!-- Setting a minimum width of 300px and a maximum width of 90% -->
+                                <div class="card-header">
+                                    <h3 class="card-title">Number {{ $que->number }}</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <form>
+                                    @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <p>{{ $que->question }}</p>
@@ -61,23 +61,7 @@
                                             <p class="text-sm text-muted float-right">{{ $que->question_type }}</p>
                                         </div>
                                         <!-- /.card-body -->
-                                        <div class="card-footer">
-                                            <a type="submit" class="btn btn-default"><i class="fas fa-angle-left"></i>
-                                                Back</a>
-                                            <a type="submit" class="btn btn-primary float-right">Next <i
-                                                    class="fas fa-angle-right"></i></a>
-                                        </div>
-                                    </form>
-                                </div>
-                            @elseif ($que->question_type == 'essay')
-                                <div class="card card-default" style="min-width: 300px; max-width: 90%;" id="responsive">
-                                    <!-- Limiting the width to 500px -->
-                                    <div class="card-header">
-                                        <h3 class="card-title">Number {{ $que->number }}</h3>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <!-- form start -->
-                                    <form>
+                                    @elseif ($que->question_type == 'essay')
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <p>{{ $que->question }}</p>
@@ -88,15 +72,21 @@
                                             <p class="text-sm text-muted float-right">{{ $que->question_type }}</p>
                                         </div>
                                         <!-- /.card-body -->
-                                        <div class="card-footer">
-                                            <a type="submit" class="btn btn-default"><i class="fas fa-angle-left"></i>
+                                    @endif
+                                    <div class="card-footer">
+                                        @if ($que->number != 1)
+                                            <a type="submit" href="/quiz/view/{{ $slug }}/{{ $que->number - 1 }}"
+                                                class="btn btn-default"><i class="fas fa-angle-left"></i>
                                                 Back</a>
-                                            <a type="submit" class="btn btn-primary float-right">Next <i
+                                        @endif
+                                        @if ($que->number != $lastQuestionNumber)
+                                            <a type="submit" href="/quiz/view/{{ $slug }}/{{ $que->number + 1 }}"
+                                                class="btn btn-primary float-right">Next <i
                                                     class="fas fa-angle-right"></i></a>
-                                        </div>
-                                    </form>
-                                </div>
-                            @endif
+                                        @endif
+                                    </div>
+                                </form>
+                            </div>
                         @endif
                     @endforeach
                     <!-- Essay Form -->
