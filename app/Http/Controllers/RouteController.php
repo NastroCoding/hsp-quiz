@@ -40,6 +40,14 @@ class RouteController extends Controller
         ]);
     }
 
+    
+    public function quiz_review()
+    {
+        return view('admin.quiz.review', [
+            'page' => 'Quiz'
+        ]);
+    }
+
     // ADMIN USERS
 
     public function users()

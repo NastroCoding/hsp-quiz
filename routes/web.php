@@ -32,6 +32,7 @@ Route::controller(RouteController::class)->group(function(){
     // QUIZ
     Route::get('/admin/quiz', 'quiz')->middleware('admin');
     Route::get('/admin/quiz/result', 'quiz_result')->middleware('admin');
+    Route::get('/admin/quiz/review', 'quiz_review')->middleware('admin');
 
     // CATEGORY
     Route::get('/admin/category', 'category')->middleware('admin');
