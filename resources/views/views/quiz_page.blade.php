@@ -42,7 +42,9 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form>
+                                <form action="/quiz/answer" method="POST">
+                                    <input type="hidden" name="question_id" value="{{ $que->id }}" >
+                                    @csrf
                                     @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
                                         <div class="card-body">
                                             <div class="form-group">
@@ -51,7 +53,7 @@
                                             @foreach ($que->choices as $index => $choice)
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="question1"
+                                                        <input class="form-check-input" type="radio" name="choosen_choice_id" value="{{ $choice->id }}"
                                                             id="radio{{ $index + 1 }}">
                                                         <label class="form-check-label"
                                                             for="radio{{ $index + 1 }}">{{ $choice->choice }}</label>
@@ -83,6 +85,8 @@
                                             <a type="submit" href="/quiz/view/{{ $slug }}/{{ $que->number + 1 }}"
                                                 class="btn btn-primary float-right">Next <i
                                                     class="fas fa-angle-right"></i></a>
+                                        @else
+                                        <input type="submit" value="Submit " class="btn btn-primary float-right">
                                         @endif
                                     </div>
                                 </form>

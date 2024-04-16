@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User_Answer;
+use App\Models\UserAnswer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserAnswerController extends Controller
 {
@@ -20,13 +21,29 @@ class UserAnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the request data
+        $validatedData = $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'choosen_choice_id' => 'required|exists:choices,id',
+        ]);
+
+        // Add the authenticated user's ID to the data
+        $validatedData['user_id'] = Auth::id();
+
+        // Set the created_by and updated_by fields to the authenticated user's ID
+        $validatedData['created_by'] = Auth::id();
+        $validatedData['updated_by'] = Auth::id();
+
+        // Create a new UserAnswer instance and save it to the database
+        UserAnswer::create($validatedData);
+
+        return redirect()->back()->with('success', 'Your answers have been submitted successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User_Answer $user_Answer)
+    public function show(UserAnswer $userAnswer)
     {
         //
     }
@@ -34,7 +51,7 @@ class UserAnswerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User_Answer $user_Answer)
+    public function update(Request $request, UserAnswer $userAnswer)
     {
         //
     }
@@ -42,7 +59,7 @@ class UserAnswerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User_Answer $user_Answer)
+    public function destroy(UserAnswer $userAnswer)
     {
         //
     }

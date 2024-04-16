@@ -6,6 +6,7 @@ use App\Http\Controllers\EducationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RouteController;
+use App\Http\Controllers\UserAnswerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -89,4 +90,8 @@ Route::controller(EducationController::class)->group(function(){
     Route::post('/admin/education/create', 'store')->middleware('admin');
     Route::get('/admin/education/delete/{id}', 'destroy')->middleware('admin');
     Route::put('/admin/education/edit/{id}', 'update')->middleware('admin');
+});
+
+Route::controller(UserAnswerController::class)->group(function(){
+    Route::post('/quiz/answer', 'store')->middleware('auth');
 });

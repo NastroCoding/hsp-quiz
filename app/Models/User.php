@@ -56,7 +56,7 @@ class User extends Authenticatable
         return $this->belongsTo(Education::class);
     }
 
-    public function user_answer(){
-        return $this->hasMany(User_Answer::class);
+    public function useranswer(){
+        return $this->hasMany(UserAnswer::class);
     }
 }
