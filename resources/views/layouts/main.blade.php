@@ -10,6 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $page }} | HSPnet</title>
+    <link rel="shortcut icon" href="{{URL::asset('dist/img/favicon.ico')}}" type="image/x-icon">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
@@ -31,7 +32,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
             <div class="container">
                 <a href="/" class="navbar-brand">
-                    <img src="{{URL::asset('dist/img/hsp-logo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3 p-1" style="opacity: 0.8" />
+                    <img src="{{URL::asset('dist/img/logo.png')}}" alt="AdminLTE Logo" class="brand-image" style="opacity: 0.8" />
                 </a>
 
                 <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
