@@ -63,11 +63,6 @@
             <!-- /.sidebar -->
         </aside>
         @yield('container')
-        <footer class="main-footer">
-            <strong>Copyright &copy; 2024
-                <a href="">HSP Net</a>.</strong>
-            All rights reserved.
-        </footer>
     </div>
     <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap -->
