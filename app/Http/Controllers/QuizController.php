@@ -80,7 +80,8 @@ class QuizController extends Controller
             'quiz' => $quiz,
             'questions' => $questions,
             'lastQuestionNumber' => $lastQuestionNumber,
-            'slug' => $quiz->slug
+            'slug' => $quiz->slug,
+            'question_number' => 1
             // Pass the questions to the view
         ]);
     }
@@ -97,8 +98,8 @@ class QuizController extends Controller
             ->where('number', $number)
             ->first();
 
-        $questions = $quiz->questions;
-        $lastQuestionNumber = Question::where('quiz_id', $quiz->id)->max('number') ?? 0;
+            $questions = $quiz->questions;
+            $lastQuestionNumber = Question::where('quiz_id', $quiz->id)->max('number') ?? 0;
 
         if (!$question) {
             // Handle case where question is not found
@@ -106,7 +107,6 @@ class QuizController extends Controller
         }
 
         return view('views.quiz_page', [
-            'page' => 'Quiz',
             'page' => $quiz->title,
             'quiz' => $quiz,
             'questions' => $questions,
