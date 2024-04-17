@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('education_id');
             $table->string('token')->unique()->nullable();
             $table->string('title');
-            $table->text('images');
+            $table->text('thumbnail')->nullable();
             $table->text('description');
             $table->enum('is_active', ['on', 'off'])->default('off');
             $table->string('slug')->unique();

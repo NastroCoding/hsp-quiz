@@ -27,7 +27,7 @@
             foreach ($userAnswers as $userAnswer) {
                 if ($userAnswer->question_id == $i) {
                     $answered = true;
-                    break; // Exit the loop once an answer is found
+                    break;
                 }
             }
         @endphp
