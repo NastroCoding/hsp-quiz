@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('images');
             $table->text('description');
-            $table->text('is_active');
+            $table->enum('is_active', ['on', 'off'])->default('off');
             $table->string('slug')->unique();
             $table->integer('time');
             $table->unsignedBigInteger('created_by');
