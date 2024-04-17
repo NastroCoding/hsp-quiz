@@ -129,6 +129,8 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputQuestion">Question</label>
+                            <br>
+                            <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="image" id="exampleInputFile" accept="image/*">
@@ -206,6 +208,17 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputName">Question</label>
+                            <br>
+                            <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile" accept="image/*">
+                                    <label class="custom-file-label" for="exampleInputFile">Choose image</label>
+                                    <div class="input-group-append">
+                                        <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
+                                    </div>
+                                </div>
+                            </div>
                             <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                         </div>
                     </div>
@@ -240,19 +253,37 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputName">Question</label>
+                        <br>
+                        <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="exampleInputFile" accept="image/*">
+                                <label class="custom-file-label" for="exampleInputFile">Choose image</label>
+                                <div class="input-group-append">
+                                    <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
+                                </div>
+                            </div>
+                        </div>
                         <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                     </div>
                     <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                    <div class="form-group" id="weighted-optionsContainer">
+                    <div id="weighted-optionsContainer">
+                        <label for="inputName">Option</label>
+                        <!-- Weighted Option 1 -->
                         <div class="input-group weighted-input-group">
-                            <input type="text" name="choices[]" class="form-control" placeholder="Option 1" />
-                            <input type="number" name="point_value[]" class="form-control" placeholder="Points" min="0" />
+                            <input type="text" class="form-control" placeholder="Option 1" name="choices[]">
+                            <input type="number" min="0" class="form-control" placeholder="Points" name="point_value[]">
                             <div class="input-group-append">
-                                <span class="input-group-text btn-danger btn" style="cursor: pointer" onclick="removeWeightedOption(this)">
+                                <span class="input-group-text btn btn-default" style="cursor: pointer;" onclick="imageInput.click()">
+                                    <i class="fas fa-image"></i>
+                                    <input type="file" accept="image/*" style="display: none;">
+                                </span>
+                                <span class="input-group-text btn-danger btn" style="cursor: pointer;" onclick="removeWeightedOption(this)">
                                     <i class="fas fa-trash"></i>
                                 </span>
                             </div>
                         </div>
+                        <!-- End Weighted Option 1 -->
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add Option</button>
