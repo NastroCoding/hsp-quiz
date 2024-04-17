@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Choice;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\UserAnswer;
@@ -24,33 +25,56 @@ class QuizController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'category_id' => 'required',
-            'education_id' => 'required',
-            'token' => 'required',
-            'title' => 'required',
-            'description' => 'required',
-            'time' => 'required',
-            'slug' => 'unique'
+        $validatedData = $request->validate([
+            'question' => 'required|string',
+            'choices' => 'required|array',
+            'choices.*' => 'string',
+            'is_correct' => 'required|array',
+            'number' => 'required',
+            'point_value' => 'required',
+            'question_type' => 'required',
         ]);
 
-        $created_by = Auth::user()->id;
-        $updated_by = Auth::user()->id;
-        $slug = Str::slug($request->title);
+        $user = Auth::user();
+        $lastQuestionNumber = Question::where('quiz_id', $request->quiz_id)->max('number') ?? 0;
+        
+        $question = new Question();
+        $question->question = $validatedData['question'];
+        $question->point_value = $validatedData['point_value'];
+        $question->question_type = $validatedData['question_type'];
+        $question->quiz_id = $request->quiz_id;
+        $question->created_by = $user->id;
+        $question->updated_by = $user->id;
+        $question->number = $lastQuestionNumber + 1;
+        $question->save();
 
-        $quiz = Quiz::create([
-            'category_id' => $request->category_id,
-            'education_id' => $request->education_id,
-            'token' => $request->token,
-            'title' => $request->title,
-            'description' => $request->description,
-            'time' => $request->time,
-            'slug' => $slug,
-            'created_by' => $created_by,
-            'updated_by' => $updated_by
-        ]);
+        if ($request->hasFile('images')) {
+            $image = $request->file('images');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('question_images', $imageName, 'public');
+            $question->images = $imagePath;
+        }
 
-        return redirect('/admin/quiz')->with('quiz_success', 'Quiz Add Success!');
+        foreach ($validatedData['choices'] as $index => $choice) {
+            $questionChoice = new Choice();
+            $questionChoice->question_id = $question->id;
+            $questionChoice->choice = $choice;
+            $questionChoice->is_correct = isset($validatedData['is_correct'][$index]);
+            $questionChoice->created_by = $user->id;
+            $questionChoice->updated_by = $user->id;
+
+            // Handle image upload for each choice
+            if ($request->hasFile('images.' . $index)) {
+                $image = $request->file('images.' . $index);
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imagePath = $image->storeAs('choice_images', $imageName, 'public');
+                $questionChoice->image_choice = $imagePath;
+            }
+
+            $questionChoice->save();
+        }
+
+        return redirect()->back()->with('success', 'Question created successfully!');
     }
 
     /**
