@@ -90,7 +90,7 @@
                                     <div class="card-footer">
                                         @if ($que->number != 1)
                                             <a href="javascript:void(0)"
-                                                onclick="submitForm('/quiz/view/{{ $slug }}/{{ $que->number - 1 }}')"
+                                                onclick="submitForm('   /quiz/view/{{ $slug }}/{{ $que->number - 1 }}')"
                                                 class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
                                         @endif
                                         @if ($que->number != $lastQuestionNumber)
@@ -119,6 +119,5 @@
     <script>
         CountdownTimer.init("countdownTimer2");
         CountdownTimer.init("countdownTimer3");
-    </script>
     </script>
 @endsection

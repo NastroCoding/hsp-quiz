@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('education_id');
             $table->string('token');
             $table->string('title');
+            $table->text('images');
             $table->text('description');
             $table->string('slug')->unique();
             $table->integer('time');
