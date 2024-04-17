@@ -36,25 +36,26 @@
                 User
             </h3>
             <div class="card card-default">
+                @foreach ($questions as $question)
                 <!-- form start -->
                 <div class="card-header">
-                    <p class="card-title text-muted">multiple_choice</p>
+                    <p class="card-title text-muted">{{ $question->question_type }}</p>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <p>1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque corrupti necessitatibus voluptas, facere quas nam sint architecto excepturi velit soluta numquam sit ut sequi reprehenderit iste ipsam earum veritatis? Perspiciatis.</p>
+                        <p>{{ $question->number }}. consectetur adipisicing elit. Atque corrupti necessitatibus voluptas, facere quas nam sint architecto excepturi velit soluta numquam sit ut sequi reprehenderit iste ipsam earum veritatis? Perspiciatis.</p>
                     </div>
                     <div class="form-group">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="radio1">
-                            <label class="form-check-label"> <span class="text-muted text-sm">
-                                    +10 Points
-                                </span></label>
+                            <label class="form-check-label"> <span class="text-muted text-sm">+10 Points</span></label>
                         </div>
                     </div>
                 </div>
                 <!-- /.card-body -->
+                @endforeach
             </div>
+
             <!-- /.card -->
         </div>
     </div>

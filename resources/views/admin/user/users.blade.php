@@ -4,16 +4,16 @@
 <section class="content-header">
     @if ($errors->any())
     @foreach ($errors->all() as $error)
-        <div class="alert alert-danger" role="alert">
-            {{ $error }}
-        </div>
+    <div class="alert alert-danger" role="alert">
+        {{ $error }}
+    </div>
     @endforeach
-@endif
-@if (session()->has('quiz_success'))
+    @endif
+    @if (session()->has('quiz_success'))
     <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
         {{ session('quiz_success') }}
     </div>
-@endif
+    @endif
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -38,6 +38,16 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Registered User</h3>
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- ./card-header -->
         <div class="card-body">

@@ -38,6 +38,16 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Quiz List</h3>
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- ./card-header -->
         <div class="card-body">
@@ -258,6 +268,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+<!-- review modal-->
 <div class="modal fade" id="review">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -273,6 +284,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Participated users</h3>
+
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body table-responsive p-0">
@@ -285,31 +297,32 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>183</td>
-                                            <td>John Doe</td>
-                                            <td>90/100</td>
-                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>183</td>
-                                            <td>John Doe</td>
-                                            <td>90/100</td>
-                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>183</td>
-                                            <td>John Doe</td>
-                                            <td>90/100</td>
-                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>183</td>
-                                            <td>John Doe</td>
-                                            <td>90/100</td>
-                                            <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
-                                        </tr>
+                                    @foreach ($data as $user)
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>90/100</td>
+                                        <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>90/100</td>
+                                        <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>90/100</td>
+                                        <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>90/100</td>
+                                        <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a></td>
+                                    </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>

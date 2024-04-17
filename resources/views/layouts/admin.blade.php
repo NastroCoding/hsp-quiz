@@ -63,7 +63,6 @@
                 <img src="{{ URL::asset('dist/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image" style="opacity: 0.8" />
                 <span class="brand-text font-weight-light">HSPnet</span>
             </a>
-
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
