@@ -16,18 +16,18 @@ class AuthController extends Controller
 
     public function signin(Request $request){
         $validate = $request->validate([
-            'token' => 'required',
+            'email' => 'required',
             'password' => 'required|min:8'
         ]);
 
         $credentials = [
-            'token' => $request->token,
+            'email' => $request->email,
             'password' => $request->password,
         ];
 
-        $user = User::where('token', $request->token)->first();
+        $user = User::where('email', $request->email)->first();
         if(Auth::attempt($credentials)){
-            if($user->role == 'admin'){
+            if($user->role == 'admin' || $user->role == 'superadmin'){
                 return redirect('/admin/dashboard');
             }else{
                 return redirect('/home');
@@ -49,13 +49,12 @@ class AuthController extends Controller
 
         $hash = Hash::make($request->password);
         $default_role = "user";
-        $default_token = "001";
 
         $user = User::create([
+            'name' => $request->email,
             'email' => $request->email,
             'password' => $hash,
             'role' => $default_role,
-            'token' => $default_token
         ]);
 
         return redirect('/')->with('register_success', 'Registrasi Berhasil!');

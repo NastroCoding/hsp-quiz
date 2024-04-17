@@ -28,8 +28,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
+            'name' => 'required',
             'email' => 'required',
-            'token' => 'required|min:8',
             'password' => 'required|min:8'
         ]);
 
@@ -46,10 +46,10 @@ class UserController extends Controller
 
 
         $user = User::create([
+            'name' => $request->name,
             'email' => $request->email,
             'password' => $hash,
             'role' => $role,
-            'token' => $request->token,
             'created_by' => $created_by,
             'updated_by' => $updated_by
         ]);

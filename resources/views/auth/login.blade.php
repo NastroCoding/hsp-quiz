@@ -42,7 +42,7 @@
                 <form action="/signin" method="POST">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Token" name="token" id="inputEmail3">
+                        <input type="text" class="form-control" placeholder="Email" name="email" id="inputEmail3">
                     </div>
                     <div class="input-group mb-3">
                         <input type="password" class="form-control" placeholder="Password" name="password">
