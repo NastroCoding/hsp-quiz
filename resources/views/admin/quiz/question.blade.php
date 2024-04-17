@@ -133,8 +133,8 @@
                             <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image" id="exampleInputFile" accept="image/*">
-                                    <label class="custom-file-label" for="exampleInputFile">Choose image</label>
+                                    <input type="file" class="custom-file-input" id="exampleInputFile1" accept="image/*" onchange="updateLabel(this, 'fileLabel1')">
+                                    <label class="custom-file-label" id="fileLabel1" for="exampleInputFile1">Choose image</label>
                                     <div class="input-group-append">
                                         <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
                                     </div>
@@ -212,8 +212,8 @@
                             <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile" accept="image/*">
-                                    <label class="custom-file-label" for="exampleInputFile">Choose image</label>
+                                    <input type="file" class="custom-file-input" id="exampleInputFile2" accept="image/*" onchange="updateLabel(this, 'fileLabel2')">
+                                    <label class="custom-file-label" id="fileLabel2" for="exampleInputFile2">Choose image</label>
                                     <div class="input-group-append">
                                         <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
                                     </div>
@@ -257,8 +257,8 @@
                         <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="exampleInputFile" accept="image/*">
-                                <label class="custom-file-label" for="exampleInputFile">Choose image</label>
+                                <input type="file" class="custom-file-input" id="exampleInputFile3" accept="image/*" onchange="updateLabel(this, 'fileLabel3')">
+                                <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">Choose image</label>
                                 <div class="input-group-append">
                                     <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
                                 </div>
@@ -483,6 +483,12 @@
         modalBackdrop.parentNode.removeChild(modalBackdrop);
         modal.classList.remove('show');
         modal.style.display = 'none';
+    }
+
+    function updateLabel(input, labelId) {
+        var filename = input.files[0].name;
+        var label = document.getElementById(labelId);
+        label.innerHTML = filename;
     }
 </script>
 @endsection
