@@ -55,8 +55,8 @@
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Name</th>
                         <th>Email</th>
-                        <th>Token</th>
                         <th>Role</th>
                         <th>Education</th>
                         <th></th>
@@ -66,8 +66,8 @@
                     @foreach ($data as $user)
                     <tr data-widget="expandable-table" aria-expanded="false">
                         <td>{{ $user->id }}</td>
+                        <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->token }}</td>
                         <td>{{ $user->role }}</td>
                         <td>{{ $user->education }}</td>
                         <td>
@@ -124,8 +124,8 @@
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="exampleInputToken">Token</label>
-                            <input type="text" name="token" class="form-control" id="exampleInputToken" placeholder="Enter Token">
+                            <label for="exampleInputToken">Name</label>
+                            <input type="text" name="name" class="form-control" id="exampleInputToken" placeholder="Enter Name">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail">Email</label>
