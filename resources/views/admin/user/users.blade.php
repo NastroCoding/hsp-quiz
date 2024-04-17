@@ -2,6 +2,18 @@
 @section('container')
 <!-- Content Header (Page header) -->
 <section class="content-header">
+    @if ($errors->any())
+    @foreach ($errors->all() as $error)
+        <div class="alert alert-danger" role="alert">
+            {{ $error }}
+        </div>
+    @endforeach
+@endif
+@if (session()->has('quiz_success'))
+    <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
+        {{ session('quiz_success') }}
+    </div>
+@endif
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">

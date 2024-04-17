@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\UserAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -75,14 +76,19 @@ class QuizController extends Controller
         $questions = $quiz->questions;
         $lastQuestionNumber = Question::where('quiz_id', $quiz->id)->max('number') ?? 0;
 
+        $userAnswers = UserAnswer::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
+        // Pass userAnswers to the view
         return view('views.quiz_page', [
             'page' => $quiz->title,
             'quiz' => $quiz,
             'questions' => $questions,
             'lastQuestionNumber' => $lastQuestionNumber,
             'slug' => $quiz->slug,
-            'question_number' => 1
-            // Pass the questions to the view
+            'question_number' => 1,
+            'userAnswers' => $userAnswers, // Pass user's answers to the view
         ]);
     }
 
@@ -106,13 +112,19 @@ class QuizController extends Controller
             return response()->json(['message' => 'Question not found'], 404);
         }
 
+        $userAnswers = UserAnswer::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
+        // Pass userAnswers to the view
         return view('views.quiz_page', [
             'page' => $quiz->title,
             'quiz' => $quiz,
             'questions' => $questions,
             'lastQuestionNumber' => $lastQuestionNumber,
             'slug' => $quiz->slug,
-            'question_number' => $number
+            'question_number' => $number,
+            'userAnswers' => $userAnswers, // Pass user's answers to the view
         ], compact('question'));
     }
 

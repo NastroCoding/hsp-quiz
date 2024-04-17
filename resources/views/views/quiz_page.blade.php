@@ -22,7 +22,18 @@
         }
     </style>
     @for ($i = 1; $i <= $lastQuestionNumber; $i++)
-        <a href="/quiz/view/{{ $slug }}/{{ $i }}" class="btn btn-default col">{{ $i }}</a>
+        @php
+            $answered = false;
+            foreach ($userAnswers as $userAnswer) {
+                if ($userAnswer->question_id == $i) {
+                    $answered = true;
+                    break; // Exit the loop once an answer is found
+                }
+            }
+        @endphp
+        <a href="/quiz/view/{{ $slug }}/{{ $i }}"
+            class="btn {{ $answered ? 'btn-success text-white' : 'btn-default' }} col {{ $question_number == $i ? 'active' : '' }}"
+            style="margin: 1px;">{{ $i }}</a>
     @endfor
 @endsection
 
@@ -43,8 +54,8 @@
                                 <!-- /.card-header -->
                                 <!-- form start -->
                                 <form action="/quiz/answer" method="POST">
-                                    <input type="hidden" name="question_id" value="{{ $que->id }}" >
                                     @csrf
+                                    <input type="hidden" name="question_id" value="{{ $que->id }}">
                                     @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
                                         <div class="card-body">
                                             <div class="form-group">
@@ -53,7 +64,8 @@
                                             @foreach ($que->choices as $index => $choice)
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="choosen_choice_id" value="{{ $choice->id }}"
+                                                        <input class="form-check-input" type="radio"
+                                                            name="choosen_choice_id" value="{{ $choice->id }}"
                                                             id="radio{{ $index + 1 }}">
                                                         <label class="form-check-label"
                                                             for="radio{{ $index + 1 }}">{{ $choice->choice }}</label>
@@ -77,16 +89,17 @@
                                     @endif
                                     <div class="card-footer">
                                         @if ($que->number != 1)
-                                            <a type="submit" href="/quiz/view/{{ $slug }}/{{ $que->number - 1 }}"
-                                                class="btn btn-default"><i class="fas fa-angle-left"></i>
-                                                Back</a>
+                                            <a href="javascript:void(0)"
+                                                onclick="submitForm('/quiz/view/{{ $slug }}/{{ $que->number - 1 }}')"
+                                                class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
                                         @endif
                                         @if ($que->number != $lastQuestionNumber)
-                                            <a type="submit" href="/quiz/view/{{ $slug }}/{{ $que->number + 1 }}"
+                                            <a href="javascript:void(0)"
+                                                onclick="submitForm('/quiz/view/{{ $slug }}/{{ $que->number + 1 }}')"
                                                 class="btn btn-primary float-right">Next <i
                                                     class="fas fa-angle-right"></i></a>
                                         @else
-                                        <input type="submit" value="Submit " class="btn btn-primary float-right">
+                                            <button type="submit" class="btn btn-primary float-right">Submit</button>
                                         @endif
                                     </div>
                                 </form>

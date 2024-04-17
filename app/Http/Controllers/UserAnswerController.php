@@ -37,7 +37,7 @@ class UserAnswerController extends Controller
         // Create a new UserAnswer instance and save it to the database
         UserAnswer::create($validatedData);
 
-        return redirect()->back()->with('success', 'Your answers have been submitted successfully!');
+        return redirect('/quiz')->with('success', 'Your answers have been submitted successfully!');
     }
 
     /**
