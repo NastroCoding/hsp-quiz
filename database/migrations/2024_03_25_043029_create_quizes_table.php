@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('education_id');
-            $table->string('token');
+            $table->string('token')->unique()->nullable();
             $table->string('title');
             $table->text('images');
             $table->text('description');
+            $table->text('is_active');
             $table->string('slug')->unique();
             $table->integer('time');
             $table->unsignedBigInteger('created_by');
