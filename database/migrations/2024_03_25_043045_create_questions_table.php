@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('quiz_id');
             $table->integer('number');
             $table->text('question');
-            $table->text('images');
+            $table->text('images')->nullable();
             $table->integer('point_value');
             $table->enum('question_type', ['essay', 'multiple_choice', 'weighted_multiple']);
             $table->unsignedBigInteger('created_by');
