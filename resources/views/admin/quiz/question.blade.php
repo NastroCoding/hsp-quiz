@@ -124,14 +124,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/admin/quiz/question/create" method="POST">
+                <form action="/admin/quiz/question/create" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputQuestion">Question</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile" accept="image/*">
+                                    <input type="file" class="custom-file-input" name="image" id="exampleInputFile" accept="image/*">
                                     <label class="custom-file-label" for="exampleInputFile">Choose image</label>
                                     <div class="input-group-append">
                                         <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>

@@ -130,6 +130,8 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     imageInput.setAttribute("type", "file");
     imageInput.setAttribute("accept", "image/*");
     imageInput.style.display = "none";
+    inputField.setAttribute("name", "images[]");
+
 
     // Add a click event listener to the span
     imageSpan.addEventListener("click", function () {
