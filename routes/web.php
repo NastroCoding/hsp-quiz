@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(RouteController::class)->group(function(){
     // ADMIN
     Route::get('/admin/dashboard', 'admin_dashboard')->middleware('admin');
+    Route::get('/admin/profile', 'admin_profile')->middleware('admin');
     
     // USER
     Route::get('/admin/users', 'users')->middleware('admin');

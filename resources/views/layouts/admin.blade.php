@@ -41,7 +41,6 @@
                     <a href="/admin/dashboard" class="nav-link">Home</a>
                 </li>
             </ul>
-
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Navbar Search -->
@@ -55,7 +54,6 @@
             </ul>
         </nav>
         <!-- /.navbar -->
-
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -71,7 +69,7 @@
                         <img src="{{ URL::asset('dist/img/AdminLTELogo.png') }}" class="img-circle elevation-2" alt="User Image" />
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Admin</a>
+                        <a href="/admin/profile" class="d-block">Admin</a>
                     </div>
                 </div>
                 <!-- Sidebar Menu -->
@@ -86,7 +84,6 @@
                                     Dashboard
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
-                                
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
@@ -121,7 +118,7 @@
             </div>
             <!-- /.sidebar -->
         </aside>
-        
+
 
         <div class="content-wrapper">
             @yield('container')
