@@ -56,6 +56,11 @@
                                 <form action="/quiz/answer" method="POST">
                                     @csrf
                                     <input type="hidden" name="question_id" value="{{ $que->id }}">
+                                    @if ($que->image_url)
+                                        <div class="form group">
+                                            <img src="{{ $que->image_url }}" alt="Question Image">
+                                        </div>
+                                    @endif
                                     @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
                                         <div class="card-body">
                                             <div class="form-group">
@@ -78,9 +83,6 @@
                                     @elseif ($que->question_type == 'essay')
                                         <div class="card-body">
                                             <div class="form-group">
-                                                @if (file_exists('public/img/' . $que->images))
-                                                <img src="{{ asset('img/'.$imageName) }}" alt="soal-1">
-                                                @endif
                                                 <p>{{ $que->question }}</p>
                                             </div>
                                             <div class="form-group">
