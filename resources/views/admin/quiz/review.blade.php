@@ -36,14 +36,13 @@
                 User
             </h3>
             <div class="card card-default">
-                @foreach ($questions as $question)
                 <!-- form start -->
                 <div class="card-header">
-                    <p class="card-title text-muted">{{ $question->question_type }}</p>
+                    <p class="card-title text-muted">multiple_choice</p>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <p>{{ $question->number }}. consectetur adipisicing elit. Atque corrupti necessitatibus voluptas, facere quas nam sint architecto excepturi velit soluta numquam sit ut sequi reprehenderit iste ipsam earum veritatis? Perspiciatis.</p>
+                        <p>1. consectetur adipisicing elit. Atque corrupti necessitatibus voluptas, facere quas nam sint architecto excepturi velit soluta numquam sit ut sequi reprehenderit iste ipsam earum veritatis? Perspiciatis.</p>
                     </div>
                     <div class="form-group">
                         <div class="form-check">
@@ -53,9 +52,7 @@
                     </div>
                 </div>
                 <!-- /.card-body -->
-                @endforeach
             </div>
-
             <!-- /.card -->
         </div>
     </div>

@@ -18,6 +18,13 @@ class RouteController extends Controller
         ]);
     }
 
+    public function admin_profile()
+    {
+        return view('admin.edit-profile', [
+            'page' => 'Profile'
+        ]);
+    }
+
     // QUIZ
 
     public function quiz()
