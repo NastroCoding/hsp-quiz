@@ -58,7 +58,7 @@
                         <img src="{{ URL::asset('dist/img/user.png') }}" class="img-circle elevation-2" alt="User Image" />
                     </div>
                     <div class="info">
-                        <a href="/admin/profile" class="d-block">Admin</a>
+                        <a href="/admin/profile" class="d-block">{{ Auth::user()->role }}</a>
                     </div>
                 </div>
                 <!-- Sidebar Menu -->
