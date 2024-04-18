@@ -1,0 +1,37 @@
+.profile-img-container {
+    position: relative;
+    display: inline-block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-img-container:hover .overlay {
+    opacity: 1;
+}
+
+.edit-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black; /* Set icon color to black */
+    font-size: 24px;
+    visibility: hidden; /* Initially hidden */
+}
+
+.profile-img-container:hover .edit-icon {
+    visibility: visible; /* Show on hover */
+}
+
+label, .profile-img-container:hover {
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
