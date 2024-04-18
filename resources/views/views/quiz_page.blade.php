@@ -56,11 +56,6 @@
                                 <form action="/quiz/answer" method="POST">
                                     @csrf
                                     <input type="hidden" name="question_id" value="{{ $que->id }}">
-                                    @if ($que->image_url)
-                                        <div class="form group">
-                                            <img src="{{ $que->image_url }}" alt="Question Image">
-                                        </div>
-                                    @endif
                                     @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
                                         <div class="card-body">
                                             <div class="form-group">
@@ -83,6 +78,9 @@
                                     @elseif ($que->question_type == 'essay')
                                         <div class="card-body">
                                             <div class="form-group">
+                                                @if (file_exists('public/img/' . $que->images))
+                                                    <p>ini ada foto</p>
+                                                @endif
                                                 <p>{{ $que->question }}</p>
                                             </div>
                                             <div class="form-group">
@@ -92,6 +90,18 @@
                                         </div>
                                         <!-- /.card-body -->
                                     @endif
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            @if (file_exists('public/img/' . $que->images))
+                                                <p>ini ada foto</p>
+                                            @endif
+                                            <p>{{ $que->question }}</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                        </div>
+                                        <p class="text-sm text-muted float-right">{{ $que->question_type }}</p>
+                                    </div>
                                     <div class="card-footer">
                                         @if ($que->number != 1)
                                             <a href="javascript:void(0)"
@@ -108,9 +118,69 @@
                                         @endif
                                     </div>
                                 </form>
+
                             </div>
                         @endif
                     @endforeach
+                    <div class="card card-default col-8" id="responsive">
+                        <!-- Setting a minimum width of 300px and a maximum width of 90% -->
+                        <div class="card-header">
+                            <h3 class="card-title">Number {{ $que->number }}</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form action="/quiz/answer" method="POST">
+                            <input type="hidden" name="question_id" value="">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <p></p>
+                                    </div>
+                                        <div class="form-group">
+                                            <div class="form-check">
+                                                <label class="form-check-label"
+                                                    for="radio"</label>
+                                            </div>
+                                        </div>
+                                    <p class="text-sm text-muted float-right"></p>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-body">
+                                    <div class="form-group">
+                                            <img src="{{ URL::asset('dist/img/soal-1.jpg')}}" alt="">
+                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore qui id culpa natus esse, nam explicabo nemo quisquam autem odit vero sequi. Repudiandae nulla, quasi blanditiis sunt illum quae non.</p>
+                                            <img src="{{ URL::asset('dist/img/soal-2.jpg')}}" alt="">
+                                            <br>
+                                            <img src="{{ URL::asset('dist/img/soal-3.jpg')}}" alt="">
+                                            <br>
+                                            <img src="{{ URL::asset('dist/img/soal-4.jpg')}}" alt="">
+                                    </div>
+                                    {{-- <div class="form-group">
+                                        <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                    </div>
+                                    <p class="text-sm text-muted float-right"></p> --}}
+                                </div>
+                                <!-- /.card-body -->
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <p></p>
+                                </div>
+                                {{-- <div class="form-group">
+                                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                </div> --}}
+                                <p class="text-sm text-muted float-right"></p>
+                            </div>
+                            <div class="card-footer">
+                                    <a href="javascript:void(0)"
+                                        onclick=""
+                                        class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
+                                    <a href="javascript:void(0)"
+                                        onclick=""
+                                        class="btn btn-primary float-right">Next <i class="fas fa-angle-right"></i></a>
+                                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                            </div>
+                        </form>
+
+                    </div>
                     <!-- Essay Form -->
 
                     <!-- /.col-md-6 -->
