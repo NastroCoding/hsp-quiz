@@ -18,15 +18,6 @@
     {{-- Animate.css --}}
     <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}">
 </head>
-<!--
-`body` tag options:
-
-  Apply one or more of the following classes to to the body tag
-  to get the desired effect
-
-  * sidebar-collapse
-  * sidebar-mini
--->
 
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -49,8 +40,6 @@
                         <i class="fas fa-right-from-bracket"></i>
                     </a>
                 </li>
-                <!-- Messages Dropdown Menu -->
-                <!-- Notifications Dropdown Menu -->
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -58,7 +47,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="/admin/dashboard" class="brand-link">
-                <img src="{{ URL::asset('dist/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image" style="opacity: 0.8" />
+                <img src="{{ URL::asset('dist/img/logo.png') }}" alt="HSPnet Logo" class="brand-image" style="opacity: 0.8" />
                 <span class="brand-text font-weight-light">HSPnet</span>
             </a>
             <!-- Sidebar -->
@@ -66,7 +55,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{{ URL::asset('dist/img/AdminLTELogo.png') }}" class="img-circle elevation-2" alt="User Image" />
+                        <img src="{{ URL::asset('dist/img/user.png') }}" class="img-circle elevation-2" alt="User Image" />
                     </div>
                     <div class="info">
                         <a href="/admin/profile" class="d-block">Admin</a>
@@ -123,12 +112,6 @@
         <div class="content-wrapper">
             @yield('container')
         </div>
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
         <footer class="main-footer">
