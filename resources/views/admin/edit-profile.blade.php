@@ -27,7 +27,8 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div id="settings">
-                                <form class="form-horizontal">
+                                <form class="form-horizontal" method="POST" action="">
+                                    @csrf
                                     <div class="card-body box-profile">
                                         <div class="text-center">
                                             <div class="profile-img-container">
@@ -39,25 +40,31 @@
                                                 <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
                                             </div>
                                         </div>
-                                        <h3 class="profile-username text-center">Admin</h3>
-                                        <p class="text-muted text-center">Superadmin</p> <!-- role disini -->
+                                        <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
+                                        <p class="text-muted text-center">{{ Auth::user()->role }}</p>
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputName" placeholder="Name">
+                                            <input type="text" class="form-control" id="inputName" name="name" value="{{ Auth::user()->name }}" placeholder="Name">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                                         <div class="col-sm-10">
-                                            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                                            <input type="email" class="form-control" id="inputEmail" name="email" value="{{ Auth::user()->email }}" placeholder="Email">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                                        <div class="col-sm-8">
+                                            <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password" value="{{ Auth::user()->password }}" disabled style="cursor: not-allowed;" title="">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <!-- Button to toggle password visibility -->
+                                            <button type="button" class="btn btn-primary toggle-password" data-toggle="tooltip" data-placement="top" title="Show/Hide Password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -99,6 +106,17 @@
             // Read the selected file as a Data URL
             reader.readAsDataURL(selectedFile);
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.querySelector('#inputPassword');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
     });
 </script>
 @endsection
