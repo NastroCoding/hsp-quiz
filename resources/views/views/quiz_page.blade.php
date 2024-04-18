@@ -27,7 +27,7 @@
             foreach ($userAnswers as $userAnswer) {
                 if ($userAnswer->question_id == $i) {
                     $answered = true;
-                    break;
+                    break; // Exit the loop once an answer is found
                 }
             }
         @endphp
@@ -78,6 +78,9 @@
                                     @elseif ($que->question_type == 'essay')
                                         <div class="card-body">
                                             <div class="form-group">
+                                                @if (file_exists('public/img/' . $que->images))
+                                                <img src="{{ asset('img/'.$imageName) }}" alt="soal-1">
+                                                @endif
                                                 <p>{{ $que->question }}</p>
                                             </div>
                                             <div class="form-group">

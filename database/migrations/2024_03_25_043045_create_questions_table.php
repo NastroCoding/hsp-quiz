@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
