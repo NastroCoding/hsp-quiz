@@ -133,18 +133,19 @@
                             <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile1" accept="image/*" onchange="updateLabel(this, 'fileLabel1')">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile1" accept="image/*" onchange="displayImage(this)">
                                     <label class="custom-file-label" id="fileLabel1" for="exampleInputFile1">Choose image</label>
                                     <div class="input-group-append">
                                         <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
                                     </div>
+                                    
                                 </div>
                             </div>
+                            <div id="imagePreview" class="m-1"></div>
                             <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
                         </div>
-                        <div class="form-group">
 
-                        </div>
+                        
                         <input type="hidden" name="question_type" value="multiple_choice">
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                         <input type="hidden" name="number" value="{{ $lastQuestionNumber}}">
@@ -168,8 +169,8 @@
                                 </div>
                                 <input type="file" accept="image/*" style="display: none;" id="imageInput">
                             </div>
+                            <div id="imagePreview" class="m-1"></div>
                         </div>
-
                         <div class="form-group">
                             <br>
                             <button type="button" class="btn btn-primary" id="addOptionBtn">
@@ -489,6 +490,18 @@
         var filename = input.files[0].name;
         var label = document.getElementById(labelId);
         label.innerHTML = filename;
+    }
+
+    function displayImage(input) {
+        var file = input.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imagePreview = document.getElementById('imagePreview');
+                imagePreview.innerHTML = '<img src="' + e.target.result + '" alt="Image Preview" style="max-width: 100%; max-height: 200px;">';
+            };
+            reader.readAsDataURL(file);
+        }
     }
 </script>
 @endsection
