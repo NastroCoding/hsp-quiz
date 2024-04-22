@@ -47,7 +47,7 @@ class RouteController extends Controller
         ]);
     }
 
-    
+
     public function quiz_review()
     {
         return view('admin.quiz.review', [
@@ -94,7 +94,13 @@ class RouteController extends Controller
 
     public function index()
     {
+        $data = Quiz::latest()->get();
+        $category = Category::latest()->get();
+        $education = Education::latest()->get();
         return view('views.index', [
+            'category' => $category,
+            'education' => $education,
+            'data' => $data,
             'page' => 'Home'
         ]);
     }
@@ -102,7 +108,11 @@ class RouteController extends Controller
     public function user_quiz()
     {
         $data = Quiz::latest()->get();
+        $category = Category::latest()->get();
+        $education = Education::latest()->get();
         return view('views.quiz_user', [
+            'category' => $category,
+            'education' => $education,
             'data' => $data,
             'page' => 'Quiz'
         ]);
@@ -110,7 +120,13 @@ class RouteController extends Controller
 
     public function user_score()
     {
+        $data = Quiz::latest()->get();
+        $category = Category::latest()->get();
+        $education = Education::latest()->get();
         return view('views.score', [
+            'category' => $category,
+            'education' => $education,
+            'data' => $data,
             'page' => 'Score'
         ]);
     }

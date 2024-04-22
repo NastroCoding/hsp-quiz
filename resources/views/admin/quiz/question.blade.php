@@ -133,17 +133,16 @@
                             <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile1" accept="image/*" onchange="updateLabel(this, 'fileLabel1')">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile1" accept="image/*" onchange="displayImage(this, '1')">
                                     <label class="custom-file-label" id="fileLabel1" for="exampleInputFile1">Choose image</label>
                                     <div class="input-group-append">
                                         <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
                                     </div>
+
                                 </div>
                             </div>
+                            <div id="imagePreview1" class="m-1"></div>
                             <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-
                         </div>
                         <input type="hidden" name="question_type" value="multiple_choice">
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
@@ -168,8 +167,8 @@
                                 </div>
                                 <input type="file" accept="image/*" style="display: none;" id="imageInput">
                             </div>
+                            <div id="imagePreview" class="m-1"></div>
                         </div>
-
                         <div class="form-group">
                             <br>
                             <button type="button" class="btn btn-primary" id="addOptionBtn">
@@ -212,13 +211,14 @@
                             <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile2" accept="image/*" onchange="updateLabel(this, 'fileLabel2')">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile2" accept="image/*" onchange="displayImage(this, '2')">
                                     <label class="custom-file-label" id="fileLabel2" for="exampleInputFile2">Choose image</label>
                                     <div class="input-group-append">
                                         <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
                                     </div>
                                 </div>
                             </div>
+                            <div id="imagePreview2" class="m-1"></div>
                             <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                         </div>
                     </div>
@@ -257,13 +257,14 @@
                         <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="exampleInputFile3" accept="image/*" onchange="updateLabel(this, 'fileLabel3')">
+                                <input type="file" class="custom-file-input" id="exampleInputFile1" accept="image/*" onchange="displayImage(this, '3')">
                                 <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">Choose image</label>
                                 <div class="input-group-append">
                                     <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
                                 </div>
                             </div>
                         </div>
+                        <div id="imagePreview3" class="m-1"></div>
                         <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                     </div>
                     <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
@@ -315,10 +316,8 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputName">Question</label>
-
                             <div class="input-group">
                                 <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-
                             </div>
                         </div>
                         <input type="hidden" name="question_type" value="multiple_choice">
@@ -489,6 +488,25 @@
         var filename = input.files[0].name;
         var label = document.getElementById(labelId);
         label.innerHTML = filename;
+    }
+
+    function displayImage(input, modalId) {
+        console.log("Displaying image preview...");
+        var file = input.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imagePreview = document.getElementById('imagePreview' + modalId);
+                if (imagePreview) {
+                    imagePreview.innerHTML = '<img src="' + e.target.result + '" alt="Image Preview" style="max-width: 100%; max-height: 200px;">';
+                } else {
+                    console.error("Image preview container not found for modal " + modalId);
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            console.error("No file selected.");
+        }
     }
 </script>
 @endsection
