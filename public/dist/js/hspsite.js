@@ -81,6 +81,8 @@ function removeWeightedOption(element) {
     inputGroup.remove();
 }
 
+// Global variable to track the index for image previews
+
 document.getElementById("addOptionBtn").addEventListener("click", function () {
     var optionsContainer = document.getElementById("optionsContainer");
     if (!optionsContainer) {
@@ -130,8 +132,18 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     imageInput.setAttribute("type", "file");
     imageInput.setAttribute("accept", "image/*");
     imageInput.style.display = "none";
-    inputField.setAttribute("name", "images[]");
+    imageInput.setAttribute("name", "images[]");
+    // Set onchange event for image input
+    imageInput.addEventListener("change", function (event) {
+        previewOptionImage(event);
+    });
 
+    // Create unique id for image preview
+    var imagePreviewIndex =
+        optionsContainer.querySelectorAll(".optionImagePreview").length + 1;
+    var imagePreview = document.createElement("div");
+    imagePreview.classList.add("optionImagePreview", "m-1");
+    imagePreview.setAttribute("id", "imagePreview" + imagePreviewIndex);
 
     // Add a click event listener to the span
     imageSpan.addEventListener("click", function () {
@@ -158,11 +170,17 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
 
     // Append the new input group to the options container
     optionsContainer.appendChild(newInputGroup);
+    // Append the image preview to the options container
+    optionsContainer.appendChild(imagePreview);
 });
 
 function removeOption(element) {
     var option = element.closest(".input-group");
-    option.parentNode.removeChild(option);
+    var imagePreview = option.nextElementSibling; // Get the next sibling which is the image preview
+    option.parentNode.removeChild(option); // Remove the option
+    if (imagePreview && imagePreview.classList.contains("optionImagePreview")) {
+        imagePreview.parentNode.removeChild(imagePreview); // Remove the image preview if it exists
+    }
 }
 
 // Function to mark the correct answer when checkbox is clicked
