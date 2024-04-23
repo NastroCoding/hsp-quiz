@@ -91,7 +91,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <div class="row">
                         <div class="col-md-6 offset-md-3 text-center mb-1">
                             <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#multiple-choice"
@@ -227,7 +226,7 @@
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="exampleInputFile2"
-                                            accept="image/*" onchange="">
+                                            accept="image/*" onchange="previewEssayImage(event, 'fileLabel2')">
                                         <label class="custom-file-label" id="fileLabel2" for="exampleInputFile2">Choose
                                             image</label>
                                         <div class="input-group-append">
@@ -236,6 +235,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="essayImagePreview" class="mt-2"></div> <!-- Essay image preview container -->
                                 <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                             </div>
                         </div>
@@ -253,6 +253,7 @@
         </div>
     </div>
 
+
     <!-- Weighted Multiple Choice Question Modal -->
     <div class="modal fade" id="weighted-mc">
         <div class="modal-dialog">
@@ -263,60 +264,63 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="/admin/quiz/question/create/weighted" method="POST">
-                    @csrf
-                    <input type="hidden" name="question_type" value="weighted_multiple">
-                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="inputName">Question</label>
-                            <br>
-                            <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile1"
-                                        accept="image/*" onchange="">
-                                    <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">Choose
-                                        image</label>
-                                    <div class="input-group-append">
-                                        <small class="text-muted float-right input-group-text"><span
-                                                class="text-danger">*</span>Optional</small>
+                <div class="modal-body">
+                    <form action="/admin/quiz/question/create/weighted" method="POST">
+                        @csrf
+                        <input type="hidden" name="question_type" value="weighted_multiple">
+                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="inputQuestion">Question</label>
+                                <br>
+                                <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="exampleInputFile3"
+                                            accept="image/*" onchange="previewWeightedEssayImage(event, 'fileLabel3')">
+                                        <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">Choose
+                                            image</label>
+                                        <div class="input-group-append">
+                                            <small class="text-muted float-right input-group-text"><span
+                                                    class="text-danger">*</span>Optional</small>
+                                        </div>
                                     </div>
                                 </div>
+                                <div id="weighted-essayImagePreview" class="mt-2"></div>
+                                <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
                             </div>
-                            <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-                        </div>
-                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div id="weighted-optionsContainer">
-                            <label for="inputName">Option</label>
-                            <!-- Weighted Option 1 -->
-                            <div class="input-group weighted-input-group">
-                                <input type="text" class="form-control" placeholder="Option 1" name="choices[]">
-                                <input type="number" min="0" class="form-control" placeholder="Points"
-                                    name="point_value[]">
-                                <div class="input-group-append">
-                                    <span class="input-group-text btn btn-default" style="cursor: pointer;"
-                                        onclick="imageInput.click()">
-                                        <i class="fas fa-image"></i>
-                                        <input type="file" accept="image/*" style="display: none;">
-                                    </span>
-                                    <span class="input-group-text btn-danger btn" style="cursor: pointer;"
-                                        onclick="removeWeightedOption(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
+                            <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                            <div id="weighted-optionsContainer">
+                                <label for="inputName">Option</label>
+                                <!-- Weighted Option 1 -->
+                                <div class="input-group weighted-input-group">
+                                    <input type="text" class="form-control" placeholder="Option 1" name="choices[]">
+                                    <input type="number" min="0" class="form-control" placeholder="Points"
+                                        name="point_value[]">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text btn btn-default" style="cursor: pointer;">
+                                            <i class="fas fa-image"></i>
+                                            <input type="file" accept="image/*" style="display: none;">
+                                        </span>
+                                        <span class="input-group-text btn-danger btn" style="cursor: pointer;"
+                                            onclick="removeWeightedOption(this)">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                    </div>
                                 </div>
+                                <!-- End Weighted Option 1 -->
                             </div>
-                            <!-- End Weighted Option 1 -->
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add
+                                    Option</button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add Option</button>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success float-right">Create</button>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success float-right">Create</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -487,79 +491,6 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var lastQuestionNumber = "{{ $lastQuestionNumber }}";
-            var questionNumberInput = document.getElementById('question_number');
-
-            if (lastQuestionNumber != "") {
-                // If lastQuestionNumber exists, increment it by one
-                var nextQuestionNumber = parseInt(lastQuestionNumber) + 1;
-                questionNumberInput.value = nextQuestionNumber;
-            } else {
-                // If it's the first question, set the question number to 1
-                questionNumberInput.value = 1;
-            }
-        });
-
-        function closeQuestionModal() {
-            var modal = document.getElementById('add-question');
-            var modalBackdrop = document.querySelector('.modal-backdrop');
-            modalBackdrop.parentNode.removeChild(modalBackdrop);
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-        }
-
-        function previewImage(event, type, labelId) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            const label = document.getElementById(labelId);
-
-            reader.onload = function() {
-                const imgElement = document.createElement('img');
-                imgElement.src = reader.result;
-                imgElement.classList.add('img-thumbnail', 'mt-2', 'mb-2');
-
-                if (type === 'question') {
-                    document.getElementById('questionImagePreview').innerHTML = '';
-                    document.getElementById('questionImagePreview').appendChild(imgElement);
-                } else {
-                    // For options
-                    // Assuming you have multiple previews for multiple options
-                    const previewContainer = document.getElementById('imagePreview');
-                    previewContainer.appendChild(imgElement);
-                }
-            };
-
-            reader.readAsDataURL(file);
-
-            // Update label with the name of the selected file
-            label.innerText = file.name;
-        }
-
-        function uploadOptionImage(element) {
-            // Find the input element within the same group
-            var imageInput = element.parentElement.parentElement.getElementsByClassName("optionImageInput")[0];
-            imageInput.click();
-        }
-
-        function previewOptionImage(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            const previewContainer = event.target.parentElement.parentElement.getElementsByClassName("optionImagePreview")[0];
-
-            reader.onload = function() {
-                const imgElement = document.createElement('img');
-                imgElement.src = reader.result;
-                imgElement.classList.add('img-thumbnail', 'mt-2', 'mb-2');
-                // Append the new image preview to the container
-                previewContainer.appendChild(imgElement);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    </script>
 @endsection
 @section('scripts')
     <script>

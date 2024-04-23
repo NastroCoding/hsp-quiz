@@ -96,6 +96,10 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     var newInputGroup = document.createElement("div");
     newInputGroup.classList.add("input-group");
 
+    // Generate unique IDs for option elements
+    var uniqueId = "optionImageInput_" + optionIndex;
+    var previewId = "imagePreview" + optionIndex; // Unique ID for image preview
+
     var prependDiv = document.createElement("div");
     prependDiv.classList.add("input-group-prepend");
 
@@ -133,17 +137,17 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     imageInput.setAttribute("accept", "image/*");
     imageInput.style.display = "none";
     imageInput.setAttribute("name", "images[]");
+    imageInput.id = uniqueId; // Assign unique ID to the image input field
+
     // Set onchange event for image input
     imageInput.addEventListener("change", function (event) {
-        previewOptionImage(event);
+        previewOptionImage(event, uniqueId, previewId); // Pass the unique IDs to the preview function
     });
 
     // Create unique id for image preview
-    var imagePreviewIndex =
-        optionsContainer.querySelectorAll(".optionImagePreview").length + 1;
     var imagePreview = document.createElement("div");
     imagePreview.classList.add("optionImagePreview", "m-1");
-    imagePreview.setAttribute("id", "imagePreview" + imagePreviewIndex);
+    imagePreview.setAttribute("id", previewId); // Assign unique ID to the image preview
 
     // Add a click event listener to the span
     imageSpan.addEventListener("click", function () {
@@ -168,9 +172,8 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     newInputGroup.appendChild(appendDiv);
     newInputGroup.appendChild(imageInput);
 
-    // Append the new input group to the options container
+    // Append the new input group and image preview together to the options container
     optionsContainer.appendChild(newInputGroup);
-    // Append the image preview to the options container
     optionsContainer.appendChild(imagePreview);
 });
 
@@ -213,3 +216,172 @@ document.getElementById("questionForm").addEventListener("submit", function () {
         }
     });
 });
+
+// Function to set the question number based on the last question number
+function setQuestionNumber() {
+    var lastQuestionNumber = "{{ $lastQuestionNumber }}";
+    var questionNumberInput = document.getElementById("question_number");
+
+    if (lastQuestionNumber != "") {
+        // If lastQuestionNumber exists, increment it by one
+        var nextQuestionNumber = parseInt(lastQuestionNumber) + 1;
+        questionNumberInput.value = nextQuestionNumber;
+    } else {
+        // If it's the first question, set the question number to 1
+        questionNumberInput.value = 1;
+    }
+}
+
+// Function to close the question modal
+function closeQuestionModal() {
+    var modal = document.getElementById("add-question");
+    var modalBackdrop = document.querySelector(".modal-backdrop");
+    modalBackdrop.parentNode.removeChild(modalBackdrop);
+    modal.classList.remove("show");
+    modal.style.display = "none";
+}
+
+// Function to preview an image
+function previewImage(event, type, labelId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+
+        if (type === "question") {
+            document.getElementById("questionImagePreview").innerHTML = "";
+            document
+                .getElementById("questionImagePreview")
+                .appendChild(imgElement);
+        } else {
+            // For options
+            // Assuming you have multiple previews for multiple options
+            const previewContainer = document.getElementById("imagePreview");
+            previewContainer.appendChild(imgElement);
+        }
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
+// Function to preview an image for the essay modal
+function previewEssayImage(event, labelId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+    const previewContainer = document.getElementById("essayImagePreview");
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+
+        // Clear existing images from the preview container
+        previewContainer.innerHTML = "";
+
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
+// Function to trigger the click event on option image input
+function uploadOptionImage(element) {
+    // Find the input element within the same group
+    var imageInput =
+        element.parentElement.parentElement.getElementsByClassName(
+            "optionImageInput"
+        )[0];
+    imageInput.click();
+}
+
+// Function to preview an option image
+// Function to preview an option image
+function previewOptionImage(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const previewContainer = event.target.parentElement.nextElementSibling; // Get the image preview container
+
+    // Clear existing images from the preview container
+    previewContainer.innerHTML = "";
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+}
+
+// Function to preview an image for the weighted multiple choice modal
+function previewWeightedEssayImage(event, labelId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+    const previewContainer = document.getElementById("weighted-essayImagePreview");
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+
+        // Clear existing images from the preview container
+        previewContainer.innerHTML = "";
+
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
+// Function to preview an option image for weighted multiple choice modal
+function previewWeightedOptionImage(event, inputId, previewId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const previewContainer = document.getElementById(previewId);
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+
+        // Clear existing images from the preview container
+        previewContainer.innerHTML = "";
+
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    document.getElementById(inputId).nextElementSibling.innerText = file.name;
+}
+
+
+// Call the setQuestionNumber function when DOM content is loaded
+document.addEventListener("DOMContentLoaded", setQuestionNumber);
+
