@@ -32,11 +32,13 @@ class RouteController extends Controller
         $category = Category::latest()->get();
         $education = Education::latest()->get();
         $quiz = Quiz::latest()->get();
+        $user = User::latest()->get();
         return view('admin.quiz.quiz', [
             'page' => 'Quiz',
             'category' => $category,
             'education' => $education,
-            'data' => $quiz
+            'data' => $quiz,
+            'user' => $user
         ]);
     }
 

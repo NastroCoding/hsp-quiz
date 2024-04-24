@@ -115,7 +115,7 @@ function previewWeightedOptionImage(event, inputId, previewId) {
     reader.onload = function () {
         const imgElement = document.createElement("img");
         imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.classList.add("img-thumbnail", "mb-1");
         imgElement.style.width = "200px"; // Set width to 200 pixels
 
         // Clear existing images from the preview container
@@ -200,7 +200,7 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
 
     // Create unique id for image preview
     var imagePreview = document.createElement("div");
-    imagePreview.classList.add("optionImagePreview", "m-1");
+    imagePreview.classList.add("optionImagePreview", "mb-1");
     imagePreview.setAttribute("id", previewId); // Assign unique ID to the image preview
 
     // Add a click event listener to the span
@@ -310,7 +310,7 @@ function previewImage(event, type, labelId) {
     reader.onload = function () {
         const imgElement = document.createElement("img");
         imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.classList.add("img-thumbnail", "mb-1");
         imgElement.style.width = "200px"; // Set width to 200 pixels
 
         if (type === "question") {
@@ -342,7 +342,57 @@ function previewEssayImage(event, labelId) {
     reader.onload = function () {
         const imgElement = document.createElement("img");
         imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.classList.add("img-thumbnail", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+
+        // Clear existing images from the preview container
+        previewContainer.innerHTML = "";
+
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
+function previewQuizImage(event, labelId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+    const previewContainer = document.getElementById("quizImagePreview");
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+
+        // Clear existing images from the preview container
+        previewContainer.innerHTML = "";
+
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
+function editPreviewQuizImage(event, labelId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+    const previewContainer = document.getElementById("editQuizImagePreview");
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mb-1");
         imgElement.style.width = "200px"; // Set width to 200 pixels
 
         // Clear existing images from the preview container
@@ -388,7 +438,7 @@ function previewOptionImage(event) {
     reader.onload = function () {
         const imgElement = document.createElement("img");
         imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.classList.add("img-thumbnail", "mb-1");
         imgElement.style.width = "200px"; // Set width to 200 pixels
         // Append the new image preview to the container
         previewContainer.appendChild(imgElement);
@@ -409,7 +459,7 @@ function previewWeightedEssayImage(event, labelId) {
     reader.onload = function () {
         const imgElement = document.createElement("img");
         imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mt-1", "mb-1");
+        imgElement.classList.add("img-thumbnail", "mb-1");
         imgElement.style.width = "200px"; // Set width to 200 pixels
 
         // Clear existing images from the preview container
@@ -424,3 +474,17 @@ function previewWeightedEssayImage(event, labelId) {
     // Update label with the name of the selected file
     label.innerText = file.name;
 }
+
+// Define the function to set current date
+function setCurrentDate(inputId) {
+    var now = new Date();
+    // Extract the date part (YYYY-MM-DD)
+    var currentDate = now.toISOString().slice(0, 10);
+    // Set the value of the input field with the specified ID to the current date
+    document.getElementById(inputId).value = currentDate;
+}
+
+// Call the function after the DOM has loaded
+document.addEventListener("DOMContentLoaded", function () {
+    setCurrentDate("local-date");
+});
