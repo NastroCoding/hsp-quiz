@@ -24,48 +24,32 @@
         <!-- /.content-header -->
         <!-- Main content -->
         <div class="content">
-            <div class="container-fluid">
+            <div class="container">
                 <button class="btn btn-sm btn-default mb-1" data-toggle="modal" data-target="#modal-filter"><i
                         class="fas fa-sliders"></i></button>
                 <div class="row">
-                    <div class="col-sm-5 col-md-6">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="{{ URL::asset('dist/img/thumbnail-logo.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Quiz 1</h5>
-                                <p class="card-text"> With supporting text below as a natural lead-in to
-                                    additional content.</p>
-                                <a href="#" class="btn btn-primary">Continue</a>
+                    <!-- /.col-md-6 -->
+                    @foreach ($data as $quiz)
+                        <div class="col-lg-4">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="{{ URL::asset('dist/img/thumbnail-logo.jpg') }}"
+                                    alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $quiz->title }}1</h5>
+                                    <p class="card-text"> {{ $quiz->description }}</p>
+                                    <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
+                                        data-toggle="modal" data-target="#modal-quiz">
+                                        Enter
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-5 col-md-6">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="{{ URL::asset('dist/img/thumbnail-logo.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Quiz 2</h5>
-                                <p class="card-text"> With supporting text below as a natural lead-in to
-                                    additional content.</p>
-                                <a href="#" class="btn btn-primary">Continue</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-5 col-md-6">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="{{ URL::asset('dist/img/thumbnail-logo.jpg') }}"
-                                alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title">Quiz 3</h5>
-                                <p class="card-text"> With supporting text below as a natural lead-in to
-                                    additional content.</p>
-                                <a href="#" class="btn btn-primary">Continue</a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
+                    <!-- /.col-md-6 -->
                 </div>
+                <!-- /.row -->
             </div>
+            <!-- /.container-fluid -->
         </div>
         <!-- /.content -->
     </div>
