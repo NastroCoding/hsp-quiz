@@ -10,10 +10,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $page }} | HSPnet</title>
-    <link rel="shortcut icon" href="{{URL::asset('dist/img/favicon.ico')}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ URL::asset('dist/img/favicon.ico') }}" type="image/x-icon">
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ URL::asset('plugins/fontawesome-free/css/all.min.css') }}" />
     <!-- IonIcons -->
@@ -21,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}" />
     {{-- Animate.css --}}
-    <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}">
+    <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css') }}">
 </head>
 
 <body class="hold-transition layout-top-nav ">
@@ -32,10 +33,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
             <div class="container">
                 <a href="/" class="navbar-brand">
-                    <img src="{{URL::asset('dist/img/logo.png')}}" alt="AdminLTE Logo" class="brand-image" style="opacity: 0.8" />
+                    <img src="{{ URL::asset('dist/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image"
+                        style="opacity: 0.8" />
                 </a>
-
-                <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler order-1" type="button" data-toggle="collapse"
+                    data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -58,7 +61,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                     <!-- Messages Dropdown Menu -->
                     <li class="nav-item dropdown">
-                        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">User</a>
+                        <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false" class="nav-link dropdown-toggle">User</a>
                         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                             <li>
                                 <a href="/logout" class="dropdown-item">Logout</a>
@@ -71,10 +75,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </nav>
         @yield('container')
         <!-- /.navbar -->
-
-
         <!-- /.content-wrapper -->
-
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-light">
             <div class="p-3">
@@ -158,7 +159,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ URL::asset('/dist/js/hspsite.js') }}"></script>
 
     {{-- JQuery  --}}
-    <script src="{{ URL::asset('/dist/js/jquery.min.js')}}"></script>
+    <script src="{{ URL::asset('/dist/js/jquery.min.js') }}"></script>
 
     @yield('scripts')
 </body>
