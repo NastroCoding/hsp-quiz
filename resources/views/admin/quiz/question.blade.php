@@ -298,16 +298,21 @@
                                     <input type="number" min="0" class="form-control" placeholder="Points"
                                         name="point_value[]">
                                     <div class="input-group-append">
-                                        <span class="input-group-text btn btn-default" style="cursor: pointer;">
+                                        <span class="input-group-text btn btn-default" style="cursor: pointer;"
+                                            onclick="uploadWeightedOptionImage(this)">
                                             <i class="fas fa-image"></i>
-                                            <input type="file" accept="image/*" style="display: none;">
                                         </span>
                                         <span class="input-group-text btn-danger btn" style="cursor: pointer;"
                                             onclick="removeWeightedOption(this)">
                                             <i class="fas fa-trash"></i>
                                         </span>
                                     </div>
+                                    <input type="file" accept="image/*" style="display: none;"
+                                        onchange="previewWeightedOptionImage(event, 'imageLabel1', 'weightedImagePreview1')"
+                                        class="weightedOptionImageInput">
                                 </div>
+
+                                <div class="weightedOptionImagePreview" id="weightedImagePreview1"></div>
                                 <!-- End Weighted Option 1 -->
                             </div>
                             <div class="form-group">
