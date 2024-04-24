@@ -151,7 +151,7 @@
                                     </div>
 
                                 </div>
-                                <div id="questionImagePreview" class="mt-2"></div>
+                                <div id="questionImagePreview" class="mt-1"></div>
                                 <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
                             </div>
                             <input type="hidden" name="question_type" value="multiple_choice">
@@ -236,7 +236,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="essayImagePreview" class="mt-2"></div> <!-- Essay image preview container -->
+                                <div id="essayImagePreview" class="mt-1"></div> <!-- Essay image preview container -->
                                 <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                             </div>
                         </div>
@@ -287,7 +287,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="weighted-essayImagePreview" class="mt-2"></div>
+                                <div id="weighted-essayImagePreview" class="mt-1"></div>
                                 <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
                             </div>
                             <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />

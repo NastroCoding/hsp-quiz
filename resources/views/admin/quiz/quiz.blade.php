@@ -73,7 +73,7 @@
                         <td>{{ $quiz->category->category_name }}</td>
                         <td>{{ $quiz->education->education_name }}</td>
                         <td>
-                            <a class="btn btn-info btn-sm" href="/admin/quiz/edit/{{ $quiz->id }}" data-toggle="modal" data-target="#edit-user">
+                            <a class="btn btn-info btn-sm" href="/admin/quiz/edit/{{ $quiz->id }}" data-toggle="modal" data-target="#edit-quiz">
                                 Edit
                             </a>
                             <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
@@ -85,7 +85,7 @@
                     </tr>
                     <tr class="expandable-body">
                         <td colspan="7">
-                            <p> Description : {{ $quiz->description }} <br> Token : {{ $quiz->token }}</p>
+                            <p> Description : {{ $quiz->description }} <br> Token : {{ $quiz->token }} <br> Thumbnail : <br><img class="img-thumbnail mb-1" src="{{ URL::asset('/dist/img/thumbnail.png') }}" alt="" style="width:200px; "></p>
                         </td>
                     </tr>
                     @endforeach
@@ -124,13 +124,11 @@
                             <label for="formFile" class="form-label">Thumbnail</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile3" accept="image/*" onchange="updateLabel(this, 'fileLabel3')">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile3" accept="image/*" onchange="previewQuizImage(event, 'fileLabel3')">
                                     <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">Choose image</label>
-                                    <div class="input-group-append">
-                                        <small class="text-muted float-right input-group-text"><span class="text-danger">*</span>Optional</small>
-                                    </div>
                                 </div>
                             </div>
+                            <div id="quizImagePreview" class="mt-1"></div>
                         </div>
                         <div class="form-group">
                             <label for="">Time</label>
@@ -182,7 +180,7 @@
     <!-- /.modal-dialog -->
 </div>
 @if ($data->isNotEmpty())
-<div class="modal fade" id="edit-user">
+<div class="modal fade" id="edit-quiz">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -206,6 +204,16 @@
                         <div class="form-group">
                             <label for="exampleInputDescription">Token</label>
                             <input type="text" name="token" class="form-control" id="exampleInputTitle" placeholder="Enter token" value="{{ $quiz->token }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="formFile" class="form-label">Thumbnail</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile4" accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')">
+                                    <label class="custom-file-label" id="fileLabel4" for="exampleInputFile4">Choose image</label>
+                                </div>
+                            </div>
+                            <div id="editQuizImagePreview" class="mt-1"></div>
                         </div>
                         <div class="form-group">
                             <label for="">Time</label>
@@ -309,28 +317,7 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    @foreach ($data as $user)
-                                    <tr>
-                                        <td>{{ $user->id }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>90/100</td>
-                                        <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $user->id }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>90/100</td>
-                                        <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $user->id }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>90/100</td>
-                                        <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a>
-                                        </td>
-                                    </tr>
+                                    @foreach ($user as $user)
                                     <tr>
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->email }}</td>
@@ -358,28 +345,6 @@
 </div>
 @endsection
 
-<script>
-    // Define the function to set current date
-    function setCurrentDate(inputId) {
-        var now = new Date();
-        // Extract the date part (YYYY-MM-DD)
-        var currentDate = now.toISOString().slice(0, 10);
-        // Set the value of the input field with the specified ID to the current date
-        document.getElementById(inputId).value = currentDate;
-    }
-
-    // Call the function after the DOM has loaded
-    document.addEventListener("DOMContentLoaded", function() {
-        setCurrentDate('local-date');
-    });
-
-    // Function to update label based on file input
-    function updateLabel(input, labelId) {
-        var filename = input.files[0].name;
-        var label = document.getElementById(labelId);
-        label.innerHTML = filename;
-    }
-</script>
 @section('scripts')
 <script>
     $(document).ready(function() {
