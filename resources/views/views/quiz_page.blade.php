@@ -46,7 +46,7 @@
                     <!-- Multiple Choice Form -->
                     @foreach ($questions as $que)
                         @if ($que->number == $question_number)
-                            <div class="card card-default col-8" id="responsive">
+                            {{-- <div class="card card-default col-8" id="responsive">
                                 <!-- Setting a minimum width of 300px and a maximum width of 90% -->
                                 <div class="card-header">
                                     <h3 class="card-title">Number {{ $que->number }}</h3>
@@ -119,7 +119,7 @@
                                     </div>
                                 </form>
 
-                            </div>
+                            </div> --}}
                         @endif
                     @endforeach
                     <div class="card card-default col-8" id="responsive">
@@ -131,35 +131,57 @@
                         <!-- form start -->
                         <form action="/quiz/answer" method="POST">
                             <input type="hidden" name="question_id" value="">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <p></p>
-                                    </div>
-                                        <div class="form-group">
-                                            <div class="form-check">
-                                                <label class="form-check-label"
-                                                    for="radio"</label>
-                                            </div>
-                                        </div>
-                                    <p class="text-sm text-muted float-right"></p>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <p></p>
                                 </div>
-                                <!-- /.card-body -->
-                                <div class="card-body">
-                                    <div class="form-group">
-                                            <img src="{{ URL::asset('dist/img/soal-1.jpg')}}" alt="">
-                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore qui id culpa natus esse, nam explicabo nemo quisquam autem odit vero sequi. Repudiandae nulla, quasi blanditiis sunt illum quae non.</p>
-                                            <img src="{{ URL::asset('dist/img/soal-2.jpg')}}" alt="">
-                                            <br>
-                                            <img src="{{ URL::asset('dist/img/soal-3.jpg')}}" alt="">
-                                            <br>
-                                            <img src="{{ URL::asset('dist/img/soal-4.jpg')}}" alt="">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="radio"</label>
                                     </div>
-                                    {{-- <div class="form-group">
+                                </div>
+                                <p class="text-sm text-muted float-right"></p>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-body d-flex justify-content-center">
+                                <div class="form-group">
+                                    <div class="gambar-container">
+                                        <form action="#">
+                                            <div class="radio-group">
+                                                <div class="gambar-item">
+                                                    <label for="gambar_1"><img src="{{ URL::asset('dist/img/soal-1.jpg') }}"
+                                                            alt="" width="300"></label>
+                                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore
+                                                        qui id culpa natus esse, nam explicabo nemo quisquam autem odit vero
+                                                        sequi. Repudiandae nulla, quasi blanditiis sunt illum quae non.</p>
+                                                </div>
+                                                <div class="gambar-item">
+                                                    <input type="radio" id="gambar_2" name="gambar" value="gambar2">
+                                                    <label for="gambar_2"><img src="{{ URL::asset('dist/img/soal-2.jpg') }}"
+                                                            alt="" width="200"></label>
+                                                </div>
+                                                <div class="gambar-item">
+                                                    <input type="radio" id="gambar_3" name="gambar" value="gambar3">
+                                                    <label for="gambar_3">
+                                                        <img src="{{ URL::asset('dist/img/soal-3.jpg') }}" alt=""
+                                                            width="200">
+                                                    </label>
+                                                </div>
+                                                <div class="gambar-item">
+                                                    <input type="radio" id="gambar_4" name="gambar" value="gambar4">
+                                                    <label for="gambar_4"><img src="{{ URL::asset('dist/img/soal-4.jpg') }}"
+                                                            alt="" width="200"></label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                {{-- <div class="form-group">
                                         <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
                                     </div>
                                     <p class="text-sm text-muted float-right"></p> --}}
-                                </div>
-                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card-body -->
                             <div class="card-body">
                                 <div class="form-group">
                                     <p></p>
@@ -170,13 +192,11 @@
                                 <p class="text-sm text-muted float-right"></p>
                             </div>
                             <div class="card-footer">
-                                    <a href="javascript:void(0)"
-                                        onclick=""
-                                        class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
-                                    <a href="javascript:void(0)"
-                                        onclick=""
-                                        class="btn btn-primary float-right">Next <i class="fas fa-angle-right"></i></a>
-                                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                                <a href="javascript:void(0)" onclick="" class="btn btn-default"><i
+                                        class="fas fa-angle-left"></i> Back</a>
+                                <a href="javascript:void(0)" onclick="" class="btn btn-primary float-right">Next <i
+                                        class="fas fa-angle-right"></i></a>
+                                <button type="submit" class="btn btn-primary float-right mr-1">Submit</button>
                             </div>
                         </form>
 
