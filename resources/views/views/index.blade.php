@@ -31,7 +31,7 @@
                     <!-- /.col-md-6 -->
                     @foreach ($data as $quiz)
                         <div class="col-lg-4">
-                            <div class="card" style="width: 18rem;">
+                            <div class="card" style="width: 23rem;">
                                 <img class="card-img-top" src="{{ URL::asset('dist/img/thumbnail-logo.jpg') }}"
                                     alt="Card image cap">
                                 <div class="card-body">

@@ -122,7 +122,7 @@
                             </div> --}}
                         @endif
                     @endforeach
-                    <div class="card card-default col-8" id="responsive">
+                    <div class="card card-default col-5" id="responsive">
                         <!-- Setting a minimum width of 300px and a maximum width of 90% -->
                         <div class="card-header">
                             <h3 class="card-title">Number {{ $que->number }}</h3>
@@ -143,7 +143,7 @@
                                 <p class="text-sm text-muted float-right"></p>
                             </div>
                             <!-- /.card-body -->
-                            <div class="card-body d-flex justify-content-center">
+                            <div class="card-body">
                                 <div class="form-group">
                                     <div class="gambar-container">
                                         <form action="#">
