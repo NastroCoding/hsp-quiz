@@ -13,8 +13,14 @@ class RouteController extends Controller
 {
     public function admin_dashboard()
     {
+        $data = Quiz::latest()->get();
+        $category = Category::latest()->get();
+        $education = Education::latest()->get();
         return view('admin.dashboard', [
-            'page' => 'Dashboard'
+            'page' => 'Dashboard',
+            'category' => $category,
+            'education' => $education,
+            'data' => $data
         ]);
     }
 
