@@ -137,7 +137,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <label class="form-check-label" for="radio"</label>
+                                        <label class="form-check-label" for="radio"></label>
                                     </div>
                                 </div>
                                 <p class="text-sm text-muted float-right"></p>
