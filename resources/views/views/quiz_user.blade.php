@@ -49,7 +49,7 @@
                     @endforeach
                     <!-- /.col-md-6 -->
                 </div>
-                <!-- /.row -->
+                <!-- /.row -->  
             </div>
             <!-- /.container-fluid -->
         </div>

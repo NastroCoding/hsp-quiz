@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             All rights reserved.
         </footer>
     </div>
-    <!-- quiz modal -->
+    
     <!-- sort modal -->
     <div class="modal fade" id="modal-filter">
         <div class="modal-dialog">
@@ -144,6 +144,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <!-- /.modal-dialog -->
     </div>
+
+    @if ($data->isNotEmpty())
+
+    <div class="modal fade" id="modal-quiz">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter Quiz</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/quiz/view/{{ $quiz->slug }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Enter quiz code</label>
+                                <input type="text" name="token" class="form-control" id="exampleInputEmail1"
+                                    placeholder="XXXXXX">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Go</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+            
+    @endif
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
