@@ -10,9 +10,9 @@
             @endforeach
         @endif
         @if (session()->has('education_success'))
-        <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
-            {{ session('education_success') }}
-        </div>
+            <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
+                {{ session('education_success') }}
+            </div>
         @endif
         <div class="container-fluid">
             <div class="row mb-2">
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="row">
-                <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#add-user"><i
+                <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#add-education"><i
                         class="fas fa-plus mr-1"></i>Add Education</button>
             </div>
         </div>
@@ -76,12 +76,48 @@
                                 </button>
                             </td>
                         </tr>
+
+                        <div class="modal fade" id="edit-modal{{ $education->id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Edit Education</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/admin/education/edit/{{ $education->id }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label for="exampleInputToken">Education Name</label>
+                                                    <input type="text" name="education" class="form-control"
+                                                        id="exampleInputToken" placeholder="Enter Education"
+                                                        value="{{ $education->education_name }}">
+                                                </div>
+                                            </div>
+                                            <!-- /.card-body -->
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <input type="submit" name="submit" class="btn btn-success"
+                                            value="Update Education">
+                                    </div>
+                                    </form>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
                     @endforeach
+
                 </tbody>
             </table>
         </div>
         <!-- /.card-body -->
-        <div class="modal fade" id="add-user">
+        <div class="modal fade" id="add-education">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -135,41 +171,6 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-        @if ($data->isNotEmpty())
-            <div class="modal fade" id="edit-modal{{ $education->id }}">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Edit Education</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="/admin/education/edit/{{ $education->id }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="exampleInputToken">Education Name</label>
-                                        <input type="text" name="education" class="form-control"
-                                            id="exampleInputToken" placeholder="Enter Education"
-                                            value="{{ $education->education_name }}">
-                                    </div>
-                                </div>
-                                <!-- /.card-body -->
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit" name="submit" class="btn btn-success" value="Update Education">
-                        </div>
-                        </form>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-        @endif
     </div>
     <!-- /.content -->
 @endsection

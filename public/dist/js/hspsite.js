@@ -144,15 +144,30 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
         return; // Exit function if options container is not found
     }
 
-    var optionIndex =
-        optionsContainer.querySelectorAll(".normal-input-group").length + 1;
+    // Find all existing option input fields
+    var existingOptions = optionsContainer.querySelectorAll(
+        "input[name='choices[]']"
+    );
+
+    // Find the highest index currently in use among existing options
+    var highestIndex = 0;
+    existingOptions.forEach(function (option) {
+        var placeholderText = option.getAttribute("placeholder");
+        var currentIndex = parseInt(placeholderText.split(" ")[1]);
+        if (currentIndex > highestIndex) {
+            highestIndex = currentIndex;
+        }
+    });
+
+    // Increment the highest index to get the next index
+    var nextIndex = highestIndex + 1;
 
     var newInputGroup = document.createElement("div");
     newInputGroup.classList.add("input-group", "normal-input-group");
 
     // Generate unique IDs for option elements
-    var uniqueId = "optionImageInput_" + optionIndex;
-    var previewId = "imagePreview" + optionIndex; // Unique ID for image preview
+    var uniqueId = "optionImageInput_" + nextIndex;
+    var previewId = "imagePreview" + nextIndex; // Unique ID for image preview
 
     var prependDiv = document.createElement("div");
     prependDiv.classList.add("input-group-prepend");
@@ -171,7 +186,7 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     var inputField = document.createElement("input");
     inputField.setAttribute("type", "text");
     inputField.classList.add("form-control");
-    inputField.setAttribute("placeholder", "Option " + optionIndex);
+    inputField.setAttribute("placeholder", "Option " + nextIndex); // Update placeholder with next index
     inputField.setAttribute("name", "choices[]");
 
     newInputGroup.appendChild(inputField);
