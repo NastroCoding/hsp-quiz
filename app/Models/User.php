@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     use SoftDeletes;
-    
+
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
@@ -27,7 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'education_id', // Add this line
     ];
 
     /**
@@ -53,11 +54,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function education(){
+    public function education()
+    {
         return $this->belongsTo(Education::class);
     }
 
-    public function useranswer(){
+    public function useranswer()
+    {
         return $this->hasMany(UserAnswer::class);
     }
 }

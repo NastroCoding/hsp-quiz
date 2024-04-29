@@ -70,7 +70,7 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->role }}</td>
-                                <td>{{ $user->education }}</td>
+                                <td>{{ $user->education->education_name }}</td>
                                 <td>
                                     <a class="btn btn-info btn-sm" data-toggle="modal"
                                         data-target="#edit-user{{ $user->id }}">
@@ -109,38 +109,41 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Edit User</h4>
+                                            <h4 class="modal-title">Create User</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="/admin/quiz/edit/{{ $user->id }}" method="POST">
+                                            <form action="/admin/user/edit/{{ $user->id }}" method="POST">
                                                 @csrf
                                                 <div class="card-body">
                                                     <div class="form-group">
-                                                        <label for="exampleInputToken">Token</label>
-                                                        <input type="text" name="token" class="form-control"
-                                                            id="exampleInputToken" placeholder="" value="{{ $user->password }}">
+                                                        <label for="exampleInputToken">Name</label>
+                                                        <input type="text" name="name" class="form-control"
+                                                            id="exampleInputToken" placeholder="Enter Name"
+                                                            value="{{ $user->name }}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail">Email</label>
                                                         <input type="email" name="email" class="form-control"
-                                                            id="exampleInputEmail" placeholder="" value="{{ $user->email }}">
+                                                            id="exampleInputEmail" placeholder="Email"
+                                                            value="{{ $user->email }}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="role">Role</label>
-                                                        <select name="role" id="" class="form-control" value="{{ $user->role }}">
+                                                        <select name="role" id="" class="form-control">
                                                             <option value="user">User</option>
                                                             <option value="admin">Admin</option>
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="">Education</label>
-                                                        <select name="education" id="" class="form-control" value="{{ $user->education }}">
+                                                        <label>Education</label>
+                                                        <select class="form-control" name="education_id">
                                                             @foreach ($education as $edu)
-                                                                <option value="{{ $edu->id }}">
-                                                                    {{ $edu->education_name }}</option>
+                                                                <option value="{{ $edu->id }}" {{ $edu->id == $user->education_id ? 'selected' : '' }}>
+                                                                    {{ $edu->education_name }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -155,7 +158,8 @@
                                         <div class="modal-footer justify-content-between">
                                             <button type="button" class="btn btn-default"
                                                 data-dismiss="modal">Close</button>
-                                            <input type="submit" name="submit" class="btn btn-info" value="Edit User">
+                                            <input type="submit" name="submit" class="btn btn-success"
+                                                value="Create User">
                                         </div>
                                         </form>
                                     </div>
@@ -203,10 +207,11 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="">Education</label>
-                                <select name="education" id="" class="form-control">
+                                <label>Education</label>
+                                <select class="form-control" name="education_id">
                                     @foreach ($education as $edu)
-                                        <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
+                                        <option value="{{ $edu->id }}">{{ $edu->education_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
