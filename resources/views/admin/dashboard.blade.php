@@ -30,8 +30,8 @@
                 @foreach ($data as $quiz)
                     <div class="col-lg-4">
                         <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="{{ URL::asset('dist/img/thumbnail-logo.jpg') }}"
-                                alt="Card image cap">
+                            <img class="card-img-top" src="/storage{{ asset($quiz->thumbnail) }}"
+                                alt="Card image cap" style="width:286px; height:180px;">
                             <div class="card-header">
                                 <h5 class="card-title m-0">{{ $quiz->title }}</h5>
                             </div>

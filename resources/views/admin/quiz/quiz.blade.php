@@ -90,9 +90,10 @@
                             <tr class="expandable-body">
                                 <td colspan="7">
                                     <p> Description : {{ $quiz->description }} <br> Token : {{ $quiz->token }} <br>
-                                        Thumbnail : <br><img class="img-thumbnail mb-1"
-                                            src="{{ URL::asset('/dist/img/thumbnail.png') }}" alt=""
-                                            style="width:200px; "></p>
+                                        Thumbnail : <br>
+                                        <img class="img-thumbnail mb-1" src="/storage{{ asset($quiz->thumbnail) }}"
+                                            alt="Thumbnail" style="width:200px;">
+                                    </p>
                                 </td>
                             </tr>
                             {{-- edit quiz modal --}}
@@ -106,7 +107,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="/admin/quiz/edit/{{ $quiz->id }}" method="POST">
+                                            <form action="/admin/quiz/edit/{{ $quiz->id }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="card-body">
                                                     <div class="form-group">
@@ -137,7 +138,14 @@
                                                                     for="exampleInputFile4">Choose image</label>
                                                             </div>
                                                         </div>
-                                                        <div id="editQuizImagePreview" class="mt-1"></div>
+                                                        <div id="editQuizImagePreview" class="mt-1">
+                                                            @if ($quiz->thumbnail)
+                                                                <img src="/storage{{ asset($quiz->thumbnail) }}"
+                                                                    class="img-thumbnail" style="width: 200px;">
+                                                            @else
+                                                                No thumbnail available
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="">Time</label>
@@ -209,7 +217,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/admin/quiz/create" method="POST">
+                    <form action="/admin/quiz/create" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
@@ -223,8 +231,8 @@
                                     placeholder="Enter Description"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputDescription">Token</label>
-                                <input type="text" name="token" class="form-control" id="exampleInputTitle"
+                                <label for="exampleInputToken">Token</label>
+                                <input type="text" name="token" class="form-control" id="exampleInputToken"
                                     placeholder="Enter token">
                             </div>
                             <div class="form-group">
@@ -232,17 +240,19 @@
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="exampleInputFile3"
-                                            accept="image/*" onchange="previewQuizImage(event, 'fileLabel3')">
+                                            accept="image/*" name="thumbnail"
+                                            onchange="previewQuizImage(event, 'fileLabel3')">
                                         <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">Choose
                                             image</label>
                                     </div>
                                 </div>
-                                <div id="quizImagePreview" class="mt-1"></div>
+                                <div id="quizImagePreview" class="mt-1 text-muted">16:9 Aspect ratio is recommended</div>
                             </div>
                             <div class="form-group">
-                                <label for="">Time</label>
+                                <label for="exampleInputTime">Time</label>
                                 <div class="input-group mb-3">
-                                    <input type="number" name="time" class="form-control" placeholder="Minutes">
+                                    <input type="number" name="time" class="form-control" id="exampleInputTime"
+                                        placeholder="Minutes">
                                     <div class="input-group-append">
                                         <span class="input-group-text">min</span>
                                     </div>
@@ -251,10 +261,9 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <!-- select -->
                                         <div class="form-group">
-                                            <label>Category</label>
-                                            <select name="category_id" class="form-control">
+                                            <label for="exampleInputCategory">Category</label>
+                                            <select name="category_id" class="form-control" id="exampleInputCategory">
                                                 @foreach ($category as $cat)
                                                     <option value="{{ $cat->id }}">{{ $cat->category_name }}
                                                     </option>
@@ -264,8 +273,8 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Education</label>
-                                            <select class="form-control" name="education_id">
+                                            <label for="exampleInputEducation">Education</label>
+                                            <select class="form-control" name="education_id" id="exampleInputEducation">
                                                 @foreach ($education as $edu)
                                                     <option value="{{ $edu->id }}">{{ $edu->education_name }}
                                                     </option>
@@ -276,13 +285,13 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.card-body -->
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-success" value="Add Quiz">
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-success" value="Add Quiz">
-                </div>
-                </form>
+                <!-- /.modal-body -->
             </div>
             <!-- /.modal-content -->
         </div>
