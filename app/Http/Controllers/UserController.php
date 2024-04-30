@@ -3,49 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Education;
-use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $user = User::all();
+        $users = User::with('education')->get();
         return view('admin.user.user', [
-            'data' => $user,
+            'data' => $users,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validate = $request->validate([
+            'education_id' => 'required', // Ensure education_id is required
             'name' => 'required',
             'email' => 'required',
             'password' => 'required|min:8'
         ]);
 
         $hash = Hash::make($request->password);
-        if($request->role == ''){
-            $role = 'user';
-            $created_by = 'System';
-            $updated_by = 'System';
-        }else{
-            $role = $request->role;
-            $created_by = Auth::user()->id;
-            $updated_by = Auth::user()->id;
-        };
 
+        $role = $request->filled('role') ? $request->role : 'user';
+        $created_by = Auth::id();
+        $updated_by = Auth::id();
 
         $user = User::create([
+            'education_id' => $request->education_id,
             'name' => $request->name,
             'email' => $request->email,
             'password' => $hash,
@@ -54,63 +44,55 @@ class UserController extends Controller
             'updated_by' => $updated_by
         ]);
 
-        return redirect('/admin/users')->with('register_success', 'Registrasi Berhasil!');
+        return redirect('/admin/users')->with('register_success', 'Registration Successful!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $show = User::where('id', $id)->get();
+        $user = User::with('education')->findOrFail($id);
         $education = Education::latest()->get();
         return view('admin.user.edit_user', [
             'page' => 'Edit User',
-            'data' => $show,
+            'data' => [$user],
             'education' => $education,
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $validate = $request->validate([
-            'token' => 'required|min:8',
+            'education_id' => 'required', // Ensure education_id is required
             'email' => 'required',
             'password' => 'required|min:8'
         ]);
 
         $hash = Hash::make($request->password);
 
-        $user = User::where('id', $id);
-        $updated_by = Auth::user()->id;
+        $user = User::findOrFail($id);
+        $updated_by = Auth::id();
 
         $user->update([
-            'token' => $request->token,
+            'education_id' => $request->education_id,
             'email' => $request->email,
             'updated_by' => $updated_by,
-            'password' => $request->password
+            'password' => $hash
         ]);
 
-        return redirect('/admin/users')->with('update_success', 'User Berhasil di Update!');
+        return redirect('/admin/users')->with('update_success', 'User Successfully Updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        $whodelete = Auth::user()->id;
+        $whodelete = Auth::id();
         $dumpemail = Str::upper(Str::random(16));
-        $user = User::where('id', $id);
+
+        $user = User::findOrFail($id);
         $user->update([
             'email' => $dumpemail,
             'updated_by' => $whodelete
         ]);
         $user->delete();
 
-        return redirect('/admin/users')->with('delete_success', 'User Berhasil Di Hapus!');
+        return redirect('/admin/users')->with('delete_success', 'User Successfully Deleted!');
     }
 }
