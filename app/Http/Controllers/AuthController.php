@@ -49,12 +49,14 @@ class AuthController extends Controller
 
         $hash = Hash::make($request->password);
         $default_role = "user";
+        $default_education_id = 1; 
 
         $user = User::create([
             'name' => $request->email,
             'email' => $request->email,
             'password' => $hash,
             'role' => $default_role,
+            'education_id' => $default_education_id,
         ]);
 
         return redirect('/')->with('register_success', 'Registrasi Berhasil!');
