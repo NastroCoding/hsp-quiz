@@ -52,7 +52,7 @@ document
         imageInput.setAttribute("type", "file");
         imageInput.setAttribute("accept", "image/*");
         imageInput.style.display = "none";
-        imageInput.setAttribute("name", "images[]");
+        imageInput.setAttribute("name", "choice_images[]");
         imageInput.id = uniqueId; // Assign unique ID to the image input field
 
         // Set onchange event for image input
@@ -205,7 +205,7 @@ document.getElementById("addOptionBtn").addEventListener("click", function () {
     imageInput.setAttribute("type", "file");
     imageInput.setAttribute("accept", "image/*");
     imageInput.style.display = "none";
-    imageInput.setAttribute("name", "images[]");
+    imageInput.setAttribute("name", "choice_images[]");
     imageInput.id = uniqueId; // Assign unique ID to the image input field
 
     // Set onchange event for image input

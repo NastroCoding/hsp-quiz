@@ -8,6 +8,7 @@ use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
@@ -29,16 +30,26 @@ class QuestionController extends Controller
             'question' => 'required|string',
             'choices' => 'required|array',
             'choices.*' => 'string',
-            'is_correct' => 'required|array', // Validate the is_correct field
+            'is_correct' => 'required|array',
             'number' => 'required',
             'point_value' => 'required',
-            'question_type' => 'required'
+            'question_type' => 'required',
+            'questionImage' => 'nullable|image', // Add validation for question image
+            'choice_images.*' => 'nullable|image', // Validation for choice images
         ]);
+
+        // Handle question image upload
+        if ($request->hasFile('questionImage')) {
+            $imagePath = $request->file('questionImage')->store('question_images', 'public');
+            $imageUrl = asset('storage/' . $imagePath);
+        } else {
+            $imageUrl = null;
+        }
 
         // Get the currently authenticated user
         $user = Auth::user();
         $lastQuestionNumber = Question::where('quiz_id', $request->quiz_id)->max('number') ?? 0;
-        
+
         // Create a new question instance
         $question = new Question();
         $question->question = $validatedData['question'];
@@ -47,8 +58,8 @@ class QuestionController extends Controller
         $question->quiz_id = $request->quiz_id;
         $question->created_by = $user->id;
         $question->updated_by = $user->id;
-        $question->number = $lastQuestionNumber+1;
-        // Additional attributes of the question can be set here
+        $question->number = $lastQuestionNumber + 1;
+        $question->images = $imageUrl; // Save the question image URL
         $question->save();
 
         // Save the choices associated with the question
@@ -60,8 +71,16 @@ class QuestionController extends Controller
             $questionChoice->is_correct = isset($validatedData['is_correct'][$index]);
             $questionChoice->created_by = $user->id;
             $questionChoice->updated_by = $user->id;
+
+            // Handle choice image upload
+            if ($request->hasFile('choice_images.' . $index)) {
+                $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
+                $questionChoice->image_choice = $imagePath;
+            }
+
             $questionChoice->save();
         }
+
         return redirect()->back()->with('success', 'Question created successfully!');
     }
 
@@ -75,11 +94,20 @@ class QuestionController extends Controller
             'question_type' => 'required|string',
             'quiz_id' => 'required|exists:quizzes,id',
             'question' => 'required|string',
+            'essayImage' => 'nullable|image', // Add validation for essay image
         ]);
 
         // Get the currently authenticated user
         $user = Auth::user();
         $lastQuestionNumber = Question::where('quiz_id', $request->quiz_id)->max('number') ?? 0;
+
+        // Handle essay image upload
+        if ($request->hasFile('essayImage')) {
+            $imagePath = $request->file('essayImage')->store('essay_images', 'public');
+            $imageUrl = asset('storage/' . $imagePath);
+        } else {
+            $imageUrl = null;
+        }
 
         // Create the essay question
         $question = new Question();
@@ -89,11 +117,12 @@ class QuestionController extends Controller
         $question->question_type = $validatedData['question_type'];
         $question->created_by = $user->id;
         $question->updated_by = $user->id;
-        $question->number = $lastQuestionNumber+1;
+        $question->number = $lastQuestionNumber + 1;
+        $question->images = $imageUrl; // Save the essay image URL
         $question->save();
 
         // Redirect back or return a response
-        return redirect()->back()->with('success', 'Essay question created successfully!', ['lastQuestionNumber' => $lastQuestionNumber]);
+        return redirect()->back()->with('success', 'Essay question created successfully!');
     }
 
     /**
@@ -103,43 +132,63 @@ class QuestionController extends Controller
     {
         // Validate the form data
         $validatedData = $request->validate([
-            'question_type' => 'required|string', // Ensure that 'question_type' is present and a string
-            'quiz_id' => 'required|exists:quizzes,id', // Ensure that 'quiz_id' exists in the 'quizzes' table
+            'question_type' => 'required|string',
+            'quiz_id' => 'required|exists:quizzes,id',
             'question' => 'required|string',
             'choices' => 'required|array',
             'choices.*' => 'string',
             'point_value' => 'required|array',
-            'point_value.*' => 'numeric|min:0', // Ensure that each 'points' value is numeric and greater than or equal to 0
+            'point_value.*' => 'numeric|min:0',
+            'choice_images.*' => 'nullable|image', // Validation for choice images
         ]);
 
-        $created_by = Auth::user()->id;
+        // Get the currently authenticated user
+        $user = Auth::user();
         $lastQuestionNumber = Question::where('quiz_id', $request->quiz_id)->max('number') ?? 0;
+
+        // Handle question image upload
+        if ($request->hasFile('weightedEssayImage')) {
+            $imagePath = $request->file('weightedEssayImage')->store('weighted_essay_images', 'public');
+            $imageUrl = asset('storage/' . $imagePath);
+        } else {
+            $imageUrl = null;
+        }
 
         // Create the question
         $question = Question::create([
             'quiz_id' => $validatedData['quiz_id'],
-            'point_value' => '0',
+            'point_value' => 0,
             'question' => $validatedData['question'],
             'question_type' => $validatedData['question_type'],
-            'created_by' => $created_by,
-            'updated_by' => $created_by,
-            'number' => $lastQuestionNumber+1
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+            'number' => $lastQuestionNumber + 1,
+            'images' => $imageUrl, // Save the image URL
         ]);
 
         // Attach choices to the question
         foreach ($validatedData['choices'] as $index => $choice) {
-            $question->choices()->create([
+            $questionChoice = $question->choices()->create([
                 'choice' => $choice,
-                'is_correct' => $request->has('is_correct') && $request->input('is_correct') == $index,
+                'is_correct' => false, // Adjust as necessary
                 'point_value' => $validatedData['point_value'][$index],
-                'created_by' => $created_by,
-                'updated_by' => $created_by
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
             ]);
+
+            // Handle choice image upload
+            if ($request->hasFile('choice_images.' . $index)) {
+                // Upload and save choice image
+                $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
+                $questionChoice->image_choice = $imagePath;
+                $questionChoice->save();
+            }
         }
 
         // Redirect back or return a response
-        return redirect()->back()->with('success', 'Question created successfully!', ['lastQuestionNumber' => $lastQuestionNumber]);
+        return redirect()->back()->with('success', 'Question created successfully!');
     }
+
 
     /**
      * Display the specified resource.
