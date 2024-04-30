@@ -44,6 +44,10 @@
                             <p class="card-title text-muted">{{ $question->question_type }}</p>
                         </div>
                         <div class="card-body">
+                            @if ($question->images)
+                                <img src="{{ asset('' . $question->images) }}" alt="Question Image"
+                                    style="max-width: 300px;">
+                            @endif
                             <div class="form-group">
                                 <p>{{ $question->number }}. {{ $question->question }}</p>
                             </div>
@@ -52,12 +56,18 @@
                                     @foreach ($question->choices as $choice)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="radio1">
-                                            <label class="form-check-label">{{ $choice->choice }} <span
-                                                    class="text-muted text-sm">
+                                            <label class="form-check-label">
+                                                @if ($choice->image_choice)
+                                                    <img src="{{ asset('storage/' . $choice->image_choice) }}"
+                                                        alt="Choice Image" style="max-width: 100px;">
+                                                @endif
+                                                {{ $choice->choice }}
+                                                <span class="text-muted text-sm">
                                                     @if ($question->question_type == 'weighted_multiple')
                                                         +{{ $choice->point_value }} Points
                                                     @endif
-                                                </span></label>
+                                                </span>
+                                            </label>
                                         </div>
                                     @endforeach
                                 </div>
@@ -141,15 +151,11 @@
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="exampleInputFile1"
-                                            accept="image/*" onchange="previewImage(event, 'question', 'fileLabel1')">
+                                            accept="image/*" name="questionImage"
+                                            onchange="previewImage(event, 'question', 'fileLabel1')">
                                         <label class="custom-file-label" id="fileLabel1" for="exampleInputFile1">Choose
                                             image</label>
-                                        <div class="input-group-append">
-                                            <small class="text-muted float-right input-group-text"><span
-                                                    class="text-danger">*</span>Optional</small>
-                                        </div>
                                     </div>
-
                                 </div>
                                 <div id="questionImagePreview" class="mt-1"></div>
                                 <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
@@ -160,33 +166,36 @@
                             <label>Options</label>
                             <div id="optionsContainer" class="form-group">
                                 <!-- Options will be added dynamically here -->
+                                <!-- Your dynamic options HTML -->
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            <input type="checkbox" name="is_correct[]">
+                                            <input type="checkbox" name="is_correct[]" />
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Option 1" name="choices[]">
+                                    <input type="text" class="form-control" placeholder="Option 1"
+                                        name="choices[]" />
+                                    <!-- Modified: added file input for each choice -->
                                     <div class="input-group-append">
-                                        <span class="input-group-text btn btn-default" style="cursor: pointer;"
+                                        <span class="input-group-text btn btn-default" style="cursor: pointer"
                                             onclick="uploadOptionImage(this)">
                                             <i class="fas fa-image"></i>
                                         </span>
-                                        <span class="input-group-text btn btn-danger" style="cursor: pointer;"
+                                        <span class="input-group-text btn btn-danger" style="cursor: pointer"
                                             onclick="removeOption(this)">
                                             <i class="fas fa-trash"></i>
                                         </span>
                                     </div>
-                                    <input type="file" accept="image/*" style="display: none;"
-                                        onchange="previewOptionImage(event, 'imagePreview1')" class="optionImageInput">
+                                    <input type="file" accept="image/*" style="display: none"
+                                        onchange="previewOptionImage(event, 'imagePreview1')" class="optionImageInput"
+                                        name="choice_images[]" />
                                 </div>
-                                <div class="optionImagePreview" id="imagePreview1"></div> <!-- Image preview container -->
+                                <!-- Image preview container -->
+                                <div class="optionImagePreview" id="imagePreview1"></div>
                             </div>
                             <div class="form-group">
                                 <br>
-                                <button type="button" class="btn btn-primary" id="addOptionBtn">
-                                    Add Option
-                                </button>
+                                <button type="button" class="btn btn-primary" id="addOptionBtn">Add Option</button>
                                 <input type="number" name="point_value" class="form-control float-right"
                                     placeholder="Points" min="0" style="width: 100px;" required>
                             </div>
@@ -215,7 +224,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/admin/quiz/question/create/essay" method="POST">
+                    <form action="/admin/quiz/question/create/essay" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="question_type" value="essay">
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
@@ -227,7 +236,8 @@
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="exampleInputFile2"
-                                            accept="image/*" onchange="previewEssayImage(event, 'fileLabel2')">
+                                            accept="image/*" onchange="previewEssayImage(event, 'fileLabel2')"
+                                            name="essayImage">
                                         <label class="custom-file-label" id="fileLabel2" for="exampleInputFile2">Choose
                                             image</label>
                                         <div class="input-group-append">
@@ -254,8 +264,7 @@
         </div>
     </div>
 
-
-    <!-- Weighted Multiple Choice Question Modal -->
+    <!-- Weighted Multiple Choice modal -->
     <div class="modal fade" id="weighted-mc">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -266,7 +275,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/admin/quiz/question/create/weighted" method="POST">
+                    <form action="/admin/quiz/question/create/weighted" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="question_type" value="weighted_multiple">
                         <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
@@ -278,7 +287,8 @@
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="exampleInputFile3"
-                                            accept="image/*" onchange="previewWeightedEssayImage(event, 'fileLabel3')">
+                                            accept="image/*" onchange="previewWeightedEssayImage(event, 'fileLabel3')"
+                                            name="weightedEssayImage">
                                         <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">Choose
                                             image</label>
                                         <div class="input-group-append">
@@ -290,9 +300,8 @@
                                 <div id="weighted-essayImagePreview" class="mt-1"></div>
                                 <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
                             </div>
-                            <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
                             <div id="weighted-optionsContainer">
-                                <label for="inputName">Option</label>
+                                <label for="inputName">Options</label>
                                 <!-- Weighted Option 1 -->
                                 <div class="input-group weighted-input-group">
                                     <input type="text" class="form-control" placeholder="Option 1" name="choices[]">
@@ -310,9 +319,8 @@
                                     </div>
                                     <input type="file" accept="image/*" style="display: none;"
                                         onchange="previewWeightedOptionImage(event, 'imageLabel1', 'weightedImagePreview1')"
-                                        class="weightedOptionImageInput">
+                                        class="weightedOptionImageInput" name="choice_images[]">
                                 </div>
-
                                 <div class="weightedOptionImagePreview" id="weightedImagePreview1"></div>
                                 <!-- End Weighted Option 1 -->
                             </div>

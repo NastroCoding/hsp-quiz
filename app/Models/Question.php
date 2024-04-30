@@ -24,6 +24,6 @@ class Question extends Model
 
     public function userAnswer()
     {
-        return $this->hasMany(User_Answer::class);
+        return $this->hasMany(UserAnswer::class);
     }
 }
