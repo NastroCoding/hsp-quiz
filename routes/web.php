@@ -27,7 +27,7 @@ Route::controller(RouteController::class)->group(function(){
     // ADMIN
     Route::get('/admin/dashboard', 'admin_dashboard')->middleware('admin');
     Route::get('/admin/profile', 'admin_profile')->middleware('admin');
-    
+
     // USER
     Route::get('/admin/users', 'users')->middleware('admin');
 
@@ -38,8 +38,8 @@ Route::controller(RouteController::class)->group(function(){
 
     // CATEGORY
     Route::get('/admin/category', 'category')->middleware('admin');
-    
-    
+
+
     // EDUCATION
     Route::get('/admin/education', 'education')->middleware('admin');
 
@@ -95,4 +95,6 @@ Route::controller(EducationController::class)->group(function(){
 
 Route::controller(UserAnswerController::class)->group(function(){
     Route::post('/quiz/answer', 'store')->middleware('auth');
+
+Route::get('/quiz/{id}/thumbnail', [QuizController::class, 'showThumbnail'])->name('quiz.thumbnail');
 });

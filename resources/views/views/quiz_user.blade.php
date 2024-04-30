@@ -32,7 +32,9 @@
                     <!-- /.col-md-6 -->
                     @foreach ($data as $quiz)
                         <div class="col-lg-4">
-                            <div class="card card-primary card-outline">
+                            <div class="card" style="width: 23rem;">
+                                <img class="card-img-top" src="{{ asset('storage/' . $quiz->thumbnail) }}"
+                                    alt="Card image cap" style="width:100%; height:180px;">
                                 <div class="card-header">
                                     <h5 class="card-title m-0">{{ $quiz->title }}</h5>
                                 </div>
@@ -49,7 +51,7 @@
                     @endforeach
                     <!-- /.col-md-6 -->
                 </div>
-                <!-- /.row -->  
+                <!-- /.row -->
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -89,6 +91,6 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-            
+
     @endif
 @endsection

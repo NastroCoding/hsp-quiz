@@ -28,18 +28,18 @@
                 <button class="btn btn-sm btn-default mb-1" data-toggle="modal" data-target="#modal-filter"><i
                         class="fas fa-sliders"></i></button>
                 <div class="row">
-                    <!-- /.col-md-6 -->
+                    <!-- /.col-lg-4 -->
                     @foreach ($data as $quiz)
                         <div class="col-lg-4">
                             <div class="card" style="width: 23rem;">
-                                <img class="card-img-top" src="{{ URL::asset('dist/img/thumbnail-logo.jpg') }}"
-                                    alt="Card image cap">
+                                <img class="card-img-top" src="{{ asset('storage/' . $quiz->thumbnail) }}"
+                                    alt="Card image cap" style="width:100%; height:180px;">
                                     <div class="card-header">
                                     <h5 class="card-title m-0">{{ $quiz->title }}</h5>
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text"> {{ $quiz->description }}</p>
-                                    <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
+                                    <a class="btn btn-primary" href="{{ route('quiz.thumbnail', ['id' => $quiz->id]) }}"
                                         data-toggle="modal" data-target="#modal-quiz">
                                         Continue
                                     </a>
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     @endforeach
-                    <!-- /.col-md-6 -->
+                    <!-- /.col-lg-4 -->
                 </div>
                 <!-- /.row -->
             </div>
