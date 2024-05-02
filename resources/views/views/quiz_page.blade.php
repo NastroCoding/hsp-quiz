@@ -41,7 +41,7 @@
     <div class="content-wrapper d-flex justify-content-center align-items-center">
         <div class="content">
             <div class="container">
-                <div class="row ">
+                <div class="row mt-3">
                     <!-- /.col-md-6 -->
                     <!-- Multiple Choice Form -->
                     @foreach ($questions as $que)
@@ -56,56 +56,43 @@
                                 <form action="/quiz/answer" method="POST">
                                     @csrf
                                     <input type="hidden" name="question_id" value="{{ $que->id }}">
-                                    @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
-                                        <div class="card-body">
-                                            <div class="form-group">
-                                                <p>{{ $que->question }}</p>
-                                            </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            @if ($question->images)
+                                                <img src="{{ asset('' . $question->images) }}" alt="Question Image"
+                                                    style="max-width: 300px;">
+                                            @endif
+                                            <p>{{ $que->question }}</p>
+                                        </div>
+
+                                        @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
                                             @foreach ($que->choices as $index => $choice)
                                                 <div class="form-group">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                             name="choosen_choice_id" value="{{ $choice->id }}"
                                                             id="radio{{ $index + 1 }}">
-                                                        <label class="form-check-label"
-                                                            for="radio{{ $index + 1 }}">{{ $choice->choice }}</label>
+                                                        <label class="form-check-label" for="radio{{ $index + 1 }}">
+                                                            @if ($choice->image_choice)
+                                                                <img src="{{ asset('storage/' . $choice->image_choice) }}"
+                                                                    alt="Choice Image" style="max-width: 100px;">
+                                                            @endif
+                                                            <p>{{ $choice->choice }}</p>
+                                                        </label>
                                                     </div>
                                                 </div>
                                             @endforeach
-                                            <p class="text-sm text-muted float-right">{{ $que->question_type }}</p>
-                                        </div>
-                                        <!-- /.card-body -->
-                                    @elseif ($que->question_type == 'essay')
-                                        <div class="card-body">
-                                            <div class="form-group">
-                                                @if (file_exists('public/img/' . $que->images))
-                                                    <p>ini ada foto</p>
-                                                @endif
-                                                <p>{{ $que->question }}</p>
-                                            </div>
+                                        @elseif ($que->question_type == 'essay')
                                             <div class="form-group">
                                                 <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
                                             </div>
-                                            <p class="text-sm text-muted float-right">{{ $que->question_type }}</p>
-                                        </div>
-                                        <!-- /.card-body -->
-                                    @endif
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            @if (file_exists('public/img/' . $que->images))
-                                                <p>ini ada foto</p>
-                                            @endif
-                                            <p>{{ $que->question }}</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
-                                        </div>
-                                        <p class="text-sm text-muted float-right">{{ $que->question_type }}</p>
+                                        @endif
                                     </div>
+                                    <!-- /.card-body -->
                                     <div class="card-footer">
                                         @if ($que->number != 1)
                                             <a href="javascript:void(0)"
-                                                onclick="submitForm('   /quiz/view/{{ $slug }}/{{ $que->number - 1 }}')"
+                                                onclick="submitForm('/quiz/view/{{ $slug }}/{{ $que->number - 1 }}')"
                                                 class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
                                         @endif
                                         @if ($que->number != $lastQuestionNumber)
@@ -120,91 +107,66 @@
                                 </form>
                             </div>
                         @endif
+                        <script>
+                            var CountdownTimer = {
+                                resetCountdown: function() {
+                                    var countDownDate = new Date().getTime() + {{ $quiz->time }} * 60 * 1000;
+                                    localStorage.setItem("countdownDate", countDownDate.toString());
+                                    location.reload();
+                                },
+
+                                init: function(timerId) {
+                                    var x = setInterval(function() {
+                                        var now = new Date().getTime();
+                                        var storedCountdownDate = localStorage.getItem("countdownDate");
+                                        var countDownDate = storedCountdownDate ?
+                                            parseInt(storedCountdownDate) :
+                                            new Date().getTime() + {{ $quiz->time }} * 60 * 1000;
+
+                                        var distance = countDownDate - now;
+                                        var hours = Math.floor(
+                                            (distance % (1000 * 60 * 60 * 24)) /
+                                            (1000 * 60 * 60)
+                                        );
+                                        var minutes = Math.floor(
+                                            (distance % (1000 * 60 * 60)) / (1000 * 60)
+                                        );
+                                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                                        var timerElement = document.getElementById(timerId);
+                                        if (timerElement) {
+                                            timerElement.innerHTML =
+                                                hours + "h " + minutes + "m " + seconds + "s ";
+                                        }
+
+                                        if (distance < 0) {
+                                            clearInterval(x);
+                                            if (timerElement) {
+                                                timerElement.innerHTML = "EXPIRED";
+                                            }
+                                        }
+                                    }, 1000);
+                                },
+                            };
+
+                            // Initialize countdown timer when the page loads
+                            window.addEventListener("load", function() {
+                                CountdownTimer.init("countdownTimer1");
+                            });
+
+                            // Add event listener to reset button
+                            document.getElementById("resetButton").addEventListener("click", function() {
+                                CountdownTimer.resetCountdown();
+                            });
+                            CountdownTimer.init("countdownTimer2");
+                            CountdownTimer.init("countdownTimer3");
+                        </script>
                     @endforeach
                     <!-- /.col-md-6 -->
                 </div>
-                {{-- contoh form image --}}
-                <div class="row">
-                    <div class="card card-default col-8" id="responsive">
-                        <!-- Setting a minimum width of 300px and a maximum width of 90% -->
-                        <div class="card-header">
-                            <h3 class="card-title">Number {{ $que->number }}</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <form action="/quiz/answer" method="POST">
-                            <input type="hidden" name="question_id" value="">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <p></p>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-check">
-                                        <label class="form-check-label" for="radio"></label>
-                                    </div>
-                                </div>
-                                <p class="text-sm text-muted float-right"></p>
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <div class="gambar-container">
-                                        <form action="#">
-                                            <div class="radio-group">
-                                                <div class="gambar-item">
-                                                    <label for="gambar_1"><img
-                                                            src="{{ URL::asset('dist/img/soal-1.jpg') }}" alt=""
-                                                            width="300"></label>
-                                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore
-                                                        qui id culpa natus esse, nam explicabo nemo quisquam autem odit vero
-                                                        sequi. Repudiandae nulla, quasi blanditiis sunt illum quae non.</p>
-                                                </div>
-                                                <div class="gambar-item">
-                                                    <input type="radio" id="gambar_2" name="gambar" value="gambar2">
-                                                    <label for="gambar_2"><img
-                                                            src="{{ URL::asset('dist/img/soal-2.jpg') }}" alt=""
-                                                            width="200"></label>
-                                                </div>
-                                                <div class="gambar-item">
-                                                    <input type="radio" id="gambar_3" name="gambar" value="gambar3">
-                                                    <label for="gambar_3">
-                                                        <img src="{{ URL::asset('dist/img/soal-3.jpg') }}" alt=""
-                                                            width="200">
-                                                    </label>
-                                                </div>
-                                                <div class="gambar-item">
-                                                    <input type="radio" id="gambar_4" name="gambar" value="gambar4">
-                                                    <label for="gambar_4"><img
-                                                            src="{{ URL::asset('dist/img/soal-4.jpg') }}" alt=""
-                                                            width="200"></label>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <p class="text-sm text-muted float-right"></p>
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                <a href="javascript:void(0)" onclick="" class="btn btn-default"><i
-                                        class="fas fa-angle-left"></i> Back</a>
-                                <a href="javascript:void(0)" onclick="" class="btn btn-primary float-right">Next <i
-                                        class="fas fa-angle-right"></i></a>
-                                <button type="submit" class="btn btn-primary float-right mr-1">Submit</button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-
-                <!-- /.row -->
             </div>
             <!-- /.container-fluid -->
         </div>
     </div>
-    <script src="{{ URL::asset('/dist/js/countdown.js') }}"></script>
-    <script>
-        CountdownTimer.init("countdownTimer2");
-        CountdownTimer.init("countdownTimer3");
-    </script>
+
 @endsection
