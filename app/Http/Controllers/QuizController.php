@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quiz;
+use App\Models\UserAnswer;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -110,5 +112,77 @@ class QuizController extends Controller
         $quiz->delete();
 
         return redirect()->back()->with('success', 'Quiz deleted successfully!');
+    }
+
+    public function quiz_view(Request $request, string $slug)
+    {
+        $validate = $request->validate([
+            'token' => 'required',
+        ]);
+
+        $quiz = Quiz::where('slug', $slug)->first();
+
+        if (!$quiz) {
+            return redirect('/quiz')->with('failed', 'Quiz not found!');
+        }
+
+        if ($request->token != $quiz->token) {
+            return redirect('/quiz')->with('failed', 'Invalid token!');
+        }
+
+        // Load questions associated with the quiz
+        $questions = $quiz->questions;
+        $lastQuestionNumber = $questions->max('number') ?? 0;
+
+        $userAnswers = UserAnswer::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
+        // Get the countdown time from the quiz
+        $countdownTime = $quiz->time;
+
+        return view('views.quiz_page', [
+            'page' => $quiz->title,
+            'quiz' => $quiz,
+            'questions' => $questions,
+            'lastQuestionNumber' => $lastQuestionNumber,
+            'slug' => $quiz->slug,
+            'question_number' => 1,
+            'userAnswers' => $userAnswers, // Pass user's answers to the view
+            'countdownTime' => $quiz->time, // Pass the countdown time to the view
+        ]);        
+    }
+    
+    public function quiz_num($slug, $number)
+    {
+        $quiz = Quiz::where('slug', $slug)->first();
+        if (!$quiz) {
+            return response()->json(['message' => 'Quiz not found'], 404);
+        }
+
+        $question = Question::where('quiz_id', $quiz->id)
+            ->where('number', $number)
+            ->first();
+
+        $questions = $quiz->questions;
+        $lastQuestionNumber = $questions->max('number') ?? 0;
+
+        if (!$question) {
+            return response()->json(['message' => 'Question not found'], 404);
+        }
+
+        $userAnswers = UserAnswer::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
+        return view('views.quiz_page', [
+            'page' => $quiz->title,
+            'quiz' => $quiz,
+            'questions' => $questions,
+            'lastQuestionNumber' => $lastQuestionNumber,
+            'slug' => $quiz->slug,
+            'question_number' => $number,
+            'userAnswers' => $userAnswers, // Pass user's answers to the view
+        ], compact('question'));
     }
 }
