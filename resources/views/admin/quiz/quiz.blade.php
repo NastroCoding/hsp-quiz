@@ -74,7 +74,7 @@
                                 <td>{{ $quiz->category->category_name }}</td>
                                 <td>{{ $quiz->education->education_name }}</td>
                                 <td>
-                                    <a class="btn btn-info btn-sm"" data-toggle="modal"
+                                    <a class="btn btn-info btn-sm" data-toggle="modal"
                                         data-target="#edit-quiz{{ $quiz->id }}">
                                         Edit
                                     </a>
