@@ -55,7 +55,9 @@
                                 <div class="form-group">
                                     @foreach ($question->choices as $choice)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="radio1">
+                                            <!-- Add 'checked' attribute based on is_correct value -->
+                                            <input class="form-check-input" type="radio" name="radio1"
+                                                {{ $choice->is_correct ? 'checked' : '' }} disabled>
                                             <label class="form-check-label">
                                                 @if ($choice->image_choice)
                                                     <img src="{{ asset('storage/' . $choice->image_choice) }}"
@@ -86,6 +88,294 @@
                     </div>
                     <!-- /.card -->
                 </div>
+                <!-- Edit modal -->
+                @if ($question->question_type == 'multiple_choice')
+                    <!-- Multiple choice modal -->
+                    <div class="modal fade" id="edit-{{ $question->question_type }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Multiple Choice</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/admin/quiz/question/edit/{{ $question->id }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="quiz_id" value="{{ $question->quiz_id }}">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="inputQuestion">Question</label>
+                                                <br>
+                                                <small class="float-right text-muted"><span
+                                                        class="text-danger">*</span>Optional</small>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                            id="exampleInputFile1" accept="image/*" name="questionImage"
+                                                            onchange="previewImage(event, 'question', 'fileLabel1')"
+                                                            value="@if ($question->images) {{ asset('' . $question->images) }} @endif">
+                                                        <label class="custom-file-label" id="fileLabel1"
+                                                            for="exampleInputFile1">
+                                                            @if ($question->images)
+                                                                {{ $question->images }}
+                                                            @else
+                                                                Choose Image
+                                                            @endif
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div id="questionImagePreview" class="mt-1">
+                                                    @if ($question->images)
+                                                        <img src="{{ asset('' . $question->images) }}" alt="Question Image"
+                                                            style="max-width: 300px;" class="mb-2">
+                                                    @endif
+                                                </div>
+                                                <textarea id="inputQuestion" name="question" class="form-control" rows="4">{{ $question->question }}</textarea>
+                                            </div>
+                                            <input type="hidden" name="question_type" value="multiple_choice">
+                                            <input type="hidden" />
+                                            <input type="hidden" name="number" value="{{ $lastQuestionNumber }}">
+                                            <label>Options</label>
+                                            <div id="optionsContainer" class="form-group">
+                                                <!-- Options will be added dynamically here -->
+                                                <!-- Your dynamic options HTML -->
+                                                @foreach ($question->choices as $choice)
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">
+                                                                <!-- Modify the checkbox based on the is_correct value -->
+                                                                <input type="checkbox" name="is_correct[]"
+                                                                    {{ $choice->is_correct ? 'checked' : '' }} />
+                                                            </span>
+                                                        </div>
+                                                        <input type="text" class="form-control" placeholder="Option 1"
+                                                            name="choices[]" value="{{ $choice->choice }}" />
+                                                        <!-- Modified: added file input for each choice -->
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-default"
+                                                                style="cursor: pointer" onclick="uploadOptionImage(this)">
+                                                                <i class="fas fa-image"></i>
+                                                            </span>
+                                                            <span class="input-group-text btn btn-danger"
+                                                                style="cursor: pointer" onclick="removeOption(this)">
+                                                                <i class="fas fa-trash"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input type="file" accept="image/*" style="display: none"
+                                                            onchange="previewOptionImage(event, 'imagePreview1')"
+                                                            class="optionImageInput" name="choice_images[]"
+                                                            value="@if ($choice->image_choice) {{ asset('storage/' . $choice->image_choice) }} @endif" />
+                                                    </div>
+                                                    <!-- Image preview container -->
+                                                    <div class="optionImagePreview mb-2" id="imagePreview1">
+                                                        @if ($choice->image_choice)
+                                                            <img src="{{ asset('storage/' . $choice->image_choice) }}"
+                                                                alt="Choice Image" style="max-width: 100px;">
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <div class="form-group">
+                                                <br>
+                                                <button type="button" class="btn btn-primary" id="addOptionBtn">Add
+                                                    Option</button>
+                                                <input type="number" name="point_value" class="form-control float-right"
+                                                    placeholder="Points" min="0" style="width: 100px;"
+                                                    value="{{ $question->point_value }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-info float-right"
+                                                id="createQuestionBtn">Edit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </div>
+                @elseif($question->question_type == 'essay')
+                    <!-- Essay modal -->
+                    <div class="modal fade" id="edit-{{ $question->question_type }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Essay</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/admin/quiz/question/edit/{{ $question->id }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="quiz_id" value="{{ $question->quiz_id }}">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label for="inputName">Question</label>
+                                                <br>
+                                                <small class="float-right text-muted"><span
+                                                        class="text-danger">*</span>Optional</small>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                            id="exampleInputFile2" accept="image/*"
+                                                            onchange="previewEssayImage(event, 'fileLabel2')"
+                                                            name="essayImage"
+                                                            value="@if ($question->images) {{ asset('' . $question->images) }} @endif">
+                                                        <label class="custom-file-label" id="fileLabel2"
+                                                            for="exampleInputFile2">
+                                                            @if ($question->images)
+                                                                {{ $question->images }}
+                                                            @else
+                                                                Choose Image
+                                                            @endif
+                                                        </label>
+                                                        <div class="input-group-append">
+                                                            <small class="text-muted float-right input-group-text"><span
+                                                                    class="text-danger">*</span>Optional</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="essayImagePreview" class="mt-1">
+                                                    @if ($question->images)
+                                                        <img src="{{ asset('' . $question->images) }}"
+                                                            alt="Question Image" style="max-width: 300px;"
+                                                            class="mb-2">
+                                                    @endif
+                                                </div>
+                                                <!-- Essay image preview container -->
+                                                <textarea id="inputDescription" name="question" class="form-control" rows="4">{{ $question->question }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-info float-right"
+                                                id="createQuestionBtn">
+                                                Edit
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </div>
+                @else
+                    <!-- Weighted Multiple Choice modal -->
+                    <div class="modal fade" id="edit-{{ $question->question_type }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Weighted Multiple Choice</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/admin/quiz/question/edit/{{ $question->id }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        @dd($question->quiz_id)
+                                        <input type="hidden" name="quiz_id" value="{{ $question->quiz_id }}">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="inputQuestion">Question</label>
+                                                <br>
+                                                <small class="float-right text-muted"><span
+                                                        class="text-danger">*</span>Optional</small>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                            id="exampleInputFile3" accept="image/*"
+                                                            onchange="previewWeightedEssayImage(event, 'fileLabel3')"
+                                                            name="weightedEssayImage"
+                                                            value="@if ($question->images) {{ asset('' . $question->images) }} @endif">
+                                                        <label class="custom-file-label" id="fileLabel3"
+                                                            for="exampleInputFile3">
+                                                            @if ($question->images)
+                                                                {{ $question->images }}
+                                                            @else
+                                                                Choose
+                                                                image
+                                                            @endif
+                                                        </label>
+                                                        <div class="input-group-append">
+                                                            <small class="text-muted float-right input-group-text"><span
+                                                                    class="text-danger">*</span>Optional</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="weighted-essayImagePreview" class="mt-1">
+                                                    @if ($question->images)
+                                                        <img src="{{ asset('' . $question->images) }}"
+                                                            alt="Question Image" style="max-width: 300px;"
+                                                            class="mb-2">
+                                                    @endif
+                                                </div>
+                                                <textarea id="inputQuestion" name="question" class="form-control" rows="4">{{ $question->question }}</textarea>
+                                            </div>
+                                            <div id="weighted-optionsContainer">
+                                                <label for="inputName">Options</label>
+                                                <!-- Weighted Option 1 -->
+                                                @foreach ($question->choices as $choice)
+                                                    <div class="input-group weighted-input-group">
+                                                        <input type="text" class="form-control" placeholder="Option 1"
+                                                            name="choices[]" value="{{ $choice->choice }}">
+                                                        <input type="number" min="0" class="form-control"
+                                                            placeholder="Points" name="point_value[]"
+                                                            value="{{ $choice->point_value }}">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text btn btn-default"
+                                                                style="cursor: pointer;"
+                                                                onclick="uploadWeightedOptionImage(this)">
+                                                                <i class="fas fa-image"></i>
+                                                            </span>
+                                                            <span class="input-group-text btn-danger btn"
+                                                                style="cursor: pointer;"
+                                                                onclick="removeWeightedOption(this)">
+                                                                <i class="fas fa-trash"></i>
+                                                            </span>
+                                                        </div>
+                                                        <input type="file" accept="image/*" style="display: none;"
+                                                            onchange="previewWeightedOptionImage(event, 'imageLabel1', 'weightedImagePreview1')"
+                                                            class="weightedOptionImageInput" name="choice_images[]"
+                                                            value="@if ($choice->image_choice) {{ asset('storage/' . $choice->image_choice) }} @endif">
+                                                    </div>
+                                                    <div class="weightedOptionImagePreview" id="weightedImagePreview1">
+                                                        @if ($choice->image_choice)
+                                                            <img src="{{ asset('storage/' . $choice->image_choice) }}"
+                                                                alt="Choice Image" style="max-width: 100px;">
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                                <!-- End Weighted Option 1 -->
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary"
+                                                    id="addWeightedOptionBtn">Add
+                                                    Option</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-info float-right">Edit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             @endforeach
         </div>
     </section>
@@ -339,147 +629,6 @@
         </div>
     </div>
 
-    <!-- Edit modal -->
-    <!-- multiple choice modal -->
-    <div class="modal fade" id="edit-multiple_choice">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Multiple Choice</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/question/create" method="POST">
-                        @csrf
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="inputName">Question</label>
-                                <div class="input-group">
-                                    <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-                                </div>
-                            </div>
-                            <input type="hidden" name="question_type" value="multiple_choice">
-                            <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                            <div id="optionsContainer" class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><input type="radio" name="is_correct" /></span>
-                                    </div>
-                                    <input type="text" name="choices[]" class="form-control"
-                                        placeholder="Option 1" />
-                                    <div class="input-group-append">
-                                        <span class="input-group-text btn-danger btn" style=" cursor: pointer"
-                                            onclick="removeOption(this)"><i class="fas fa-trash"></i></span>
-                                    </div>
-                                </div>
-                                <!-- /input-group -->
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" id="addOptionBtn">
-                                    Add Option
-                                </button>
-                                <input type="number" name="point_value" class="form-control float-right"
-                                    placeholder="Points" min="0" style="width: 100px;" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success float-right"
-                                id="createQuestionBtn">Create</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
-
-    <!-- Essay modal -->
-    <div class="modal fade" id="edit-essay">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Essay</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/question/create/essay" method="POST">
-                        @csrf
-                        <input type="hidden" name="question_type" value="essay">
-                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="inputName">Question</label>
-                                <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
-                            Create
-                        </button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
-
-    <!-- Weighted Multiple Choice Question Modal -->
-    <div class="modal fade" id="edit-weighted_multiple">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Weighted Multiple Choice</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="/admin/quiz/question/create/weighted" method="POST">
-                    @csrf
-                    <input type="hidden" name="question_type" value="weighted_multiple">
-                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="inputName">Question</label>
-                            <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
-                        </div>
-                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div class="form-group" id="weighted-optionsContainer">
-                            <div class="input-group weighted-input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><input type="radio" name="is_correct" /></span>
-                                </div>
-                                <input type="text" name="choices[]" class="form-control" placeholder="Option 1" />
-                                <input type="number" name="point_value[]" class="form-control" placeholder="Points"
-                                    min="0" />
-                                <div class="input-group-append">
-                                    <span class="input-group-text btn-danger btn" style="cursor: pointer"
-                                        onclick="removeWeightedOption(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add Option</button>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success float-right">Create</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- Delete Modal -->
     <div class="modal fade" id="delete">

@@ -58,8 +58,8 @@
                                     <input type="hidden" name="question_id" value="{{ $que->id }}">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            @if ($question->images)
-                                                <img src="{{ asset('' . $question->images) }}" alt="Question Image"
+                                            @if ($que->images)
+                                                <img src="{{ asset('' . $que->images) }}" alt="Question Image"
                                                     style="max-width: 300px;">
                                             @endif
                                             <p>{{ $que->question }}</p>
