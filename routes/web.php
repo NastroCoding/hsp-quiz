@@ -77,6 +77,7 @@ Route::controller(QuestionController::class)->group(function(){
     Route::post('/admin/quiz/question/create', 'store')->middleware('admin');
     Route::post('/admin/quiz/question/create/essay', 'essayStore')->middleware('admin');
     Route::post('/admin/quiz/question/create/weighted', 'weightedStore')->middleware('admin');
+    Route::post('/admin/quiz/question/edit/{id}', 'update')->middleware('admin');
     Route::get('/admin/quiz/{slug}', 'show')->middleware('admin');
     Route::get('/admin/quiz/question/delete/{id}', 'destroy')->middleware('admin');
 });
