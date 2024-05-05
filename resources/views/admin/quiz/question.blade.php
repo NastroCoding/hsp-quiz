@@ -78,12 +78,12 @@
                             <button type="submit" class="btn btn-sm btn-info" data-toggle="modal"
                                 data-id="{{ $question->id }}"
                                 data-target="#edit-{{ $question->question_type }}">Edit</button>
-                            <!-- Modal Edit -->
-                            <div class="modal fade" id="editModal{{ $question>id }}">
+                            <!-- edit quiz modal -->
+                            <div class="modal fade" id="edit-question{{ $question->id }}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Edit Question</h4>
+                                            <h4 class="modal-title">Edit</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -104,7 +104,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- end modal edit -->
+                            <!-- end edit question modal -->
                             <button type="button" class="btn btn-danger btn-sm delete-btn float-right"
                                 data-id="{{ $question->id }}" data-toggle="modal" data-target="#delete">
                                 Delete
@@ -114,7 +114,7 @@
                     <!-- /.card -->
                 </div>
                 <!-- multiple choice modal -->
-                <div class="modal fade" id="multiple-choice">
+                <div class="modal fade" id="edit-multiple-choice">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -201,7 +201,7 @@
                 </div>
 
                 <!-- Essay modal -->
-                <div class="modal fade" id="essay">
+                <div class="modal fade" id="edit-essay">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -259,7 +259,7 @@
                 </div>
 
                 <!-- Weighted Multiple Choice modal -->
-                <div class="modal fade" id="weighted-mc">
+                <div class="modal fade" id="edit-weighted-mc">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
