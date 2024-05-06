@@ -393,7 +393,7 @@
                                     <input type="hidden" />
                                     <input type="hidden" name="number" value="{{ $lastQuestionNumber }}">
                                     <label>Options</label>
-                                    <div id="optionsContainer" class="form-group">
+                                    <div id="editOptionsContainer" class="form-group">
                                         <!-- Options will be added dynamically here -->
                                         <!-- Your dynamic options HTML -->
                                         @foreach ($question->choices as $index => $choice)
@@ -444,7 +444,7 @@
                                     </div>
                                     <div class="form-group">
                                         <br>
-                                        <button type="button" class="btn btn-primary" id="addOptionBtn">Add
+                                        <button type="button" class="btn btn-primary" id="editAddOptionBtn">Add
                                             Option</button>
                                         <input type="number" name="point_value" class="form-control float-right"
                                             placeholder="Points" min="0" style="width: 100px;"
