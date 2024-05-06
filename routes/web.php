@@ -9,6 +9,7 @@ use App\Http\Controllers\RouteController;
 use App\Http\Controllers\UserAnswerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,5 +101,4 @@ Route::controller(UserAnswerController::class)->group(function () {
 
     Route::get('/quiz/{id}/thumbnail', [QuizController::class,'showThumbnail',])->name('quiz.thumbnail');
 
-    Route::post('/quiz', function () {return Redirect::to('/quiz');})->name('submit_quiz');
-});
+    Route::post('/quiz', function () {return Redirect::to('/quiz');})->name('submit_quiz');});
