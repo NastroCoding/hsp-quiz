@@ -272,107 +272,109 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-
-    {{-- edit quiz modal --}} @foreach ($data as $quiz )
-    <div class="modal fade" id="edit-quiz{{ $quiz->id }}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Quiz</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/edit/{{ $quiz->id }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="exampleInputTitle">Quiz Title</label>
-                                <input type="text" name="title" class="form-control" id="exampleInputTitle"
-                                    placeholder="Enter title" value="{{ $quiz->title }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputDescription">Description</label>
-                                <textarea class="form-control" name="description" rows="3" id="exampleInputDescription"
-                                    placeholder="Enter Description">{{ $quiz->description }}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputDescription">Token</label>
-                                <input type="text" name="token" class="form-control" id="exampleInputTitle"
-                                    placeholder="Enter token" value="{{ $quiz->token }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="formFile" class="form-label">Thumbnail</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="exampleInputFile4"
-                                            accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')">
-                                        <label class="custom-file-label" id="fileLabel4" for="exampleInputFile4">Choose
-                                            image</label>
-                                    </div>
+    @foreach ($data as $quiz)
+        {{-- edit quiz modal --}}
+        <div class="modal fade" id="edit-quiz{{ $quiz->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Quiz</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/quiz/edit/{{ $quiz->id }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputTitle">Quiz Title</label>
+                                    <input type="text" name="title" class="form-control" id="exampleInputTitle"
+                                        placeholder="Enter title" value="{{ $quiz->title }}">
                                 </div>
-                                <div id="editQuizImagePreview" class="mt-1">
-                                    @if ($quiz->thumbnail)
-                                        <img src="/storage{{ asset($quiz->thumbnail) }}" class="img-thumbnail"
-                                            style="width: 200px;">
-                                    @else
-                                        No thumbnail available
-                                    @endif
+                                <div class="form-group">
+                                    <label for="exampleInputDescription">Description</label>
+                                    <textarea class="form-control" name="description" rows="3" id="exampleInputDescription"
+                                        placeholder="Enter Description">{{ $quiz->description }}</textarea>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Time</label>
-                                <div class="input-group mb-3">
-                                    <input type="number" name="time" class="form-control" placeholder="Minutes"
-                                        value="{{ $quiz->time }}">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">min</span>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="exampleInputDescription">Token</label>
+                                    <input type="text" name="token" class="form-control" id="exampleInputTitle"
+                                        placeholder="Enter token" value="{{ $quiz->token }}">
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <!-- select -->
-                                        <div class="form-group">
-                                            <label>Category</label>
-                                            <select name="category_id" class="form-control">
-                                                @foreach ($category as $cat)
-                                                    <option value="{{ $cat->id }}">
-                                                        {{ $cat->category_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                <div class="form-group">
+                                    <label for="formFile" class="form-label">Thumbnail</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="exampleInputFile4"
+                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')">
+                                            <label class="custom-file-label" id="fileLabel4"
+                                                for="exampleInputFile4">Choose
+                                                image</label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label>Education</label>
-                                            <select class="form-control" name="education_id">
-                                                @foreach ($education as $edu)
-                                                    <option value="{{ $edu->id }}">
-                                                        {{ $edu->education_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                    <div id="editQuizImagePreview" class="mt-1">
+                                        @if ($quiz->thumbnail)
+                                            <img src="/storage{{ asset($quiz->thumbnail) }}" class="img-thumbnail"
+                                                style="width: 200px;">
+                                        @else
+                                            No thumbnail available
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Time</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" name="time" class="form-control" placeholder="Minutes"
+                                            value="{{ $quiz->time }}">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">min</span>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <!-- select -->
+                                            <div class="form-group">
+                                                <label>Category</label>
+                                                <select name="category_id" class="form-control">
+                                                    @foreach ($category as $cat)
+                                                        <option value="{{ $cat->id }}">
+                                                            {{ $cat->category_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Education</label>
+                                                <select class="form-control" name="education_id">
+                                                    @foreach ($education as $edu)
+                                                        <option value="{{ $edu->id }}">
+                                                            {{ $edu->education_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- /.card-body -->
+                            <!-- /.card-body -->
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-success" value="Edit Quiz">
+                    </div>
+                    </form>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-success" value="Edit Quiz">
-                </div>
-                </form>
+                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
     @endforeach
 @endsection
 

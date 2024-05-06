@@ -499,6 +499,15 @@ function setCurrentDate(inputId) {
     document.getElementById(inputId).value = currentDate;
 }
 
+function updateIsCorrectValue(checkbox, index) {
+    var isCorrectInput = document.getElementById('isCorrect' + index);
+    if (checkbox.checked) {
+        isCorrectInput.value = '1'; // Checkbox is checked, set is_correct to 1
+    } else {
+        isCorrectInput.value = '0'; // Checkbox is unchecked, set is_correct to 0
+    }
+}
+
 // Call the function after the DOM has loaded
 document.addEventListener("DOMContentLoaded", function () {
     setCurrentDate("local-date");
