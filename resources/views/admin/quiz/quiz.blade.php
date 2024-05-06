@@ -273,7 +273,7 @@
         <!-- /.modal-dialog -->
     </div>
 
-    {{-- edit quiz modal --}}
+    {{-- edit quiz modal --}} @foreach ($data as $quiz )
     <div class="modal fade" id="edit-quiz{{ $quiz->id }}">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -373,6 +373,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    @endforeach
 @endsection
 
 @section('scripts')

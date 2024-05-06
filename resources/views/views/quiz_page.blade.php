@@ -91,15 +91,16 @@
                                     <!-- /.card-body -->
                                     <div class="card-footer">
                                         @if ($que->number != 1)
-                                            <a href="javascript:void(0)"
-                                                onclick="submitForm('/quiz/view/{{ $slug }}/{{ $que->number - 1 }}')"
-                                                class="btn btn-default"><i class="fas fa-angle-left"></i> Back</a>
+                                            <a href="/quiz/view/{{ $slug }}/{{ $que->number - 1 }}"
+                                                class="btn btn-default">
+                                                <i class="fas fa-angle-left"></i> Back
+                                            </a>
                                         @endif
                                         @if ($que->number != $lastQuestionNumber)
-                                            <a href="javascript:void(0)"
-                                                onclick="submitForm('/quiz/view/{{ $slug }}/{{ $que->number + 1 }}')"
-                                                class="btn btn-primary float-right">Next <i
-                                                    class="fas fa-angle-right"></i></a>
+                                            <a href="/quiz/view/{{ $slug }}/{{ $que->number + 1 }}"
+                                                class="btn btn-primary float-right">
+                                                Next <i class="fas fa-angle-right"></i>
+                                            </a>
                                         @else
                                             <button type="submit" class="btn btn-primary float-right">Submit</button>
                                         @endif

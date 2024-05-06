@@ -185,4 +185,9 @@ class QuizController extends Controller
             'userAnswers' => $userAnswers, // Pass user's answers to the view
         ], compact('question'));
     }
+
+    public function submitQuiz(Request $request)
+     {
+        return redirect('/quiz');
+     }
 }
