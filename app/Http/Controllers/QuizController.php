@@ -150,9 +150,9 @@ class QuizController extends Controller
             'question_number' => 1,
             'userAnswers' => $userAnswers, // Pass user's answers to the view
             'countdownTime' => $quiz->time, // Pass the countdown time to the view
-        ]);        
+        ]);
     }
-    
+
     public function quiz_num($slug, $number)
     {
         $quiz = Quiz::where('slug', $slug)->first();
@@ -185,4 +185,9 @@ class QuizController extends Controller
             'userAnswers' => $userAnswers, // Pass user's answers to the view
         ], compact('question'));
     }
+
+    public function submitQuiz(Request $request)
+     {
+        return redirect('/quiz');
+     }
 }

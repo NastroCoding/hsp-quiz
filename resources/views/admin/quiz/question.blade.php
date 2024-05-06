@@ -83,6 +83,33 @@
                             <button type="submit" class="btn btn-sm btn-info" data-toggle="modal"
                                 data-id="{{ $question->id }}"
                                 data-target="#edit-{{ $question->question_type }}">Edit</button>
+                            <!-- edit quiz modal -->
+                            <div class="modal fade" id="edit-question{{ $question->id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Edit</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="editForm" action="/admin/quiz/question/update" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="question_id" id="editQuestionId">
+                                                <!-- Your form fields for editing -->
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" onclick="submitEditForm()">Save
+                                                changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end edit question modal -->
                             <button type="button" class="btn btn-danger btn-sm delete-btn float-right"
                                 data-id="{{ $question->id }}" data-toggle="modal" data-target="#delete">
                                 Delete
@@ -218,56 +245,63 @@
         </div>
     </div>
 
-    <!-- Essay modal -->
-    <div class="modal fade" id="essay">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Essay</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/admin/quiz/question/create/essay" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="question_type" value="essay">
-                        <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="inputName">Question</label>
-                                <br>
-                                <small class="float-right text-muted"><span class="text-danger">*</span>Optional</small>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="exampleInputFile2"
-                                            accept="image/*" onchange="previewEssayImage(event, 'fileLabel2')"
-                                            name="essayImage">
-                                        <label class="custom-file-label" id="fileLabel2" for="exampleInputFile2">Choose
-                                            image</label>
-                                        <div class="input-group-append">
-                                            <small class="text-muted float-right input-group-text"><span
+                <!-- Essay modal -->
+                <div class="modal fade" id="edit-essay">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Essay</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/admin/quiz/question/create/essay" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="question_type" value="essay">
+                                    <input type="hidden" name="quiz_id" value="{{ $quiz->id }}" />
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="inputName">Question</label>
+                                            <br>
+                                            <small class="float-right text-muted"><span
                                                     class="text-danger">*</span>Optional</small>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input"
+                                                        id="exampleInputFile2" accept="image/*"
+                                                        onchange="previewEssayImage(event, 'fileLabel2')"
+                                                        name="essayImage">
+                                                    <label class="custom-file-label" id="fileLabel2"
+                                                        for="exampleInputFile2">Choose
+                                                        image</label>
+                                                    <div class="input-group-append">
+                                                        <small class="text-muted float-right input-group-text"><span
+                                                                class="text-danger">*</span>Optional</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="essayImagePreview" class="mt-1"></div>
+                                            <!-- Essay image preview container -->
+                                            <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
                                         </div>
                                     </div>
-                                </div>
-                                <div id="essayImagePreview" class="mt-1"></div> <!-- Essay image preview container -->
-                                <textarea id="inputDescription" name="question" class="form-control" rows="4"></textarea>
+                                    <div class="modal-footer justify-content-between">
+                                        <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success float-right"
+                                            id="createQuestionBtn">
+                                            Create
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
+                            <!-- /.modal-content -->
                         </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success float-right" id="createQuestionBtn">
-                                Create
-                            </button>
-                        </div>
-                    </form>
+                        <!-- /.modal-dialog -->
+                    </div>
                 </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
 
     <!-- Weighted Multiple Choice modal -->
     <div class="modal fade" id="weighted-mc">
