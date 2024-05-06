@@ -537,7 +537,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="/admin/quiz/question/edit/{{ $question->id }}" method="POST"
+                            <form action="/admin/quiz/question/edit/weighted/{{ $question->id }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="quiz_id" value="{{ $question->quiz_id }}">

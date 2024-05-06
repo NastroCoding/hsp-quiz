@@ -228,6 +228,61 @@ class QuestionController extends Controller
         return redirect()->back()->with('success', 'Question created successfully!');
     }
 
+    public function weightedUpdate(Request $request, string $questionId)
+    {
+        // Validate the form data
+        $validatedData = $request->validate([
+            'question' => 'required|string',
+            'choices' => 'required|array',
+            'choices.*' => 'string',
+            'point_value' => 'required|array',
+            'point_value.*' => 'numeric|min:0',
+            'choice_images.*' => 'nullable|image', // Validation for choice images
+        ]);
+
+        // Find the question by ID
+        $question = Question::findOrFail($questionId);
+
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Update the question details
+        $question->update([
+            'question' => $validatedData['question'],
+            'updated_by' => $user->id,
+        ]);
+
+        // Update or create choices for the question
+        foreach ($validatedData['choices'] as $index => $choice) {
+            $pointValue = $validatedData['point_value'][$index];
+
+            $choiceData = [
+                'choice' => $choice,
+                'point_value' => $pointValue,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
+            ];
+
+            // Check if choice with index exists
+            if (isset($question->choices[$index])) {
+                $question->choices[$index]->update($choiceData);
+            } else {
+                // Create new choice
+                $question->choices()->create($choiceData);
+            }
+
+            // Handle choice image upload
+            if ($request->hasFile('choice_images.' . $index)) {
+                $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
+                $question->choices[$index]->image_choice = $imagePath;
+                $question->choices[$index]->save();
+            }
+        }
+
+        // Redirect back or return a response
+        return redirect()->back()->with('success', 'Question updated successfully!');
+    }
+
 
     /**
      * Display the specified resource.
