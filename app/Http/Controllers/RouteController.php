@@ -16,11 +16,13 @@ class RouteController extends Controller
         $data = Quiz::latest()->get();
         $category = Category::latest()->get();
         $education = Education::latest()->get();
+        $user = User::latest()->get();
         return view('admin.dashboard', [
             'page' => 'Dashboard',
             'category' => $category,
             'education' => $education,
-            'data' => $data
+            'data' => $data,
+            'user' => $user
         ]);
     }
 

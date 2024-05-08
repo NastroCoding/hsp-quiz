@@ -308,7 +308,7 @@
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="exampleInputFile4"
-                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')">
+                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')" name="thumbnail">
                                             <label class="custom-file-label" id="fileLabel4"
                                                 for="exampleInputFile4">Choose
                                                 image</label>
