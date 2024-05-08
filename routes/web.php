@@ -51,9 +51,7 @@ Route::controller(RouteController::class)->group(function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::get('/', 'login')
-        ->middleware('guest')
-        ->name('login');
+    Route::get('/', 'login')->middleware('guest')->name('login');
     Route::post('/signin', 'signin')->middleware('guest');
     Route::get('/register', 'register')->middleware('guest');
     Route::post('/signup', 'signup')->middleware('guest');
@@ -83,9 +81,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/admin/quiz/question/edit/essay/{id}', 'essayUpdate')->middleware('admin');
     Route::post('/admin/quiz/question/edit/weighted/{id}', 'weightedUpdate')->middleware('admin');
     Route::get('/admin/quiz/{slug}', 'show')->middleware('admin');
-    Route::get('/admin/quiz/question/delete/{id}', 'destroy')->middleware(
-        'admin'
-    );
+    Route::get('/admin/quiz/question/delete/{id}', 'destroy')->middleware('admin');
 });
 
 Route::controller(CategoryController::class)->group(function () {

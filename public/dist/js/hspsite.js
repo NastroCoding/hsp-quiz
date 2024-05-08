@@ -137,114 +137,68 @@ function previewWeightedOptionImage(event, inputId, previewId) {
 
 // Global variable to track the index for image previews
 
-document.getElementById("addOptionBtn").addEventListener("click", function () {
-    var optionsContainer = document.getElementById("optionsContainer");
-    if (!optionsContainer) {
-        console.error("Options container not found");
-        return; // Exit function if options container is not found
-    }
+function addOption() {
+    // Get the options container
+    var optionsContainer = document.getElementById('optionsContainer');
 
-    // Find all existing option input fields
-    var existingOptions = optionsContainer.querySelectorAll(
-        "input[name='choices[]']"
-    );
+    // Count the number of existing options
+    var optionCount = optionsContainer.getElementsByClassName('input-group').length;
 
-    // Find the highest index currently in use among existing options
-    var highestIndex = 0;
-    existingOptions.forEach(function (option) {
-        var placeholderText = option.getAttribute("placeholder");
-        var currentIndex = parseInt(placeholderText.split(" ")[1]);
-        if (currentIndex > highestIndex) {
-            highestIndex = currentIndex;
-        }
-    });
+    // Create a new option div
+    var newOptionDiv = document.createElement('div');
+    newOptionDiv.className = 'input-group';
 
-    // Increment the highest index to get the next index
-    var nextIndex = highestIndex + 1;
+    // Create the HTML for the new option
+    var newOptionHTML = `
+        <input type="hidden" name="is_correct[]" value="0"> <!-- Default value is 0 -->
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <input type="checkbox" name="is_correct_checkbox[]" onchange="updateIsCorrectValue(this)">
+            </span>
+        </div>
+        <input type="text" class="form-control" placeholder="Option ${optionCount + 1}" name="choices[]">
+        <div class="input-group-append">
+            <span class="input-group-text btn btn-default" style="cursor: pointer" onclick="uploadOptionImage(this)">
+                <i class="fas fa-image"></i>
+            </span>
+            <span class="input-group-text btn btn-danger" style="cursor: pointer" onclick="removeOption(this)">
+                <i class="fas fa-trash"></i>
+            </span>
+        </div>
+        <input type="file" accept="image/*" style="display: none" onchange="previewOptionImage(event, 'imagePreview${optionCount + 1}')" class="optionImageInput" name="choice_images[]">
+    `;
 
-    var newInputGroup = document.createElement("div");
-    newInputGroup.classList.add("input-group", "normal-input-group");
+    // Set the HTML for the new option div
+    newOptionDiv.innerHTML = newOptionHTML;
 
-    // Generate unique IDs for option elements
-    var uniqueId = "optionImageInput_" + nextIndex;
-    var previewId = "imagePreview" + nextIndex; // Unique ID for image preview
+    var imagePreview = document.createElement('div')
+    imagePreview.classList.add('optionImagePreview')
+    imagePreview.setAttribute('id', 'imagePreview'.optionCount + 1 )
 
-    var prependDiv = document.createElement("div");
-    prependDiv.classList.add("input-group-prepend");
-
-    var checkboxSpan = document.createElement("span");
-    checkboxSpan.classList.add("input-group-text");
-
-    var checkbox = document.createElement("input");
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("name", "is_correct[]");
-
-    checkboxSpan.appendChild(checkbox);
-    prependDiv.appendChild(checkboxSpan);
-    newInputGroup.appendChild(prependDiv);
-
-    var inputField = document.createElement("input");
-    inputField.setAttribute("type", "text");
-    inputField.classList.add("form-control");
-    inputField.setAttribute("placeholder", "Option " + nextIndex); // Update placeholder with next index
-    inputField.setAttribute("name", "choices[]");
-
-    newInputGroup.appendChild(inputField);
-
-    var appendDiv = document.createElement("div");
-    appendDiv.classList.add("input-group-append");
-
-    var imageSpan = document.createElement("span");
-    imageSpan.classList.add("input-group-text", "btn", "btn-default");
-    imageSpan.style.cursor = "pointer";
-
-    var imageIcon = document.createElement("i");
-    imageIcon.classList.add("fas", "fa-image");
-
-    var imageInput = document.createElement("input");
-    imageInput.setAttribute("type", "file");
-    imageInput.setAttribute("accept", "image/*");
-    imageInput.style.display = "none";
-    imageInput.setAttribute("name", "choice_images[]");
-    imageInput.id = uniqueId; // Assign unique ID to the image input field
-
-    // Set onchange event for image input
-    imageInput.addEventListener("change", function (event) {
-        previewOptionImage(event, uniqueId, previewId); // Pass the unique IDs to the preview function
-    });
-
-    // Create unique id for image preview
-    var imagePreview = document.createElement("div");
-    imagePreview.classList.add("optionImagePreview", "mb-1");
-    imagePreview.setAttribute("id", previewId); // Assign unique ID to the image preview
-
-    // Add a click event listener to the span
-    imageSpan.addEventListener("click", function () {
-        // Simulate a click on the file input when the span is clicked
-        imageInput.click();
-    });
-
-    var trashSpan = document.createElement("span");
-    trashSpan.classList.add("input-group-text", "btn-danger", "btn");
-    trashSpan.style.cursor = "pointer";
-    trashSpan.addEventListener("click", function () {
-        removeOption(this);
-    });
-
-    var trashIcon = document.createElement("i");
-    trashIcon.classList.add("fas", "fa-trash");
-
-    imageSpan.appendChild(imageIcon);
-    appendDiv.appendChild(imageSpan);
-    trashSpan.appendChild(trashIcon);
-    appendDiv.appendChild(trashSpan);
-    newInputGroup.appendChild(appendDiv);
-    newInputGroup.appendChild(imageInput);
-
-    // Append the new input group and image preview together to the options container
-    optionsContainer.appendChild(newInputGroup);
+    // Append the new option to the options container
+    optionsContainer.appendChild(newOptionDiv);
     optionsContainer.appendChild(imagePreview);
-});
+}
+
+function updateIsCorrectValue(checkbox) {
+    // Get the corresponding hidden input
+    var hiddenInput = checkbox.parentNode.parentNode.parentNode.querySelector('input[name="is_correct[]"]');
+
+    // Update the value based on checkbox state
+    hiddenInput.value = checkbox.checked ? '1' : '0';
+}
+
+// JavaScript function to update the hidden input value when checkbox is clicked
+function createIsCorrectValue(checkbox) {
+    // Get the parent input group
+    var inputGroup = checkbox.closest('.input-group');
+    // Find the hidden input field
+    var hiddenInput = inputGroup.find('input[type="hidden"]');
+    
+    // If checkbox is checked, set hidden input value to 1, otherwise set it to 0
+    hiddenInput.val(checkbox.checked ? '1' : '0');
+}
+
 
 function removeOption(element) {
     var option = element.closest(".input-group");
@@ -365,43 +319,6 @@ document
         optionsContainer.appendChild(newInputGroup);
         optionsContainer.appendChild(imagePreview);
     });
-
-// Function to mark the correct answer when checkbox is clicked
-document
-    .querySelectorAll('input[type="checkbox"]')
-    .forEach(function (checkbox) {
-        checkbox.addEventListener("change", function () {
-            var isChecked = this.checked;
-            var inputField =
-                this.parentNode.parentNode.nextElementSibling.querySelector(
-                    'input[type="text"]'
-                );
-            inputField.dataset.correct = isChecked ? "1" : "0";
-        });
-    });
-
-document.addEventListener("DOMContentLoaded", function () {
-    var questionForm = document.getElementById("questionForm");
-    if (questionForm) {
-        questionForm.addEventListener("submit", function () {
-            var inputs = document.querySelectorAll('input[type="text"]');
-            inputs.forEach(function (input) {
-                var checkbox = input.previousElementSibling.querySelector(
-                    'input[type="checkbox"]'
-                );
-                if (checkbox && checkbox.checked) {
-                    // Set the value as integer 1 for correct answer
-                    input.setAttribute("data-correct", "1");
-                } else {
-                    // Set the value as integer 0 for incorrect answer
-                    input.setAttribute("data-correct", "0");
-                }
-            });
-        });
-    } else {
-        console.error("Form with ID 'questionForm' not found");
-    }
-});
 
 // Function to set the question number based on the last question number
 function setQuestionNumber() {
@@ -608,15 +525,6 @@ function setCurrentDate(inputId) {
     var currentDate = now.toISOString().slice(0, 10);
     // Set the value of the input field with the specified ID to the current date
     document.getElementById(inputId).value = currentDate;
-}
-
-function updateIsCorrectValue(checkbox, index) {
-    var isCorrectInput = document.getElementById("isCorrect" + index);
-    if (checkbox.checked) {
-        isCorrectInput.value = "1"; // Checkbox is checked, set is_correct to 1
-    } else {
-        isCorrectInput.value = "0"; // Checkbox is unchecked, set is_correct to 0
-    }
 }
 
 // Call the function after the DOM has loaded

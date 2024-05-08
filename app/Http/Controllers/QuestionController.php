@@ -35,18 +35,17 @@ class QuestionController extends Controller
             'choices' => 'required|array',
             'choices.*' => 'string',
             'is_correct' => 'required|array',
-            'point_value' => 'required',
-            'question_type' => 'required',
+            'point_value' => 'required|numeric', // Ensure point_value is numeric
+            'question_type' => 'required|string',
             'questionImage' => 'nullable|image', // Add validation for question image
             'choice_images.*' => 'nullable|image', // Validation for choice images
         ]);
 
         // Handle question image upload
+        $imageUrl = null;
         if ($request->hasFile('questionImage')) {
             $imagePath = $request->file('questionImage')->store('question_images', 'public');
             $imageUrl = asset('storage/' . $imagePath);
-        } else {
-            $imageUrl = null;
         }
 
         // Get the currently authenticated user
@@ -71,7 +70,7 @@ class QuestionController extends Controller
             $questionChoice->question_id = $question->id;
             $questionChoice->choice = $choice;
             // Check if the current choice is marked as correct
-            $questionChoice->is_correct = isset($validatedData['is_correct'][$index]);
+            $questionChoice->is_correct = $validatedData['is_correct'][$index] == '1'; // Convert to boolean
             $questionChoice->created_by = $user->id;
             $questionChoice->updated_by = $user->id;
 
@@ -86,6 +85,7 @@ class QuestionController extends Controller
 
         return redirect()->back()->with('success', 'Question created successfully!');
     }
+
 
     /**
      * Store a newly created essay question in storage.

@@ -317,7 +317,7 @@
                                     <div id="editQuizImagePreview" class="mt-1">
                                         @if ($quiz->thumbnail)
                                             <img src="/storage{{ asset($quiz->thumbnail) }}" class="img-thumbnail"
-                                                style="width: 200px;">
+                                                style="width: 200px;" name="thumbnail">
                                         @else
                                             No thumbnail available
                                         @endif
