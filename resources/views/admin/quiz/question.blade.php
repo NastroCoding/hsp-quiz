@@ -199,8 +199,6 @@
                             <label>Options</label>
                             <div id="optionsContainer" class="form-group">
                                 <!-- Options will be added dynamically here -->
-                                <!-- Your dynamic options HTML -->
-                                <!-- Initial option -->
                                 <div class="input-group">
                                     <!-- Ensure that the hidden input has a default value of 0 -->
                                     <input type="hidden" name="is_correct[]" value="0">
@@ -425,7 +423,7 @@
                                     <input type="hidden" />
                                     <input type="hidden" name="number" value="{{ $lastQuestionNumber }}">
                                     <label>Options</label>
-                                    <div id="editOptionsContainer" class="form-group">
+                                    <div id="editOptionsContainer{{ $question->id }}" class="form-group">
                                         <!-- Options will be added dynamically here -->
                                         <!-- Your dynamic options HTML -->
                                         @foreach ($question->choices as $index => $choice)
@@ -476,8 +474,7 @@
                                     </div>
                                     <div class="form-group">
                                         <br>
-                                        <button type="button" class="btn btn-primary" id="editAddOptionBtn">Add
-                                            Option</button>
+                                        <button type="button" class="btn btn-primary" id="editAddOptionBtn" onclick="editAddOption({{ $question->id }})">Add Option</button>
                                         <input type="number" name="point_value" class="form-control float-right"
                                             placeholder="Points" min="0" style="width: 100px;"
                                             value="{{ $question->point_value }}" required>
