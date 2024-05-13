@@ -59,8 +59,12 @@
                                     @foreach ($question->choices as $choice)
                                         <div class="form-check">
                                             <!-- Add 'checked' attribute based on is_correct value -->
-                                            <input class="form-check-input" type="checkbox" name="checkbox1[]"
-                                                {{ $choice->is_correct ? 'checked' : '' }} disabled>
+                                            @if ($question->question_type == 'weighted_multiple')
+                                                <input class="form-check-input" type="radio" disabled>
+                                            @else
+                                                <input class="form-check-input" type="checkbox" name="checkbox1[]"
+                                                    {{ $choice->is_correct ? 'checked' : '' }} disabled>
+                                            @endif
                                             <label class="form-check-label">
                                                 @if ($choice->image_choice)
                                                     <img src="{{ asset('storage/' . $choice->image_choice) }}"
@@ -205,23 +209,28 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             <!-- Checkbox to mark if the option is correct -->
-                                            <input type="checkbox" name="is_correct_checkbox[]" onchange="updateIsCorrectValue(this)">
+                                            <input type="checkbox" name="is_correct_checkbox[]"
+                                                onchange="updateIsCorrectValue(this)">
                                         </span>
                                     </div>
                                     <!-- Text input for the choice -->
                                     <input type="text" class="form-control" placeholder="Option 1" name="choices[]">
                                     <!-- File input for image -->
                                     <div class="input-group-append">
-                                        <span class="input-group-text btn btn-default" style="cursor: pointer" onclick="uploadOptionImage(this)">
+                                        <span class="input-group-text btn btn-default" style="cursor: pointer"
+                                            onclick="uploadOptionImage(this)">
                                             <i class="fas fa-image"></i>
                                         </span>
                                         <!-- Button to remove the option -->
-                                        <span class="input-group-text btn btn-danger" style="cursor: pointer" onclick="removeOption(this)">
+                                        <span class="input-group-text btn btn-danger" style="cursor: pointer"
+                                            onclick="removeOption(this)">
                                             <i class="fas fa-trash"></i>
                                         </span>
                                     </div>
                                     <!-- Input for image upload -->
-                                    <input type="file" accept="image/*" style="display: none" onchange="previewOptionImage(event, 'imagePreview1')" class="optionImageInput" name="choice_images[]">
+                                    <input type="file" accept="image/*" style="display: none"
+                                        onchange="previewOptionImage(event, 'imagePreview1')" class="optionImageInput"
+                                        name="choice_images[]">
                                 </div>
                                 <!-- Image preview container -->
                                 <div class="optionImagePreview" id="imagePreview1"></div>
@@ -229,7 +238,8 @@
                         </div>
                         <div class="form-group">
                             <br>
-                            <button type="button" class="btn btn-primary" id="addOptionBtn" onclick="addOption()">Add Option</button>
+                            <button type="button" class="btn btn-primary" id="addOptionBtn" onclick="addOption()">Add
+                                Option</button>
                             <input type="number" name="point_value" class="form-control float-right"
                                 placeholder="Points" min="0" style="width: 100px;" required>
                         </div>
@@ -248,7 +258,7 @@
 
 
     <!-- Essay modal -->
-    <div class="modal fade" id="edit-essay">
+    <div class="modal fade" id="essay">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -335,8 +345,8 @@
                                 <div id="weighted-essayImagePreview" class="mt-1"></div>
                                 <textarea id="inputQuestion" name="question" class="form-control" rows="4"></textarea>
                             </div>
+                            <label for="inputName">Options</label>
                             <div id="weighted-optionsContainer">
-                                <label for="inputName">Options</label>
                                 <!-- Weighted Option 1 -->
                                 <div class="input-group weighted-input-group">
                                     <input type="text" class="form-control" placeholder="Option 1" name="choices[]">
@@ -356,11 +366,12 @@
                                         onchange="previewWeightedOptionImage(event, 'imageLabel1', 'weightedImagePreview1')"
                                         class="weightedOptionImageInput" name="choice_images[]">
                                 </div>
-                                <div class="weightedOptionImagePreview" id="weightedImagePreview1"></div>
+                                <div class="weightedOptionImagePreview" id="weightedImagePreview"></div>
                                 <!-- End Weighted Option 1 -->
                             </div>
                             <div class="form-group">
-                                <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add
+                                <button type="button" class="btn btn-primary" id="addWeightedOptionBtn"
+                                    onclick="addWeightedOption()">Add
                                     Option</button>
                             </div>
                         </div>
@@ -401,7 +412,7 @@
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="exampleInputFile4"
                                                     accept="image/*" name="questionImage"
-                                                    onchange="previewImage(event, 'question', 'fileLabel4')">
+                                                    onchange="editPreviewImage(event, 'question', 'fileLabel4')">
                                                 <label class="custom-file-label" id="fileLabel4" for="exampleInputFile4">
                                                     @if ($question->images)
                                                         {{ $question->images }}
@@ -411,7 +422,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div id="questionImagePreview" class="mt-1">
+                                        <div id="questionEditImagePreview" class="mt-1">
                                             @if ($question->images)
                                                 <img src="{{ asset('' . $question->images) }}" alt="Question Image"
                                                     style="max-width: 300px;" class="mb-2">
@@ -474,7 +485,8 @@
                                     </div>
                                     <div class="form-group">
                                         <br>
-                                        <button type="button" class="btn btn-primary" id="editAddOptionBtn" onclick="editAddOption({{ $question->id }})">Add Option</button>
+                                        <button type="button" class="btn btn-primary" id="editAddOptionBtn"
+                                            onclick="editAddOption({{ $question->id }})">Add Option</button>
                                         <input type="number" name="point_value" class="form-control float-right"
                                             placeholder="Points" min="0" style="width: 100px;"
                                             value="{{ $question->point_value }}" required>
@@ -494,7 +506,7 @@
             </div>
         @elseif($question->question_type == 'essay')
             <!-- Essay modal -->
-            <div class="modal fade" id="edit-{{ $question->question_type }}">
+            <div class="modal fade" id="edit-{{ $question->question_type }}{{ $question->id }}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -516,10 +528,11 @@
                                                 class="text-danger">*</span>Optional</small>
                                         <div class="input-group">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="exampleInputFile2"
-                                                    accept="image/*" onchange="previewEssayImage(event, 'fileLabel2')"
+                                                <input type="file" class="custom-file-input" id="exampleInputFile5"
+                                                    accept="image/*"
+                                                    onchange="previewEditEssayImage(event, 'fileLabel5'){}"
                                                     name="essayImage">
-                                                <label class="custom-file-label" id="fileLabel2" for="exampleInputFile2">
+                                                <label class="custom-file-label" id="fileLabel5" for="exampleInputFile5">
                                                     @if ($question->images)
                                                         {{ $question->images }}
                                                     @else
@@ -532,7 +545,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="essayImagePreview" class="mt-1">
+                                        <div id="editEssayImagePreview" class="mt-1">
                                             @if ($question->images)
                                                 <img src="{{ asset('' . $question->images) }}" alt="Question Image"
                                                     style="max-width: 300px;" class="mb-2">
@@ -556,7 +569,7 @@
             </div>
         @else
             <!-- Weighted Multiple Choice modal -->
-            <div class="modal fade" id="edit-{{ $question->question_type }}">
+            <div class="modal fade" id="edit-{{ $question->question_type }}{{ $question->id }}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -569,6 +582,7 @@
                             <form action="/admin/quiz/question/edit/weighted/{{ $question->id }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="question_type" value="weighted_multiple">
                                 <input type="hidden" name="quiz_id" value="{{ $question->quiz_id }}">
                                 <div class="modal-body">
                                     <div class="form-group">
@@ -578,17 +592,16 @@
                                                 class="text-danger">*</span>Optional</small>
                                         <div class="input-group">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="exampleInputFile3"
-                                                    accept="image/*"
-                                                    onchange="previewWeightedEssayImage(event, 'fileLabel3')"
+                                                <input type="file" class="custom-file-input"
+                                                    id="exampleInputFile6_edit" accept="image/*"
                                                     name="weightedEssayImage"
-                                                    value="@if ($question->images) {{ asset('' . $question->images) }} @endif">
-                                                <label class="custom-file-label" id="fileLabel3" for="exampleInputFile3">
+                                                    onchange="previewEditWeightedEssayImage(event, 'fileLabel6_edit', 'editWeighted-essayImagePreview')">
+                                                <label class="custom-file-label" id="fileLabel6_edit"
+                                                    for="exampleInputFile6_edit">
                                                     @if ($question->images)
                                                         {{ $question->images }}
                                                     @else
-                                                        Choose
-                                                        image
+                                                        Choose image
                                                     @endif
                                                 </label>
                                                 <div class="input-group-append">
@@ -597,7 +610,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="weighted-essayImagePreview" class="mt-1">
+                                        <div id="editWeighted-essayImagePreview" class="mt-1">
                                             @if ($question->images)
                                                 <img src="{{ asset('' . $question->images) }}" alt="Question Image"
                                                     style="max-width: 300px;" class="mb-2">
@@ -605,10 +618,10 @@
                                         </div>
                                         <textarea id="inputQuestion" name="question" class="form-control" rows="4">{{ $question->question }}</textarea>
                                     </div>
-                                    <div id="weighted-optionsContainer">
+                                    <div id="editWeighted-optionsContainer">
                                         <label for="inputName">Options</label>
                                         <!-- Weighted Option 1 -->
-                                        @foreach ($question->choices as $choice)
+                                        @foreach ($question->choices as $index => $choice)
                                             <div class="input-group weighted-input-group">
                                                 <input type="text" class="form-control" placeholder="Option 1"
                                                     name="choices[]" value="{{ $choice->choice }}">
@@ -627,21 +640,21 @@
                                                     </span>
                                                 </div>
                                                 <input type="file" accept="image/*" style="display: none;"
-                                                    onchange="previewWeightedOptionImage(event, 'imageLabel1', 'weightedImagePreview1')"
-                                                    class="weightedOptionImageInput" name="choice_images[]"
+                                                    onchange="previewWeightedOptionImage(event, 'imageLabel{{ $index + 1 }}', 'weightedImagePreview{{ $index + 1 }}')"
+                                                    class="weightedOptionImageInput" name="choice_images[{{ $index }}]"
                                                     value="@if ($choice->image_choice) {{ asset('storage/' . $choice->image_choice) }} @endif">
                                             </div>
-                                            <div class="weightedOptionImagePreview" id="weightedImagePreview1">
+                                            <div class="weightedOptionImagePreview mb-2" id="weightedImagePreview{{ $index + 1 }}">
                                                 @if ($choice->image_choice)
                                                     <img src="{{ asset('storage/' . $choice->image_choice) }}"
-                                                        alt="Choice Image" style="max-width: 100px;">
+                                                        alt="Choice Image" style="max-width: 300px;">
                                                 @endif
                                             </div>
                                         @endforeach
                                         <!-- End Weighted Option 1 -->
                                     </div>
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-primary" id="addWeightedOptionBtn">Add
+                                        <button type="button" class="btn btn-primary" id="addWeightedOptionBtn" onclick="editWeightedOption()">Add
                                             Option</button>
                                     </div>
                                 </div>

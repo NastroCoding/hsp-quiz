@@ -373,10 +373,11 @@ class QuestionController extends Controller
         return redirect()->back()->with('success', 'Question created successfully!');
     }
 
-    public function weightedUpdate(Request $request, string $questionId)
+    public function weightedUpdate(Request $request, $questionId)
     {
         // Validate the form data
         $validatedData = $request->validate([
+            'question_type' => 'required|string',
             'question' => 'required|string',
             'choices' => 'required|array',
             'choices.*' => 'string',
@@ -385,15 +386,28 @@ class QuestionController extends Controller
             'choice_images.*' => 'nullable|image', // Validation for choice images
         ]);
 
-        // Find the question by ID
-        $question = Question::findOrFail($questionId);
-
         // Get the currently authenticated user
         $user = Auth::user();
 
-        // Update the question details
+        // Find the question
+        $question = Question::findOrFail($questionId);
+
+        // Handle question image update
+        if ($request->hasFile('weightedEssayImage')) {
+            // Delete previous image if exists
+            if ($question->images) {
+                Storage::disk('public')->delete($question->images);
+            }
+            // Upload and save new image
+            $imagePath = $request->file('weightedEssayImage')->store('weighted_essay_images', 'public');
+            $imageUrl = asset('storage/' . $imagePath);
+            $question->images = $imageUrl;
+        }
+
+        // Update the question
         $question->update([
             'question' => $validatedData['question'],
+            'question_type' => $validatedData['question_type'],
             'updated_by' => $user->id,
         ]);
 
@@ -401,32 +415,59 @@ class QuestionController extends Controller
         foreach ($validatedData['choices'] as $index => $choice) {
             $pointValue = $validatedData['point_value'][$index];
 
-            $choiceData = [
-                'choice' => $choice,
-                'point_value' => $pointValue,
-                'created_by' => $user->id,
-                'updated_by' => $user->id,
-            ];
+            // Check if choice already exists
+            if (isset($request->choice_ids[$index])) {
+                // Update existing choice
+                $choiceId = $request->choice_ids[$index];
+                $questionChoice = Choice::find($choiceId);
+                if ($questionChoice) {
+                    $questionChoice->update([
+                        'choice' => $choice,
+                        'point_value' => $pointValue,
+                        'updated_by' => $user->id,
+                    ]);
 
-            // Check if choice with index exists
-            if (isset($question->choices[$index])) {
-                $question->choices[$index]->update($choiceData);
+                    // Handle choice image update
+                    if ($request->hasFile('choice_images.' . $index)) {
+                        // Delete previous image if exists
+                        if ($questionChoice->image_choice) {
+                            Storage::disk('public')->delete($questionChoice->image_choice);
+                        }
+                        // Upload and save new image
+                        $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
+                        $questionChoice->image_choice = $imagePath;
+                        $questionChoice->save();
+                    }
+                }
             } else {
-                // Create new choice
-                $question->choices()->create($choiceData);
-            }
+                // Create new choice only if it doesn't already exist
+                $existingChoice = $question->choices()->where('choice', $choice)->first();
+                if (!$existingChoice) {
+                    // Handle choice image upload
+                    $imagePath = null;
+                    if ($request->hasFile('choice_images.' . $index)) {
+                        $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
+                    }
 
-            // Handle choice image upload
-            if ($request->hasFile('choice_images.' . $index)) {
-                $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
-                $question->choices[$index]->image_choice = $imagePath;
-                $question->choices[$index]->save();
+                    $question->choices()->create([
+                        'choice' => $choice,
+                        'is_correct' => false, // Adjust as necessary
+                        'point_value' => $pointValue,
+                        'image_choice' => $imagePath, // Store image path
+                        'created_by' => $user->id,
+                        'updated_by' => $user->id,
+                    ]);
+                }
             }
         }
 
         // Redirect back or return a response
         return redirect()->back()->with('success', 'Question updated successfully!');
     }
+
+
+
+
 
 
     /**

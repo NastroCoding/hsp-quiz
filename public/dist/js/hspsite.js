@@ -1,108 +1,109 @@
-// Add event listener to "Add Weighted Option" button
-document
-    .getElementById("addWeightedOptionBtn")
-    .addEventListener("click", function () {
-        var optionsContainer = document.getElementById(
-            "weighted-optionsContainer"
-        );
-        if (!optionsContainer) {
-            console.error("Weighted options container not found");
-            return; // Exit function if weighted options container is not found
-        }
+function addWeightedOption() {
+    // Get the options container
+    var optionsContainer = document.getElementById("weighted-optionsContainer");
 
-        var optionIndex =
-            optionsContainer.querySelectorAll(".weighted-input-group").length +
-            1;
+    // Count the number of existing options
+    var optionCount =
+        optionsContainer.getElementsByClassName("input-group").length + 1;
 
-        var newInputGroup = document.createElement("div");
-        newInputGroup.classList.add("input-group", "weighted-input-group");
+    // Create a new option div
+    var newOptionDiv = document.createElement("div");
+    newOptionDiv.className = "input-group";
 
-        // Generate unique IDs for option elements
-        var uniqueId = "weightedOptionImageInput_" + optionIndex;
-        var previewId = "weightedImagePreview" + optionIndex; // Unique ID for image preview
+    // Create the HTML for the new option
+    var newOptionHTML = `
+    <input type="text" class="form-control" placeholder="Option ${optionCount}" name="choices[]">
+    <input type="number" min="0" class="form-control" placeholder="Points"
+        name="point_value[]">
+    <div class="input-group-append">
+        <span class="input-group-text btn btn-default" style="cursor: pointer;"
+            onclick="uploadWeightedOptionImage(this)">
+            <i class="fas fa-image"></i>
+        </span>
+        <span class="input-group-text btn-danger btn" style="cursor: pointer;"
+            onclick="removeWeightedOption(this)">
+            <i class="fas fa-trash"></i>
+        </span>
+    </div>
+    <input type="file" accept="image/*" style="display: none;"
+        onchange="previewWeightedOptionImage(event, 'imageLabel${optionCount}', 'weightedImagePreview${optionCount}')"
+        class="weightedOptionImageInput" name="choice_images[]">
+    `;
 
-        var inputField = document.createElement("input");
-        inputField.setAttribute("type", "text");
-        inputField.classList.add("form-control");
-        inputField.setAttribute("placeholder", "Option " + optionIndex);
-        inputField.setAttribute("name", "choices[]");
+    // Set the HTML for the new option div
+    newOptionDiv.innerHTML = newOptionHTML;
 
-        newInputGroup.appendChild(inputField);
+    // Append the new option to the options container
+    optionsContainer.appendChild(newOptionDiv);
 
-        var pointInput = document.createElement("input");
-        pointInput.setAttribute("type", "number");
-        pointInput.setAttribute("min", "0");
-        pointInput.classList.add("form-control");
-        pointInput.setAttribute("placeholder", "Points");
-        pointInput.setAttribute("name", "point_value[]");
+    // Create a new div for image preview
+    var imagePreview = document.createElement("div");
+    imagePreview.classList.add("weightedOptionImagePreview");
+    imagePreview.setAttribute("id", "weightedImagePreview" + optionCount);
 
-        newInputGroup.appendChild(pointInput);
-
-        var appendDiv = document.createElement("div");
-        appendDiv.classList.add("input-group-append");
-
-        var imageSpan = document.createElement("span");
-        imageSpan.classList.add("input-group-text", "btn", "btn-default");
-        imageSpan.style.cursor = "pointer";
-
-        var imageIcon = document.createElement("i");
-        imageIcon.classList.add("fas", "fa-image");
-
-        var imageInput = document.createElement("input");
-        imageInput.setAttribute("type", "file");
-        imageInput.setAttribute("accept", "image/*");
-        imageInput.style.display = "none";
-        imageInput.setAttribute("name", "choice_images[]");
-        imageInput.id = uniqueId; // Assign unique ID to the image input field
-
-        // Set onchange event for image input
-        imageInput.addEventListener("change", function (event) {
-            previewWeightedOptionImage(event, uniqueId, previewId); // Pass the unique IDs to the preview function
-        });
-
-        // Create unique id for image preview
-        var imagePreview = document.createElement("div");
-        imagePreview.classList.add("weightedOptionImagePreview", "m-1");
-        imagePreview.setAttribute("id", previewId); // Assign unique ID to the image preview
-
-        // Add a click event listener to the span
-        imageSpan.addEventListener("click", function () {
-            // Simulate a click on the file input when the span is clicked
-            imageInput.click();
-        });
-
-        var trashSpan = document.createElement("span");
-        trashSpan.classList.add("input-group-text", "btn-danger", "btn");
-        trashSpan.style.cursor = "pointer";
-        trashSpan.onclick = function () {
-            optionsContainer.removeChild(newInputGroup);
-            optionsContainer.removeChild(imagePreview); // Remove the corresponding image preview
-        };
-
-        var trashIcon = document.createElement("i");
-        trashIcon.classList.add("fas", "fa-trash");
-
-        imageSpan.appendChild(imageIcon);
-        appendDiv.appendChild(imageSpan);
-        appendDiv.appendChild(trashSpan); // Moved trash icon after the image icon
-        trashSpan.appendChild(trashIcon);
-        newInputGroup.appendChild(appendDiv);
-        newInputGroup.appendChild(imageInput);
-
-        optionsContainer.appendChild(newInputGroup);
-        optionsContainer.appendChild(imagePreview); // Append the image preview right after the input group
-    });
+    // Append the image preview div to the options container
+    optionsContainer.appendChild(imagePreview);
+}
 
 function removeWeightedOption(element) {
-    var inputGroup = element.closest(".weighted-input-group");
-    var imagePreview = inputGroup.nextElementSibling; // Change 'option' to 'inputGroup'
-    inputGroup.parentNode.removeChild(inputGroup); // Remove the option
-    if (
-        imagePreview &&
-        imagePreview.classList.contains("weightedOptionImagePreview")
-    ) {
+    var option = element.closest(".input-group");
+    var imagePreview = option.nextElementSibling; // Get the next sibling which is the image preview
+    var imageInput = option.querySelector(".weightedOptionImageInput"); // Get the image input
+    option.parentNode.removeChild(option); // Remove the option
+    if (imagePreview && imagePreview.classList.contains("weightedOptionImagePreview")) {
         imagePreview.parentNode.removeChild(imagePreview); // Remove the image preview if it exists
     }
+    if (imageInput) {
+        imageInput.value = ''; // Clear the image input value
+    }
+}
+
+
+function editWeightedOption() {
+    // Get the options container
+    var optionsContainer = document.getElementById("editWeighted-optionsContainer");
+
+    // Count the number of existing options
+    var optionCount =
+        optionsContainer.getElementsByClassName("input-group").length + 1;
+
+    // Create a new option div
+    var newOptionDiv = document.createElement("div");
+    newOptionDiv.className = "input-group";
+
+    // Create the HTML for the new option
+    var newOptionHTML = `
+    <input type="text" class="form-control" placeholder="Option ${optionCount + 1}" name="choices[]">
+    <input type="number" min="0" class="form-control" placeholder="Points"
+        name="point_value[]">
+    <div class="input-group-append">
+        <span class="input-group-text btn btn-default" style="cursor: pointer;"
+            onclick="uploadWeightedOptionImage(this)">
+            <i class="fas fa-image"></i>
+        </span>
+        <span class="input-group-text btn-danger btn" style="cursor: pointer;"
+            onclick="removeWeightedOption(this)">
+            <i class="fas fa-trash"></i>
+        </span>
+    </div>
+    <input type="file" accept="image/*" style="display: none;"
+        onchange="previewWeightedOptionImage(event, 'imageLabel${optionCount + 1}', 'weightedImagePreview${optionCount + 1}')"
+        class="weightedOptionImageInput" name="choice_images[]">
+    `;
+
+    // Set the HTML for the new option div
+    newOptionDiv.innerHTML = newOptionHTML;
+
+    // Append the new option to the options container
+    optionsContainer.appendChild(newOptionDiv);
+
+    // Create a new div for image preview
+    var imagePreview = document.createElement("div");
+    imagePreview.classList.add("weightedOptionImagePreview");
+    imagePreview.setAttribute("id", "weightedImagePreview" + optionCount);
+
+    // Append the image preview div to the options container
+    optionsContainer.appendChild(imagePreview);
 }
 
 // Function to preview an option image for weighted multiple choice modal
@@ -321,6 +322,37 @@ function previewImage(event, type, labelId) {
     label.innerText = file.name;
 }
 
+// Function to preview an image
+function editPreviewImage(event, type, labelId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mb-1");
+        imgElement.style.width = "200px"; // Set width to 200 pixels
+
+        if (type === "question") {
+            document.getElementById("questionEditImagePreview").innerHTML = "";
+            document
+                .getElementById("questionEditImagePreview")
+                .appendChild(imgElement);
+        } else {
+            // For options
+            // Assuming you have multiple previews for multiple options
+            const previewContainer = document.getElementById("imagePreview");
+            previewContainer.appendChild(imgElement);
+        }
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
 // Function to preview an image for the essay modal
 function previewEssayImage(event, labelId) {
     const file = event.target.files[0];
@@ -332,7 +364,33 @@ function previewEssayImage(event, labelId) {
         const imgElement = document.createElement("img");
         imgElement.src = reader.result;
         imgElement.classList.add("img-thumbnail", "mb-1");
-        imgElement.style.width = "200px"; // Set width to 200 pixels
+        imgElement.style.maxWidth = "200px"; // Set max width to 300 pixels
+
+        // Clear existing images from the preview container
+        previewContainer.innerHTML = "";
+
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
+// Function to preview an image for the essay modal
+function previewEditEssayImage(event, labelId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+    const previewContainer = document.getElementById("editEssayImagePreview");
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mb-1");
+        imgElement.style.maxWidth = "200px"; // Set max width to 300 pixels
 
         // Clear existing images from the preview container
         previewContainer.innerHTML = "";
@@ -463,6 +521,33 @@ function previewWeightedEssayImage(event, labelId) {
     // Update label with the name of the selected file
     label.innerText = file.name;
 }
+
+// Function to preview an image for the weighted multiple choice edit modal
+function previewEditWeightedEssayImage(event, labelId, previewContainerId) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const label = document.getElementById(labelId);
+    const previewContainer = document.getElementById(previewContainerId);
+
+    reader.onload = function () {
+        const imgElement = document.createElement("img");
+        imgElement.src = reader.result;
+        imgElement.classList.add("img-thumbnail", "mb-1");
+        imgElement.style.maxWidth = "300px"; // Set max width to 300 pixels
+
+        // Clear existing images from the preview container
+        previewContainer.innerHTML = "";
+
+        // Append the new image preview to the container
+        previewContainer.appendChild(imgElement);
+    };
+
+    reader.readAsDataURL(file);
+
+    // Update label with the name of the selected file
+    label.innerText = file.name;
+}
+
 
 // Define the function to set current date
 function setCurrentDate(inputId) {
