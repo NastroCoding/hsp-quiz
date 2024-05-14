@@ -8,20 +8,69 @@ function addWeightedOption() {
 
     // Create a new option div
     var newOptionDiv = document.createElement("div");
-    newOptionDiv.className = "input-group";
+    newOptionDiv.className = "input-group weighted-input-group";
 
     // Create the HTML for the new option
     var newOptionHTML = `
     <input type="text" class="form-control" placeholder="Option ${optionCount}" name="choices[]">
-    <input type="number" min="0" class="form-control" placeholder="Points"
-        name="point_value[]">
+    <input type="number" min="0" class="form-control" placeholder="Points" name="point_value[]">
     <div class="input-group-append">
-        <span class="input-group-text btn btn-default" style="cursor: pointer;"
-            onclick="uploadWeightedOptionImage(this)">
+        <span class="input-group-text btn btn-default" style="cursor: pointer;" onclick="uploadWeightedOptionImage(this)">
             <i class="fas fa-image"></i>
         </span>
-        <span class="input-group-text btn-danger btn" style="cursor: pointer;"
-            onclick="removeWeightedOption(this)">
+        <span class="input-group-text btn-danger btn" style="cursor: pointer;" onclick="removeWeightedOption(this)">
+            <i class="fas fa-trash"></i>
+        </span>
+    </div>
+    <input type="file" accept="image/*" style="display: none;" onchange="previewWeightedOptionImage(event, 'imageLabel${optionCount}', 'weightedImagePreview${optionCount}')"
+        class="weightedOptionImageInput" name="choice_images[]">
+    `;
+
+    // Set the HTML for the new option div
+    newOptionDiv.innerHTML = newOptionHTML;
+
+    // Append the new option to the options container
+    optionsContainer.appendChild(newOptionDiv);
+
+    // Create a new div for image preview
+    var imagePreview = document.createElement("div");
+    imagePreview.classList.add("weightedOptionImagePreview");
+    imagePreview.setAttribute("id", "weightedImagePreview" + optionCount);
+
+    // Append the image preview div to the options container
+    optionsContainer.appendChild(imagePreview);
+}
+
+function removeWeightedOption(element) {
+    var optionGroup = element.parentElement.parentElement;
+    var imagePreview = optionGroup.nextElementSibling;
+    optionGroup.remove();
+    imagePreview.remove();
+}
+
+function editWeightedOption() {
+    // Get the options container
+    var optionsContainer = document.getElementById(
+        "editWeighted-optionsContainer"
+    );
+
+    // Count the number of existing options
+    var optionCount =
+        optionsContainer.getElementsByClassName("input-group").length + 1;
+
+    // Create a new option div
+    var newOptionDiv = document.createElement("div");
+    newOptionDiv.className = "input-group weighted-input-group";
+
+    // Create the HTML for the new option
+    var newOptionHTML = `
+    <input type="text" class="form-control" placeholder="Option ${optionCount}" name="choices[]">
+    <input type="number" min="0" class="form-control" placeholder="Points" name="point_value[]">
+    <div class="input-group-append">
+        <span class="input-group-text btn btn-default" style="cursor: pointer;" onclick="uploadWeightedOptionImage(this)">
+            <i class="fas fa-image"></i>
+        </span>
+        <span class="input-group-text btn-danger btn" style="cursor: pointer;" onclick="removeWeightedOption(this)">
             <i class="fas fa-trash"></i>
         </span>
     </div>
@@ -45,95 +94,17 @@ function addWeightedOption() {
     optionsContainer.appendChild(imagePreview);
 }
 
-function removeWeightedOption(element) {
-    var option = element.closest(".input-group");
-    var imagePreview = option.nextElementSibling; // Get the next sibling which is the image preview
-    var imageInput = option.querySelector(".weightedOptionImageInput"); // Get the image input
-    option.parentNode.removeChild(option); // Remove the option
-    if (imagePreview && imagePreview.classList.contains("weightedOptionImagePreview")) {
-        imagePreview.parentNode.removeChild(imagePreview); // Remove the image preview if it exists
-    }
-    if (imageInput) {
-        imageInput.value = ''; // Clear the image input value
-    }
-}
-
-
-function editWeightedOption() {
-    // Get the options container
-    var optionsContainer = document.getElementById("editWeighted-optionsContainer");
-
-    // Count the number of existing options
-    var optionCount =
-        optionsContainer.getElementsByClassName("input-group").length + 1;
-
-    // Create a new option div
-    var newOptionDiv = document.createElement("div");
-    newOptionDiv.className = "input-group";
-
-    // Create the HTML for the new option
-    var newOptionHTML = `
-    <input type="text" class="form-control" placeholder="Option ${optionCount + 1}" name="choices[]">
-    <input type="number" min="0" class="form-control" placeholder="Points"
-        name="point_value[]">
-    <div class="input-group-append">
-        <span class="input-group-text btn btn-default" style="cursor: pointer;"
-            onclick="uploadWeightedOptionImage(this)">
-            <i class="fas fa-image"></i>
-        </span>
-        <span class="input-group-text btn-danger btn" style="cursor: pointer;"
-            onclick="removeWeightedOption(this)">
-            <i class="fas fa-trash"></i>
-        </span>
-    </div>
-    <input type="file" accept="image/*" style="display: none;"
-        onchange="previewWeightedOptionImage(event, 'imageLabel${optionCount + 1}', 'weightedImagePreview${optionCount + 1}')"
-        class="weightedOptionImageInput" name="choice_images[]">
-    `;
-
-    // Set the HTML for the new option div
-    newOptionDiv.innerHTML = newOptionHTML;
-
-    // Append the new option to the options container
-    optionsContainer.appendChild(newOptionDiv);
-
-    // Create a new div for image preview
-    var imagePreview = document.createElement("div");
-    imagePreview.classList.add("weightedOptionImagePreview");
-    imagePreview.setAttribute("id", "weightedImagePreview" + optionCount);
-
-    // Append the image preview div to the options container
-    optionsContainer.appendChild(imagePreview);
-}
-
-// Function to preview an option image for weighted multiple choice modal
-function previewWeightedOptionImage(event, inputId, previewId) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const previewContainer = document.getElementById(previewId);
-    const label = document.getElementById(inputId);
-
+function previewWeightedOptionImage(event, labelId, previewId) {
+    var reader = new FileReader();
     reader.onload = function () {
-        const imgElement = document.createElement("img");
-        imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mb-1");
-        imgElement.style.width = "200px"; // Set width to 200 pixels
-
-        // Clear existing images from the preview container
-        previewContainer.innerHTML = "";
-
-        // Append the new image preview to the container
-        previewContainer.appendChild(imgElement);
+        var output = document.getElementById(previewId);
+        output.innerHTML = `<img src="${reader.result}" style="max-width: 300px;" class="mb-2">`;
     };
+    reader.readAsDataURL(event.target.files[0]);
 
-    reader.readAsDataURL(file);
-
-    // Update label with the name of the selected file
-    if (label) {
-        label.innerText = file.name;
-    } else {
-        console.error("Label element with ID '" + inputId + "' not found.");
-    }
+    // Update the label text
+    var label = document.getElementById(labelId);
+    label.textContent = event.target.files[0].name;
 }
 
 // Global variable to track the index for image previews
@@ -379,12 +350,12 @@ function previewEssayImage(event, labelId) {
     label.innerText = file.name;
 }
 
-// Function to preview an image for the essay modal
-function previewEditEssayImage(event, labelId) {
+// Function to preview an image for the edit essay modal
+function previewEditEssayImage(event, labelId, previewContainerId) {
     const file = event.target.files[0];
     const reader = new FileReader();
     const label = document.getElementById(labelId);
-    const previewContainer = document.getElementById("editEssayImagePreview");
+    const previewContainer = document.getElementById(previewContainerId);
 
     reader.onload = function () {
         const imgElement = document.createElement("img");
@@ -466,10 +437,10 @@ function uploadOptionImage(element) {
 }
 
 function uploadWeightedOptionImage(element) {
-    var imageInput = element.parentElement.parentElement.getElementsByClassName(
-        "weightedOptionImageInput"
-    )[0];
-    imageInput.click();
+    var fileInput = element.parentElement.parentElement.querySelector(
+        ".weightedOptionImageInput"
+    );
+    fileInput.click();
 }
 
 // Function to preview an option image
@@ -494,61 +465,31 @@ function previewOptionImage(event) {
     reader.readAsDataURL(file);
 }
 
-// Function to preview an image for the weighted multiple choice modal
 function previewWeightedEssayImage(event, labelId) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const label = document.getElementById(labelId);
-    const previewContainer = document.getElementById(
-        "weighted-essayImagePreview"
-    );
-
+    var reader = new FileReader();
     reader.onload = function () {
-        const imgElement = document.createElement("img");
-        imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mb-1");
-        imgElement.style.width = "200px"; // Set width to 200 pixels
-
-        // Clear existing images from the preview container
-        previewContainer.innerHTML = "";
-
-        // Append the new image preview to the container
-        previewContainer.appendChild(imgElement);
+        var output = document.getElementById("weighted-essayImagePreview");
+        output.innerHTML = `<img src="${reader.result}" style="max-width: 300px;" class="mb-2">`;
     };
+    reader.readAsDataURL(event.target.files[0]);
 
-    reader.readAsDataURL(file);
-
-    // Update label with the name of the selected file
-    label.innerText = file.name;
+    // Update the label text
+    var label = document.getElementById(labelId);
+    label.textContent = event.target.files[0].name;
 }
 
-// Function to preview an image for the weighted multiple choice edit modal
-function previewEditWeightedEssayImage(event, labelId, previewContainerId) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const label = document.getElementById(labelId);
-    const previewContainer = document.getElementById(previewContainerId);
-
+function previewEditWeightedEssayImage(event, labelId, previewId) {
+    var reader = new FileReader();
     reader.onload = function () {
-        const imgElement = document.createElement("img");
-        imgElement.src = reader.result;
-        imgElement.classList.add("img-thumbnail", "mb-1");
-        imgElement.style.maxWidth = "300px"; // Set max width to 300 pixels
-
-        // Clear existing images from the preview container
-        previewContainer.innerHTML = "";
-
-        // Append the new image preview to the container
-        previewContainer.appendChild(imgElement);
+        var output = document.getElementById(previewId);
+        output.innerHTML = `<img src="${reader.result}" style="max-width: 300px;" class="mb-2">`;
     };
+    reader.readAsDataURL(event.target.files[0]);
 
-    reader.readAsDataURL(file);
-
-    // Update label with the name of the selected file
-    label.innerText = file.name;
+    // Update the label text
+    var label = document.getElementById(labelId);
+    label.textContent = event.target.files[0].name;
 }
-
-
 // Define the function to set current date
 function setCurrentDate(inputId) {
     var now = new Date();
