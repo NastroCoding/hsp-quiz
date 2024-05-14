@@ -48,6 +48,10 @@ Route::controller(RouteController::class)->group(function () {
     Route::get('/quiz', 'user_quiz')->middleware('auth');
     Route::get('/score', 'user_score')->middleware('auth');
     Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
+
+    // REVIEW PAGE
+    Route::post('/submit-answer', [QuizController::class, 'submitAnswer'])->name('submit.answer');
+    Route::get('/review-page', [QuizController::class, 'reviewPage'])->name('quiz.review');
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -98,7 +102,5 @@ Route::controller(EducationController::class)->group(function () {
 
 Route::controller(UserAnswerController::class)->group(function () {
     Route::post('/quiz/answer', 'store')->middleware('auth');
-
     Route::get('/quiz/{id}/thumbnail', [QuizController::class,'showThumbnail',])->name('quiz.thumbnail');
-
     Route::post('/quiz', function () {return Redirect::to('/quiz');})->name('submit_quiz');});

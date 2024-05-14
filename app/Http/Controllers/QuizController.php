@@ -8,6 +8,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class QuizController extends Controller
@@ -25,7 +26,7 @@ class QuizController extends Controller
             'description' => 'required',
             'time' => 'required',
             'slug' => 'unique:quizzes',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Add validation for thumbnail
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for thumbnail
         ]);
 
         $created_by = Auth::user()->id;
@@ -35,7 +36,9 @@ class QuizController extends Controller
         // Store the thumbnail file if it exists
         $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
-            $thumbnailPath = $request->file('thumbnail')->store('thumbnails', 'public');
+            $thumbnailPath = $request
+                ->file('thumbnail')
+                ->store('thumbnails', 'public');
         }
 
         $quiz = Quiz::create([
@@ -48,10 +51,13 @@ class QuizController extends Controller
             'slug' => $slug,
             'thumbnail' => $thumbnailPath, // Store the thumbnail path
             'created_by' => $created_by,
-            'updated_by' => $updated_by
+            'updated_by' => $updated_by,
         ]);
 
-        return redirect('/admin/quiz')->with('quiz_success', 'Quiz Add Success!');
+        return redirect('/admin/quiz')->with(
+            'quiz_success',
+            'Quiz Add Success!'
+        );
     }
 
     /**
@@ -66,7 +72,7 @@ class QuizController extends Controller
             'title' => 'required',
             'description' => 'required',
             'time' => 'required',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Add validation for thumbnail
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for thumbnail
         ]);
 
         $updated_by = Auth::user()->id;
@@ -81,7 +87,9 @@ class QuizController extends Controller
                 Storage::disk('public')->delete($quiz->thumbnail);
             }
             // Store the new thumbnail
-            $thumbnailPath = $request->file('thumbnail')->store('thumbnails', 'public');
+            $thumbnailPath = $request
+                ->file('thumbnail')
+                ->store('thumbnails', 'public');
             $quiz->thumbnail = $thumbnailPath;
         }
 
@@ -93,10 +101,13 @@ class QuizController extends Controller
             'description' => $request->description,
             'time' => $request->time,
             'slug' => $slug,
-            'updated_by' => $updated_by
+            'updated_by' => $updated_by,
         ]);
 
-        return redirect('/admin/quiz')->with('success', 'Quiz Updated Successfully!');
+        return redirect('/admin/quiz')->with(
+            'success',
+            'Quiz Updated Successfully!'
+        );
     }
 
     /**
@@ -111,7 +122,9 @@ class QuizController extends Controller
         }
         $quiz->delete();
 
-        return redirect()->back()->with('success', 'Quiz deleted successfully!');
+        return redirect()
+            ->back()
+            ->with('success', 'Quiz deleted successfully!');
     }
 
     public function quiz_view(Request $request, string $slug)
@@ -175,19 +188,42 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
-        return view('views.quiz_page', [
-            'page' => $quiz->title,
-            'quiz' => $quiz,
-            'questions' => $questions,
-            'lastQuestionNumber' => $lastQuestionNumber,
-            'slug' => $quiz->slug,
-            'question_number' => $number,
-            'userAnswers' => $userAnswers, // Pass user's answers to the view
-        ], compact('question'));
+        return view(
+            'views.quiz_page',
+            [
+                'page' => $quiz->title,
+                'quiz' => $quiz,
+                'questions' => $questions,
+                'lastQuestionNumber' => $lastQuestionNumber,
+                'slug' => $quiz->slug,
+                'question_number' => $number,
+                'userAnswers' => $userAnswers, // Pass user's answers to the view
+            ],
+            compact('question')
+        );
     }
 
     public function submitQuiz(Request $request)
-     {
+    {
         return redirect('/quiz');
-     }
+    }
+
+    public function reviewPage()
+    {
+        // Getting user answers from the database (for example by using Eloquent or Query Builder)
+        $userAnswer = UserAnswer::find(1);
+
+        // Get related questions with user answers
+        $question = $userAnswer->question;
+
+        // get answer options related to the question
+        $options = $question->options;
+
+        // Send data to view review
+        return view('review.page', [
+            'userAnswer' => $userAnswer,
+            'question' => $question,
+            'options' => $options,
+        ]);
+    }
 }
