@@ -12,11 +12,13 @@ class Choice extends Model
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 
-    public function question(){
+    public function question()
+    {
         return $this->belongsTo(Question::class);
     }
 
-    public function userAnswer(){
+    public function userAnswer()
+    {
         return $this->hasMany(UserAnswer::class);
     }
 }
