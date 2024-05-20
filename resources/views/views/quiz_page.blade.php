@@ -54,13 +54,17 @@
                                             <p>{{ $que->question }}</p>
                                         </div>
                                         @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
+                                            @php
+                                                // Assuming you have a variable $userAnswers which contains the user's answers
+                                                $userAnswer = $userAnswers->firstWhere('question_id', $que->id);
+                                            @endphp
                                             @foreach ($que->choices as $index => $choice)
                                                 <div class="form-group">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                             name="choosen_choice_id" value="{{ $choice->id }}"
                                                             id="radio{{ $index + 1 }}"
-                                                            @if (isset($previousAnswer) && $previousAnswer->choosen_choice_id == $choice->id) checked @endif>
+                                                            @if (isset($userAnswer) && $userAnswer->choosen_choice_id == $choice->id) checked @endif>
                                                         <label class="form-check-label" for="radio{{ $index + 1 }}">
                                                             @if ($choice->image_choice)
                                                                 <img src="{{ asset('storage/' . $choice->image_choice) }}"
