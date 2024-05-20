@@ -208,22 +208,14 @@ class QuizController extends Controller
         return redirect('/quiz');
     }
 
-    public function reviewPage()
+    public function review($id)
     {
-        // Getting user answers from the database (for example by using Eloquent or Query Builder)
-        $userAnswer = UserAnswer::find(1);
+        $quiz = Quiz::with('questions.options')->find($id);
 
-        // Get related questions with user answers
-        $question = $userAnswer->question;
+        if (!$quiz) {
+            return redirect()->route('admin.quiz')->withErrors(['Quiz not found']);
+        }
 
-        // get answer options related to the question
-        $options = $question->options;
-
-        // Send data to view review
-        return view('review.page', [
-            'userAnswer' => $userAnswer,
-            'question' => $question,
-            'options' => $options,
-        ]);
+        return view('admin.quiz.review', compact('quiz'));
     }
 }

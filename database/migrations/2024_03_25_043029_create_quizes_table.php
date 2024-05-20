@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('education_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('token')->unique()->nullable();
             $table->string('title');
             $table->text('thumbnail')->nullable();
@@ -26,11 +27,12 @@ return new class extends Migration
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('education_id')->references('id')->on('education')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('education')->onDelete('cascade');
         });
     }
 

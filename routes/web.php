@@ -35,7 +35,7 @@ Route::controller(RouteController::class)->group(function () {
     // QUIZ
     Route::get('/admin/quiz', 'quiz')->middleware('admin');
     Route::get('/admin/quiz/result', 'quiz_result')->middleware('admin');
-    Route::get('/admin/quiz/review', 'quiz_review')->middleware('admin');
+    Route::get('/admin/quiz/review/{id}', [QuizController::class, 'review'])->name('quiz.review');
 
     // CATEGORY
     Route::get('/admin/category', 'category')->middleware('admin');
@@ -48,10 +48,6 @@ Route::controller(RouteController::class)->group(function () {
     Route::get('/quiz', 'user_quiz')->middleware('auth');
     Route::get('/score', 'user_score')->middleware('auth');
     Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
-
-    // REVIEW PAGE
-    Route::post('/submit-answer', [QuizController::class, 'submitAnswer'])->name('submit.answer');
-    Route::get('/review-page', [QuizController::class, 'reviewPage'])->name('quiz.review');
 });
 
 Route::controller(AuthController::class)->group(function () {

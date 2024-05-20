@@ -11,6 +11,7 @@ class Question extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+    protected $fillable = ['quiz_id', 'text', 'type'];
 
     public function quiz()
     {
