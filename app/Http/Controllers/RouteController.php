@@ -7,6 +7,7 @@ use App\Models\Education;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
+use App\Models\UserAnswer;
 use Illuminate\Http\Request;
 
 class RouteController extends Controller

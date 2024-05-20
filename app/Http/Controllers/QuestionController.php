@@ -97,9 +97,6 @@ class QuestionController extends Controller
         return redirect()->back()->with('success', 'Question created successfully!');
     }
 
-
-
-
     /**
      * Update the specified resource in storage.
      */
@@ -113,7 +110,7 @@ class QuestionController extends Controller
             'question_type' => 'required',
             'questionImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for question image
             'choices' => 'required_without:choice_images|array',
-            'choices.*' => 'required_without:choice_images.*', // Require string for each choice if choice_images are not provided
+            'choices.*' => 'required_without:choice_images', // Require string for each choice if choice_images are not provided
             'is_correct' => 'required|array', // Make is_correct field required
             'is_correct.*' => 'required|boolean', // Make each is_correct value a boolean
             'choice_images' => 'required_without:choices|array',
@@ -125,7 +122,6 @@ class QuestionController extends Controller
 
         // Find the question by ID
         $question = Question::findOrFail($id);
-
 
         // Ensure that the number of is_correct values matches the number of choices
         if (count($validatedData['choices']) !== count($validatedData['is_correct'])) {
@@ -144,7 +140,7 @@ class QuestionController extends Controller
             $imageUrl = asset('storage/' . $imagePath);
         } else {
             // Keep the existing image URL if no new image is uploaded
-            $imageUrl = $question->image_url;
+            $imageUrl = $question->images;
         }
 
         // Update question details including the image URL
@@ -152,7 +148,7 @@ class QuestionController extends Controller
             'question' => $validatedData['question'],
             'point_value' => $validatedData['point_value'],
             'question_type' => $validatedData['question_type'],
-            'image_url' => $imageUrl ?: $question->image_url, // Update the image URL
+            'images' => $imageUrl ?: $question->images, // Update the image URL
             'updated_by' => $updatedBy,
         ]);
 
@@ -171,36 +167,22 @@ class QuestionController extends Controller
         // Update or create choices associated with the question
         foreach ($validatedData['choices'] as $index => $choiceData) {
             // Get the choice ID from the request, if available
-            $choiceId = $choiceData['id'];
-            $questionChoice = null;
-
-            // If a choice ID is provided, find the existing choice
-            if ($choiceId) {
-                $questionChoice = Choice::find($choiceId);
-            }
-
-            // If no existing choice found, or if the choice ID doesn't match the index, create a new one
-            if (!$questionChoice || $questionChoice->id != $choiceId) {
-                $questionChoice = new Choice();
-            }
+            $choiceId = $choiceData['id'] ?? null;
+            $questionChoice = $choiceId ? Choice::find($choiceId) : new Choice();
 
             // Update choice details
             $questionChoice->question_id = $question->id;
-            $questionChoice->choice = $choiceData['text']; // Set choice text
+            $questionChoice->choice = $choiceData['text'] ?? ''; // Set choice text
 
             // Check if choice image is present
-            if ($request->hasFile("choices.{$index}.image")) {
+            if ($request->hasFile("choice_images.{$index}")) {
                 // Store the choice image
-                $imagePath = $request->file("choices.{$index}.image")->store('choice_images', 'public');
+                $imagePath = $request->file("choice_images.{$index}")->store('choice_images', 'public');
                 $questionChoice->image_choice = $imagePath;
             }
 
-            // Check if the checkbox is checked
-            if ($request->has("is_correct_checkbox.{$index}")) {
-                $questionChoice->is_correct = 1; // Checkbox is checked
-            } else {
-                $questionChoice->is_correct = 0; // Checkbox is not checked
-            }
+            // Update is_correct value
+            $questionChoice->is_correct = $validatedData['is_correct'][$index] ?? false;
 
             $questionChoice->created_by = $updatedBy;
             $questionChoice->updated_by = $updatedBy;
@@ -209,12 +191,12 @@ class QuestionController extends Controller
         }
 
         // Handle new choices added dynamically
-        foreach ($request->choices as $index => $choice) {
+        foreach ($validatedData['choices'] as $index => $choice) {
             if (!isset($choice['id'])) {
                 $newChoice = new Choice();
                 $newChoice->question_id = $question->id;
-                $newChoice->choice = $choice; // Assuming 'text' is the key for choice text
-                $newChoice->is_correct = isset($validatedData['is_correct'][$index]) ? $validatedData['is_correct'][$index] : 0;
+                $newChoice->choice = $choice['text'] ?? ''; // Assuming 'text' is the key for choice text
+                $newChoice->is_correct = $validatedData['is_correct'][$index] ?? false;
 
                 if ($request->hasFile("choice_images.{$index}")) {
                     $imagePath = $request->file("choice_images.{$index}")->store('choice_images', 'public');
@@ -230,6 +212,7 @@ class QuestionController extends Controller
 
         return redirect()->back()->with('success', 'Question updated successfully!');
     }
+
 
 
     /**
@@ -319,11 +302,12 @@ class QuestionController extends Controller
             'question_type' => 'required|string',
             'quiz_id' => 'required|exists:quizzes,id',
             'question' => 'required|string',
-            'choices' => 'required|array',
-            'choices.*' => 'string',
+            'choices' => 'required_without:choice_images|array',
+            'choices.*' => 'required_without:choice_images.*', // Require string for each choice if choice_images are not provided
             'point_value' => 'required|array',
             'point_value.*' => 'numeric|min:0',
-            'choice_images.*' => 'nullable|image', // Validation for choice images
+            'choice_images' => 'required_without:choices|array',
+            'choice_images.*' => 'required_without:choices.*|image', // Validation for choice images
         ]);
 
         // Get the currently authenticated user
@@ -376,19 +360,22 @@ class QuestionController extends Controller
     public function weightedUpdate(Request $request, $questionId)
     {
         // Validate the form data
-        $validatedData = $request->validate([
+        $rules = [
             'question_type' => 'required|string',
             'quiz_id' => 'required|exists:quizzes,id',
             'question' => 'required|string',
-            'choices' => 'required|array',
-            'choices.*' => 'string',
+            'choices' => 'required_without:choice_images|array',
+            'choices.*' => 'required_without:choice_images.*|string', // Each choice is required without its corresponding image
             'point_value' => 'required|array',
             'point_value.*' => 'numeric|min:0',
             'choice_ids' => 'array',
             'choice_ids.*' => 'integer|exists:choices,id',
-            'choice_images.*' => 'nullable|image', // Validation for choice images
-        ]);
+            'choice_images' => 'required_without:choices|array',
+            'choice_images.*' => 'required_without:choices.*|image', // Each image is required without its corresponding choice
+        ];
 
+        $validatedData = $request->validate($rules);
+        
         // Get the currently authenticated user
         $user = Auth::user();
 
@@ -431,29 +418,53 @@ class QuestionController extends Controller
                         'updated_by' => $user->id,
                     ]);
 
-                    // Handle choice image upload
+                    // Check if there's a new image for the existing choice
                     if ($request->hasFile('choice_images.' . $index)) {
+                        // Delete the old image if it exists
+                        if ($questionChoice->image_choice) {
+                            Storage::disk('public')->delete($questionChoice->image_choice);
+                        }
+                        // Upload the new image and update the choice's image field
                         $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
                         $questionChoice->image_choice = $imagePath;
-                        $questionChoice->save();
                     }
                 }
             } else {
                 // Create new choice
-                $newChoice = $question->choices()->create([
+                $newChoice = new Choice([
                     'choice' => $choice,
-                    'is_correct' => false, // Adjust as necessary
                     'point_value' => $pointValue,
                     'created_by' => $user->id,
                     'updated_by' => $user->id,
+                    'question_id' => $question->id,
                 ]);
 
                 // Handle new choice image upload
                 if ($request->hasFile('choice_images.' . $index)) {
                     $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
                     $newChoice->image_choice = $imagePath;
-                    $newChoice->save();
                 }
+
+                $newChoice->save();
+            }
+        }
+
+        // Handle choices that only have images and no text
+        foreach ($request->file('choice_images', []) as $index => $file) {
+            if (!isset($submittedChoiceIds[$index]) && !isset($validatedData['choices'][$index])) {
+                // Create a new choice with an image
+                $newChoice = new Choice([
+                    'point_value' => $validatedData['point_value'][$index],
+                    'created_by' => $user->id,
+                    'updated_by' => $user->id,
+                    'question_id' => $question->id,
+                ]);
+
+                // Upload the image and update the choice's image field
+                $imagePath = $file->store('choice_images', 'public');
+                $newChoice->image_choice = $imagePath;
+
+                $newChoice->save();
             }
         }
 

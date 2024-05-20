@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('choices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('question_id');
-            $table->text('choice');
+            $table->text('choice')->nullable();
             $table->text('image_choice')->nullable();
             $table->tinyInteger('is_correct')->default(0);
             $table->integer('point_value')->nullable();
@@ -22,10 +22,10 @@ return new class extends Migration
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();
             $table->softDeletes();
-            
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('question_choices');
+        Schema::dropIfExists('choices');
     }
 };

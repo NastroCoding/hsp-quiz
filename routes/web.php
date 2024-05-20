@@ -98,5 +98,8 @@ Route::controller(EducationController::class)->group(function () {
 
 Route::controller(UserAnswerController::class)->group(function () {
     Route::post('/quiz/answer', 'store')->middleware('auth');
-    Route::get('/quiz/{id}/thumbnail', [QuizController::class,'showThumbnail',])->name('quiz.thumbnail');
-    Route::post('/quiz', function () {return Redirect::to('/quiz');})->name('submit_quiz');});
+    Route::get('/quiz/{id}/thumbnail', [QuizController::class, 'showThumbnail',])->name('quiz.thumbnail');
+    Route::post('/quiz', function () {
+        return Redirect::to('/quiz');
+    })->name('submit_quiz');
+});

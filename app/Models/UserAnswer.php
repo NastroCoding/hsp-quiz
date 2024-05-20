@@ -12,16 +12,24 @@ class UserAnswer extends Model
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function question(){
+    public function question()
+    {
         return $this->belongsTo(Question::class);
     }
 
-    public function choosenChoice(){
+    public function choosenChoice()
+    {
         return $this->belongsTo(Choice::class, 'choosen_choice_id');
     }
 
+    // Define a custom accessor to retrieve is_correct from the related Choice model
+    public function getIsCorrectAttribute()
+    {
+        return $this->choosenChoice->is_correct;
+    }
 }

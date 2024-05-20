@@ -49,48 +49,37 @@ function removeWeightedOption(element) {
 }
 
 function editWeightedOption() {
-    // Get the options container
     var optionsContainer = document.getElementById(
         "editWeighted-optionsContainer"
     );
-
-    // Count the number of existing options
     var optionCount =
-        optionsContainer.getElementsByClassName("input-group").length + 1;
+        optionsContainer.getElementsByClassName("input-group").length;
 
-    // Create a new option div
     var newOptionDiv = document.createElement("div");
-    newOptionDiv.className = "input-group weighted-input-group";
+    newOptionDiv.className = "input-group weighted-input-group mb-2";
 
-    // Create the HTML for the new option
     var newOptionHTML = `
-    <input type="text" class="form-control" placeholder="Option ${optionCount}" name="choices[]">
-    <input type="number" min="0" class="form-control" placeholder="Points" name="point_value[]">
-    <div class="input-group-append">
-        <span class="input-group-text btn btn-default" style="cursor: pointer;" onclick="uploadWeightedOptionImage(this)">
-            <i class="fas fa-image"></i>
-        </span>
-        <span class="input-group-text btn-danger btn" style="cursor: pointer;" onclick="removeWeightedOption(this)">
-            <i class="fas fa-trash"></i>
-        </span>
-    </div>
-    <input type="file" accept="image/*" style="display: none;"
-        onchange="previewWeightedOptionImage(event, 'imageLabel${optionCount}', 'weightedImagePreview${optionCount}')"
-        class="weightedOptionImageInput" name="choice_images[]">
+        <input type="text" class="form-control" placeholder="Option ${
+            optionCount + 1
+        }" name="choices[${optionCount}]">
+        <input type="number" min="0" class="form-control" placeholder="Points" name="point_value[${optionCount}]">
+        <div class="input-group-append">
+            <span class="input-group-text btn btn-default" style="cursor: pointer;" onclick="uploadWeightedOptionImage(this)">
+                <i class="fas fa-image"></i>
+            </span>
+            <span class="input-group-text btn-danger btn" style="cursor: pointer;" onclick="removeWeightedOption(this)">
+                <i class="fas fa-trash"></i>
+            </span>
+        </div>
+        <input type="file" accept="image/*" style="display: none;" class="weightedOptionImageInput" name="choice_images[${optionCount}]" onchange="previewWeightedOptionImage(event, 'imageLabel${optionCount}', 'weightedImagePreview${optionCount}')">
     `;
 
-    // Set the HTML for the new option div
     newOptionDiv.innerHTML = newOptionHTML;
-
-    // Append the new option to the options container
     optionsContainer.appendChild(newOptionDiv);
 
-    // Create a new div for image preview
     var imagePreview = document.createElement("div");
-    imagePreview.classList.add("weightedOptionImagePreview");
+    imagePreview.classList.add("weightedOptionImagePreview", "mb-2");
     imagePreview.setAttribute("id", "weightedImagePreview" + optionCount);
-
-    // Append the image preview div to the options container
     optionsContainer.appendChild(imagePreview);
 }
 

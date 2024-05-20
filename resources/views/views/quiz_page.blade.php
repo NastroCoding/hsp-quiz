@@ -7,14 +7,14 @@
             max-width: 90%;
         }
 
-        @media only screen and (min-width:768px) {
+        @media only screen and (min-width: 768px) {
             #responsive {
                 min-width: 600px;
                 max-width: 100%;
             }
         }
 
-        @media only screen and (max-width:280px) {
+        @media only screen and (max-width: 280px) {
             #responsive {
                 min-width: 250px;
                 max-width: 100%;
@@ -23,13 +23,7 @@
     </style>
     @for ($i = 1; $i <= $lastQuestionNumber; $i++)
         @php
-            $answered = false;
-            foreach ($userAnswers as $userAnswer) {
-                if ($userAnswer->question_id == $i) {
-                    $answered = true;
-                    break; // Exit the loop once an answer is found
-                }
-            }
+            $answered = $userAnswers->contains('question_id', $i);
         @endphp
         <a href="/quiz/view/{{ $slug }}/{{ $i }}"
             class="btn {{ $answered ? 'btn-success text-white' : 'btn-default' }} col {{ $question_number == $i ? 'active' : '' }}"
@@ -42,36 +36,35 @@
         <div class="content">
             <div class="container">
                 <div class="row mt-3">
-                    <!-- /.col-md-6 -->
-                    <!-- Multiple Choice Form -->
                     @foreach ($questions as $que)
                         @if ($que->number == $question_number)
                             <div class="card card-default col-8" id="responsive">
-                                <!-- Setting a minimum width of 300px and a maximum width of 90% -->
                                 <div class="card-header">
                                     <h3 class="card-title">Number {{ $que->number }}</h3>
                                 </div>
-                                <!-- /.card-header -->
-                                <!-- form start -->
-                                <form action="/quiz/answer" method="POST">
+                                <form action="/quiz/answer" method="POST" id="quiz-form">
                                     @csrf
                                     <input type="hidden" name="question_id" value="{{ $que->id }}">
                                     <div class="card-body">
                                         <div class="form-group">
                                             @if ($que->images)
-                                                <img src="{{ asset('' . $que->images) }}" alt="Question Image"
+                                                <img src="{{ asset($que->images) }}" alt="Question Image"
                                                     style="max-width: 300px;">
                                             @endif
                                             <p>{{ $que->question }}</p>
                                         </div>
-
                                         @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
+                                            @php
+                                                // Assuming you have a variable $userAnswers which contains the user's answers
+                                                $userAnswer = $userAnswers->firstWhere('question_id', $que->id);
+                                            @endphp
                                             @foreach ($que->choices as $index => $choice)
                                                 <div class="form-group">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                             name="choosen_choice_id" value="{{ $choice->id }}"
-                                                            id="radio{{ $index + 1 }}">
+                                                            id="radio{{ $index + 1 }}"
+                                                            @if (isset($userAnswer) && $userAnswer->choosen_choice_id == $choice->id) checked @endif>
                                                         <label class="form-check-label" for="radio{{ $index + 1 }}">
                                                             @if ($choice->image_choice)
                                                                 <img src="{{ asset('storage/' . $choice->image_choice) }}"
@@ -84,90 +77,132 @@
                                             @endforeach
                                         @elseif ($que->question_type == 'essay')
                                             <div class="form-group">
-                                                <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..." name="essay_answer" id="essay_answer">{{ isset($previousAnswer) ? $previousAnswer->essay_answer : '' }}</textarea>
                                             </div>
                                         @endif
                                     </div>
-                                    <!-- /.card-body -->
                                     <div class="card-footer">
                                         @if ($que->number != 1)
-                                            <a href="/quiz/view/{{ $slug }}/{{ $que->number - 1 }}"
-                                                class="btn btn-default">
+                                            <button class="btn btn-default" type="button" id="back-button">
                                                 <i class="fas fa-angle-left"></i> Back
-                                            </a>
+                                            </button>
                                         @endif
                                         @if ($que->number != $lastQuestionNumber)
-                                            <a href="/quiz/view/{{ $slug }}/{{ $que->number + 1 }}"
-                                                class="btn btn-primary float-right">
-                                                Next <i class="fas fa-angle-right"></i>
-                                            </a>
+                                            <button type="button" class="btn btn-primary float-right" id="next-button">Next
+                                                <i class="fas fa-angle-right"></i></button>
                                         @else
                                             <button type="submit" class="btn btn-primary float-right">Submit</button>
                                         @endif
                                     </div>
                                 </form>
                             </div>
-                        @endif
-                        <script>
-                            var CountdownTimer = {
-                                resetCountdown: function() {
-                                    var countDownDate = new Date().getTime() + {{ $quiz->time }} * 60 * 1000;
-                                    localStorage.setItem("countdownDate", countDownDate.toString());
-                                    location.reload();
-                                },
+                            <script>
+                                document.getElementById("next-button").addEventListener("click", function(event) {
+                                    event.preventDefault(); // Prevent default form submission
 
-                                init: function(timerId) {
-                                    var x = setInterval(function() {
-                                        var now = new Date().getTime();
-                                        var storedCountdownDate = localStorage.getItem("countdownDate");
-                                        var countDownDate = storedCountdownDate ?
-                                            parseInt(storedCountdownDate) :
-                                            new Date().getTime() + {{ $quiz->time }} * 60 * 1000;
+                                    // Serialize form data
+                                    const formData = new FormData(document.getElementById("quiz-form"));
 
-                                        var distance = countDownDate - now;
-                                        var hours = Math.floor(
-                                            (distance % (1000 * 60 * 60 * 24)) /
-                                            (1000 * 60 * 60)
-                                        );
-                                        var minutes = Math.floor(
-                                            (distance % (1000 * 60 * 60)) / (1000 * 60)
-                                        );
-                                        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                                        var timerElement = document.getElementById(timerId);
-                                        if (timerElement) {
-                                            timerElement.innerHTML =
-                                                hours + "h " + minutes + "m " + seconds + "s ";
-                                        }
-
-                                        if (distance < 0) {
-                                            clearInterval(x);
-                                            if (timerElement) {
-                                                timerElement.innerHTML = "EXPIRED";
+                                    // Send form data asynchronously
+                                    fetch("/quiz/answer", {
+                                            method: "POST",
+                                            body: formData
+                                        })
+                                        .then(response => {
+                                            if (response.ok) {
+                                                // Optionally handle successful submission
+                                                console.log("Form submitted successfully");
+                                                // Redirect to the next question page
+                                                window.location.href = "/quiz/view/{{ $slug }}/{{ $que->number + 1 }}";
+                                            } else {
+                                                // Optionally handle errors
+                                                console.error("Form submission failed");
                                             }
-                                        }
-                                    }, 1000);
-                                },
-                            };
+                                        })
+                                        .catch(error => {
+                                            // Handle network errors
+                                            console.error("Network error:", error);
+                                        });
+                                });
 
-                            // Initialize countdown timer when the page loads
-                            window.addEventListener("load", function() {
-                                CountdownTimer.init("countdownTimer1");
-                            });
+                                document.getElementById("back-button").addEventListener("click", function(event) {
+                                    event.preventDefault(); // Prevent default form submission
 
-                            // Add event listener to reset button
-                            document.getElementById("resetButton").addEventListener("click", function() {
-                                CountdownTimer.resetCountdown();
-                            });
-                            CountdownTimer.init("countdownTimer2");
-                            CountdownTimer.init("countdownTimer3");
-                        </script>
+                                    // Serialize form data
+                                    const formData = new FormData(document.getElementById("quiz-form"));
+
+                                    // Send form data asynchronously
+                                    fetch("/quiz/answer", {
+                                            method: "POST",
+                                            body: formData
+                                        })
+                                        .then(response => {
+                                            if (response.ok) {
+                                                // Optionally handle successful submission
+                                                console.log("Form submitted successfully");
+                                                // Redirect to the next question page
+                                                window.location.href = "/quiz/view/{{ $slug }}/{{ $que->number - 1 }}";
+                                            } else {
+                                                // Optionally handle errors
+                                                console.error("Form submission failed");
+                                            }
+                                        })
+                                        .catch(error => {
+                                            // Handle network errors
+                                            console.error("Network error:", error);
+                                        });
+                                });
+                            </script>
+                        @endif
                     @endforeach
-                    <!-- /.col-md-6 -->
                 </div>
             </div>
-            <!-- /.container-fluid -->
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const countdownElements = ['countdownTimer1', 'countdownTimer2', 'countdownTimer3'];
+            countdownElements.forEach(timerId => CountdownTimer.init(timerId));
+
+            document.getElementById('resetButton')?.addEventListener('click', function() {
+                CountdownTimer.resetCountdown();
+            });
+        });
+
+        var CountdownTimer = {
+            resetCountdown: function() {
+                var countDownDate = new Date().getTime() + {{ $quiz->time }} * 60 * 1000;
+                localStorage.setItem("countdownDate", countDownDate.toString());
+                location.reload();
+            },
+
+            init: function(timerId) {
+                var countDownDate = localStorage.getItem("countdownDate") || new Date().getTime() +
+                    {{ $quiz->time }} * 60 * 1000;
+                localStorage.setItem("countdownDate", countDownDate);
+
+                var x = setInterval(function() {
+                    var now = new Date().getTime();
+                    var distance = countDownDate - now;
+
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    var timerElement = document.getElementById(timerId);
+                    if (timerElement) {
+                        timerElement.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+                    }
+
+                    if (distance < 0) {
+                        clearInterval(x);
+                        if (timerElement) {
+                            timerElement.innerHTML = "EXPIRED";
+                        }
+                    }
+                }, 1000);
+            }
+        };
+    </script>
 @endsection

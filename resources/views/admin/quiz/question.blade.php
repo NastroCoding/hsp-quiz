@@ -621,15 +621,14 @@
                                     </div>
                                     <div id="editWeighted-optionsContainer">
                                         <label for="inputName">Options</label>
-                                        <!-- Weighted Option 1 -->
                                         @foreach ($question->choices as $index => $choice)
-                                            <div class="input-group weighted-input-group">
+                                            <div class="input-group weighted-input-group mb-2">
                                                 <input type="hidden" name="choice_ids[]" value="{{ $choice->id }}">
                                                 <input type="text" class="form-control"
-                                                    placeholder="Option {{ $index + 1 }}" name="choices[]"
-                                                    value="{{ $choice->choice }}">
+                                                    placeholder="Option {{ $index + 1 }}"
+                                                    name="choices[{{ $index }}]" value="{{ $choice->choice }}">
                                                 <input type="number" min="0" class="form-control"
-                                                    placeholder="Points" name="point_value[]"
+                                                    placeholder="Points" name="point_value[{{ $index }}]"
                                                     value="{{ $choice->point_value }}">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text btn btn-default"
@@ -643,8 +642,9 @@
                                                     </span>
                                                 </div>
                                                 <input type="file" accept="image/*" style="display: none;"
-                                                    onchange="previewWeightedOptionImage(event, 'imageLabel{{ $index }}', 'weightedImagePreview{{ $index }}')"
-                                                    class="weightedOptionImageInput" name="choice_images[]">
+                                                    class="weightedOptionImageInput"
+                                                    name="choice_images[{{ $index }}]"
+                                                    onchange="previewWeightedOptionImage(event, 'imageLabel{{ $index }}', 'weightedImagePreview{{ $index }}')">
                                             </div>
                                             <div class="weightedOptionImagePreview mb-2"
                                                 id="weightedImagePreview{{ $index }}">
@@ -654,7 +654,6 @@
                                                 @endif
                                             </div>
                                         @endforeach
-                                        <!-- End Weighted Option 1 -->
                                     </div>
                                     <div class="form-group">
                                         <button type="button" class="btn btn-primary" id="addWeightedOptionBtn"
