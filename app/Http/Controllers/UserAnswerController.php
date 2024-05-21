@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Choice;
 use App\Models\UserAnswer;
+use App\Models\UserEssay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserAnswerController extends Controller
 {
@@ -14,7 +16,7 @@ class UserAnswerController extends Controller
      */
     public function index()
     {
-        //
+        // Code for listing resources (if needed)
     }
 
     /**
@@ -57,18 +59,74 @@ class UserAnswerController extends Controller
             $message = 'Your answer has been updated successfully!';
         } else {
             UserAnswer::create($validatedData);
-            $message = 'Your answers have been submitted successfully!';
+            $message = 'Your answer has been submitted successfully!';
         }
 
         return redirect('/quiz')->with('success', $message);
     }
 
     /**
+     * Store a newly created essay answer in storage.
+     */
+    public function storeEssayAnswer(Request $request)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'essay_answer' => 'required|string',
+        ]);
+
+        // Add the authenticated user's ID to the data
+        $validatedData['user_id'] = Auth::id();
+
+        // Set the created_by and updated_by fields to the authenticated user's ID
+        $validatedData['created_by'] = Auth::id();
+        $validatedData['updated_by'] = Auth::id();
+
+        try {
+            // Check if the user has already answered this question
+            $existingAnswer = UserEssay::where('user_id', Auth::id())
+                ->where('question_id', $validatedData['question_id'])
+                ->first();
+
+            // If an existing answer is found, update it; otherwise, create a new one
+            if ($existingAnswer) {
+                $existingAnswer->update([
+                    'answer' => $validatedData['essay_answer'],
+                    'updated_by' => Auth::id(),
+                ]);
+                $message = 'Your essay answer has been updated successfully!';
+            } else {
+                UserEssay::create([
+                    'user_id' => $validatedData['user_id'],
+                    'question_id' => $validatedData['question_id'],
+                    'answer' => $validatedData['essay_answer'],
+                    'created_by' => $validatedData['created_by'],
+                    'updated_by' => $validatedData['updated_by'],
+                ]);
+                $message = 'Your essay answer has been submitted successfully!';
+            }
+
+            return redirect('/quiz')->with('success', $message);
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error storing essay answer: ' . $e->getMessage(), $validatedData);
+
+            // Return with error message
+            return redirect('/quiz')->with('error', 'There was a problem submitting your answer. Please try again.');
+        }
+    }
+
+    /**
      * Display the specified resource.
      */
-    public function show(UserAnswer $userAnswer)
+    public function show($id)
     {
-        //
+        // Fetch the essay answer by id
+        $essay = UserEssay::findOrFail($id);
+
+        // Pass the essay answer to the view
+        return view('essay.show', ['essay_answer' => $essay->answer]);
     }
 
     /**
@@ -76,7 +134,7 @@ class UserAnswerController extends Controller
      */
     public function update(Request $request, UserAnswer $userAnswer)
     {
-        //
+        // Code for updating a resource (if needed)
     }
 
     /**
@@ -84,6 +142,6 @@ class UserAnswerController extends Controller
      */
     public function destroy(UserAnswer $userAnswer)
     {
-        //
+        // Code for deleting a resource (if needed)
     }
 }
