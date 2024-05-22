@@ -23,7 +23,7 @@
     </style>
     @for ($i = 1; $i <= $lastQuestionNumber; $i++)
         @php
-            $answered = $userAnswers->contains('question_id', $i);
+            $answered = $userAnswers->contains('question_id', $i) || $userEssays->contains('question_id', $i);
         @endphp
         <a href="/quiz/view/{{ $slug }}/{{ $i }}"
             class="btn {{ $answered ? 'btn-success text-white' : 'btn-default' }} col {{ $question_number == $i ? 'active' : '' }}"
@@ -42,7 +42,8 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Number {{ $que->number }}</h3>
                                 </div>
-                                <form action="/quiz/answer" method="POST" id="quiz-form">
+                                <form action="@if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple') /quiz/answer @else /quiz/essayAnswer @endif"
+                                    method="POST" id="quiz-form">
                                     @csrf
                                     <input type="hidden" name="question_id" value="{{ $que->id }}">
                                     <div class="card-body">
@@ -55,7 +56,6 @@
                                         </div>
                                         @if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple')
                                             @php
-                                                // Assuming you have a variable $userAnswers which contains the user's answers
                                                 $userAnswer = $userAnswers->firstWhere('question_id', $que->id);
                                             @endphp
                                             @foreach ($que->choices as $index => $choice)
@@ -76,8 +76,11 @@
                                                 </div>
                                             @endforeach
                                         @elseif ($que->question_type == 'essay')
+                                            @php
+                                                $userEssay = $userEssays->firstWhere('question_id', $que->id);
+                                            @endphp
                                             <div class="form-group">
-                                                <textarea class="form-control" rows="3" placeholder="Enter ..." name="essay_answer" id="essay_answer">{{ isset($previousAnswer) ? $previousAnswer->essay_answer : '' }}</textarea>
+                                                <textarea class="form-control" rows="3" placeholder="Enter ..." name="essay_answer" id="essay_answer">{{ $userEssay->answer ?? '' }}</textarea>
                                             </div>
                                         @endif
                                     </div>
@@ -89,7 +92,8 @@
                                         @endif
                                         @if ($que->number != $lastQuestionNumber)
                                             <button type="button" class="btn btn-primary float-right" id="next-button">Next
-                                                <i class="fas fa-angle-right"></i></button>
+                                                <i class="fas fa-angle-right"></i>
+                                            </button>
                                         @else
                                             <button type="submit" class="btn btn-primary float-right">Submit</button>
                                         @endif
@@ -97,14 +101,48 @@
                                 </form>
                             </div>
                             <script>
-                                document.getElementById("next-button").addEventListener("click", function(event) {
-                                    event.preventDefault(); // Prevent default form submission
+                                window.addEventListener('load', (event) => {
+                                    const nextButton = document.getElementById("next-button");
+                                    const backButton = document.getElementById("back-button");
+                                    const anchors = document.querySelectorAll('a[href^="/quiz/view/{{ $slug }}/"]');
+
+                                    if (nextButton) {
+                                        nextButton.addEventListener("click", function(event) {
+                                            navigateQuestion(event, 1);
+                                        });
+                                    }
+
+                                    if (backButton) {
+                                        backButton.addEventListener("click", function(event) {
+                                            navigateQuestion(event, -1);
+                                        });
+                                    }
+
+                                    anchors.forEach(anchor => {
+                                        anchor.addEventListener("click", function(event) {
+                                            const targetQuestionNumber = parseInt(this.href.split('/').pop());
+                                            navigateQuestion(event, targetQuestionNumber - {{ $que->number }});
+                                        });
+                                    });
+                                });
+
+                                function navigateQuestion(event, offset) {
+                                    event.preventDefault(); // Prevent default form submission or anchor click
 
                                     // Serialize form data
                                     const formData = new FormData(document.getElementById("quiz-form"));
 
+                                    // Determine the URL based on the question type
+                                    const questionType = "{{ $que->question_type }}";
+                                    let url;
+                                    if (questionType === 'multiple_choice' || questionType === 'weighted_multiple') {
+                                        url = "/quiz/answer";
+                                    } else {
+                                        url = "/quiz/essayAnswer";
+                                    }
+
                                     // Send form data asynchronously
-                                    fetch("/quiz/answer", {
+                                    fetch(url, {
                                             method: "POST",
                                             body: formData
                                         })
@@ -112,8 +150,14 @@
                                             if (response.ok) {
                                                 // Optionally handle successful submission
                                                 console.log("Form submitted successfully");
-                                                // Redirect to the next question page
-                                                window.location.href = "/quiz/view/{{ $slug }}/{{ $que->number + 1 }}";
+                                                // Redirect to the next or previous question page
+                                                const currentQuestionNumber = parseInt("{{ $que->number }}");
+                                                const nextQuestionNumber = currentQuestionNumber + offset;
+                                                if (nextQuestionNumber >= 1 && nextQuestionNumber <= {{ $lastQuestionNumber }}) {
+                                                    window.location.href = "/quiz/view/{{ $slug }}/" + nextQuestionNumber;
+                                                } else {
+                                                    console.log("Invalid question number");
+                                                }
                                             } else {
                                                 // Optionally handle errors
                                                 console.error("Form submission failed");
@@ -123,35 +167,7 @@
                                             // Handle network errors
                                             console.error("Network error:", error);
                                         });
-                                });
-
-                                document.getElementById("back-button").addEventListener("click", function(event) {
-                                    event.preventDefault(); // Prevent default form submission
-
-                                    // Serialize form data
-                                    const formData = new FormData(document.getElementById("quiz-form"));
-
-                                    // Send form data asynchronously
-                                    fetch("/quiz/answer", {
-                                            method: "POST",
-                                            body: formData
-                                        })
-                                        .then(response => {
-                                            if (response.ok) {
-                                                // Optionally handle successful submission
-                                                console.log("Form submitted successfully");
-                                                // Redirect to the next question page
-                                                window.location.href = "/quiz/view/{{ $slug }}/{{ $que->number - 1 }}";
-                                            } else {
-                                                // Optionally handle errors
-                                                console.error("Form submission failed");
-                                            }
-                                        })
-                                        .catch(error => {
-                                            // Handle network errors
-                                            console.error("Network error:", error);
-                                        });
-                                });
+                                }
                             </script>
                         @endif
                     @endforeach
@@ -159,7 +175,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const countdownElements = ['countdownTimer1', 'countdownTimer2', 'countdownTimer3'];
