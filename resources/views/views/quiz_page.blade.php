@@ -104,6 +104,7 @@
                                 window.addEventListener('load', (event) => {
                                     const nextButton = document.getElementById("next-button");
                                     const backButton = document.getElementById("back-button");
+                                    const anchors = document.querySelectorAll('a[href^="/quiz/view/{{ $slug }}/"]');
 
                                     if (nextButton) {
                                         nextButton.addEventListener("click", function(event) {
@@ -116,10 +117,17 @@
                                             navigateQuestion(event, -1);
                                         });
                                     }
+
+                                    anchors.forEach(anchor => {
+                                        anchor.addEventListener("click", function(event) {
+                                            const targetQuestionNumber = parseInt(this.href.split('/').pop());
+                                            navigateQuestion(event, targetQuestionNumber - {{ $que->number }});
+                                        });
+                                    });
                                 });
 
                                 function navigateQuestion(event, offset) {
-                                    event.preventDefault(); // Prevent default form submission
+                                    event.preventDefault(); // Prevent default form submission or anchor click
 
                                     // Serialize form data
                                     const formData = new FormData(document.getElementById("quiz-form"));
@@ -167,7 +175,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const countdownElements = ['countdownTimer1', 'countdownTimer2', 'countdownTimer3'];
