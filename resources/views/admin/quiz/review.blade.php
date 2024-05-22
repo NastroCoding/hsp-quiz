@@ -31,11 +31,13 @@
 </section>
 <section class="content">
     <div class="row">
+        <div class="col-md-12">
+            <h3>
+                User: {{ $quiz->user->name ?? 'Unknown User' }}
+            </h3>
+        </div>
         @foreach ($quiz->questions as $question)
             <div class="col-md-6">
-                <h3>
-                    User: {{ $quiz->user->name ?? 'Unknown User' }}
-                </h3>
                 <div class="card card-default">
                     <div class="card-header">
                         <p class="card-title text-muted">{{ $question->type }}</p>
@@ -56,7 +58,7 @@
                         @endforeach
                     </div>
                 </div>
-            </div> 
+            </div>
         @endforeach
     </div>
 </section>

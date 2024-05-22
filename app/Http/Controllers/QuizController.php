@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quiz;
 use App\Models\UserAnswer;
+use App\Models\UserEssay;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -151,6 +152,11 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
+        // Load user's essay answers for the questions
+        $userEssays = UserEssay::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
         // Get the countdown time from the quiz
         $countdownTime = $quiz->time;
 
@@ -161,8 +167,9 @@ class QuizController extends Controller
             'lastQuestionNumber' => $lastQuestionNumber,
             'slug' => $quiz->slug,
             'question_number' => 1,
-            'userAnswers' => $userAnswers, // Pass user's answers to the view
-            'countdownTime' => $quiz->time, // Pass the countdown time to the view
+            'userAnswers' => $userAnswers,
+            'userEssays' => $userEssays, // Pass user's essay answers to the view
+            'countdownTime' => $quiz->time,
         ]);
     }
 
@@ -188,6 +195,11 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
+        // Load user's essay answers for the questions
+        $userEssays = UserEssay::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
         return view(
             'views.quiz_page',
             [
@@ -198,24 +210,33 @@ class QuizController extends Controller
                 'slug' => $quiz->slug,
                 'question_number' => $number,
                 'userAnswers' => $userAnswers, // Pass user's answers to the view
-            ],
-            compact('question')
+                'userEssays' => $userEssays, // Pass user's essay answers to the view
+            ]
         );
     }
+
 
     public function submitQuiz(Request $request)
     {
         return redirect('/quiz');
     }
 
-    public function review($id)
+    public function reviewPage()
     {
-        $quiz = Quiz::with('questions.options')->find($id);
+        // Getting user answers from the database (for example by using Eloquent or Query Builder)
+        $userAnswer = UserAnswer::find(1);
 
-        if (!$quiz) {
-            return redirect()->route('admin.quiz')->withErrors(['Quiz not found']);
-        }
+        // Get related questions with user answers
+        $question = $userAnswer->question;
 
-        return view('admin.quiz.review', compact('quiz'));
+        // get answer options related to the question
+        $options = $question->options;
+
+        // Send data to view review
+        return view('review.page', [
+            'userAnswer' => $userAnswer,
+            'question' => $question,
+            'options' => $options,
+        ]);
     }
 }

@@ -11,6 +11,7 @@ class Quiz extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+    protected $table = 'quizzes';
     protected $fillable = ['title', 'user_id'];
 
     public function questions(){

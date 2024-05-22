@@ -375,7 +375,7 @@ class QuestionController extends Controller
         ];
 
         $validatedData = $request->validate($rules);
-        
+
         // Get the currently authenticated user
         $user = Auth::user();
 

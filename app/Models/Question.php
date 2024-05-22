@@ -11,7 +11,8 @@ class Question extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
-    protected $fillable = ['quiz_id', 'text', 'type'];
+    protected $table = 'questions';
+    protected $fillable = ['text', 'type', 'quiz_id'];
 
     public function quiz()
     {
@@ -23,9 +24,9 @@ class Question extends Model
         return $this->hasMany(Choice::class);
     }
 
-    public function userAnswer()
+    public function userAnswers()
     {
-        return $this->hasMany(UserAnswer::class);
+        return $this->hasMany(UserAnswers::class);
     }
 
     public function options()
@@ -33,8 +34,8 @@ class Question extends Model
         return $this->hasMany(Option::class);
     }
 
-    public function userAnswers()
-    {
-        return $this->hasMany(UserAnswer::class);
-    }
+    // public function userAnswers()
+    // {
+    //     return $this->hasMany(UserAnswer::class);
+    // }
 }

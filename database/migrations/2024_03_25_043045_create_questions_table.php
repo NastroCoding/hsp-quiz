@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('quiz_id');
             $table->string('text');
             $table->string('type');
+            $table->string('question_text');
             $table->integer('number');
             $table->text('question');
             $table->text('images')->nullable();
