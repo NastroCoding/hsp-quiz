@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $page }} | HSPnet</title>
+    <title>HSPnet</title>
     <link rel="shortcut icon" href="{{ URL::asset('dist/img/favicon.ico') }}" type="image/x-icon">
 
     <!-- Google Font: Source Sans Pro -->
@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             All rights reserved.
         </footer>
     </div>
-    
+
     <!-- sort modal -->
     <div class="modal fade" id="modal-filter">
         <div class="modal-dialog">
@@ -105,7 +105,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form>
+                <form method="GET" action="{{ route('quiz.index') }}">
                     <div class="modal-body">
                         <div class="card-body">
                             <div class="row">
@@ -113,7 +113,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- select -->
                                     <div class="form-group">
                                         <label>Category</label>
-                                        <select class="form-control">
+                                        <select class="form-control" name="category">
+                                            <option value="">None</option>
                                             @foreach ($category as $cat)
                                                 <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
                                             @endforeach
@@ -123,7 +124,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Education</label>
-                                        <select class="form-control">
+                                        <select class="form-control" name="education">
+                                            <option value="">None</option>
                                             @foreach ($education as $edu)
                                                 <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
                                             @endforeach
@@ -136,7 +138,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Apply</button>
+                        <button type="submit" class="btn btn-success">Apply</button>
                     </div>
                 </form>
             </div>
@@ -146,39 +148,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
 
     @if ($data->isNotEmpty())
-
-    <div class="modal fade" id="modal-quiz">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Enter Quiz</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form action="/quiz/view/{{ $quiz->slug }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Enter quiz code</label>
-                                <input type="text" name="token" class="form-control" id="exampleInputEmail1"
-                                    placeholder="XXXXXX">
+        <div class="modal fade" id="modal-quiz">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Enter Quiz</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="/quiz/view/{{ $quiz->slug }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Enter quiz code</label>
+                                    <input type="text" name="token" class="form-control"
+                                        id="exampleInputEmail1" placeholder="XXXXXX">
+                                </div>
                             </div>
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Go</button>
-                    </div>
-                </form>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Go</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
-            
     @endif
     <!-- ./wrapper -->
 

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Quiz;
 use App\Models\UserAnswer;
 use App\Models\Question;
+use App\Models\Category;
+use App\Models\Education;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +16,51 @@ use Illuminate\Support\Str;
 
 class QuizController extends Controller
 {
+    public function index(Request $request)
+    {
+        $category = Category::all();
+        $education = Education::all();
+
+        $query = Quiz::query();
+
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->has('education') && $request->education != '') {
+            $query->where('education_id', $request->education);
+        }
+
+        $data = $query->get();
+
+        return view('views\quiz_user', compact('data', 'category', 'education'));
+    }
+
+    public function adminIndex(Request $request)
+    {
+        $category = Category::all();
+        $education = Education::all();
+
+        $query = Quiz::query();
+
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->has('education') && $request->education != '') {
+            $query->where('education_id', $request->education);
+        }
+
+        $data = $query->get();
+        $user = User::latest()->get(); // Fetching the latest users
+
+        $page = 'Dashboard'; // Define the $page variable
+
+        return view('admin.dashboard', compact('data', 'category', 'education', 'user', 'page'));
+    }
+
+
+
     /**
      * Store a newly created resource in storage.
      */

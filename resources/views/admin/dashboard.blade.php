@@ -27,31 +27,37 @@
             <button class="btn btn-sm btn-default mb-1" data-toggle="modal" data-target="#modal-filter"><i
                     class="fas fa-sliders"></i></button>
             <div class="row">
-                @foreach ($data as $quiz)
-                    <div class="col-lg-4">
-                        <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="/storage{{ asset($quiz->thumbnail) }}" alt="Card image cap"
-                                style="width:100%; height:180px;">
-                            <div class="card-header">
-                                <h5 class="card-title m-0">{{ $quiz->title }}</h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text"> {{ $quiz->description }}</p>
-                                <a class="btn btn-info btn-sm" data-toggle="modal"
-                                    data-target="#edit-quiz{{ $quiz->id }}">
-                                    Edit
-                                </a>
-                                <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
-                                <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal"
-                                    data-target="#review">Review</a>
-                                <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
-                                    data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
-                                    Delete
-                                </button>
+                @if ($data->isEmpty())
+                    <div class="col-12">
+                        <p>No quizzes found matching the criteria.</p>
+                    </div>
+                @else
+                    @foreach ($data as $quiz)
+                        <div class="col-lg-4">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="/storage{{ asset($quiz->thumbnail) }}" alt="Card image cap"
+                                    style="width:100%; height:180px;">
+                                <div class="card-header">
+                                    <h5 class="card-title m-0">{{ $quiz->title }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"> {{ $quiz->description }}</p>
+                                    <a class="btn btn-info btn-sm" data-toggle="modal"
+                                        data-target="#edit-quiz{{ $quiz->id }}">
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
+                                    <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal"
+                                        data-target="#review">Review</a>
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
+                                        data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
             </div>
         </div>
     </section>
@@ -91,7 +97,8 @@
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="exampleInputFile4"
-                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')" name="thumbnail">
+                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')"
+                                                name="thumbnail">
                                             <label class="custom-file-label" id="fileLabel4" for="exampleInputFile4">Choose
                                                 image</label>
                                         </div>
@@ -247,7 +254,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form>
+                <form method="GET" action="{{ route('quiz.adminIndex') }}">
                     <div class="modal-body">
                         <div class="card-body">
                             <div class="row">
@@ -255,7 +262,8 @@
                                     <!-- select -->
                                     <div class="form-group">
                                         <label>Category</label>
-                                        <select class="form-control">
+                                        <select class="form-control" name="category">
+                                            <option value="">None</option>
                                             @foreach ($category as $cat)
                                                 <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
                                             @endforeach
@@ -265,7 +273,8 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Education</label>
-                                        <select class="form-control">
+                                        <select class="form-control" name="education">
+                                            <option value="">None</option>
                                             @foreach ($education as $edu)
                                                 <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
                                             @endforeach
@@ -278,7 +287,7 @@
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Apply</button>
+                        <button type="submit" class="btn btn-success">Apply</button>
                     </div>
                 </form>
             </div>
