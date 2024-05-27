@@ -478,21 +478,37 @@ class QuestionController extends Controller
      * Display the specified resource.
      */
     public function show($slug)
-    {
-        // Find the quiz by slug
-        $quiz = Quiz::where('slug', $slug)->first();
-        $questions = $quiz->questions;
-        // If quiz is not found, return a response (you can modify this as per your requirement)
-        if (!$quiz) {
-            return response()->json(['message' => 'Quiz not found'], 404);
-        }
-        $lastQuestionNumber = Question::max('number') ?? 0;
-        // Load the view and pass the quiz data to it
+{
+    // Find the quiz by slug
+    $quiz = Quiz::with('questions')->where('slug', $slug)->first();
+
+    // If quiz is not found, set an error message
+    if (!$quiz) {
+        $debugMessage = 'Quiz not found for slug: ' . $slug;
         return view('admin.quiz.question', [
-            'page' => $quiz->title,
-            'lastQuestionNumber' => $lastQuestionNumber,
-        ], compact('quiz', 'questions'));
+            'debugMessage' => $debugMessage,
+            'page' => 'Quiz Not Found',
+            'lastQuestionNumber' => null,
+            'quiz' => null,
+            'questions' => null,
+        ]);
     }
+
+    $questions = $quiz->questions;
+    $lastQuestionNumber = Question::max('number') ?? 0;
+
+    // Load the view and pass the quiz data to it
+    return view('admin.quiz.question', [
+        'debugMessage' => 'Quiz found: ' . $quiz->title,
+        'page' => $quiz->title,
+        'lastQuestionNumber' => $lastQuestionNumber,
+        'quiz' => $quiz,
+        'questions' => $questions,
+    ]);
+}
+
+
+
 
     /**
      * Remove the specified resource from storage.

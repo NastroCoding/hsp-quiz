@@ -6,7 +6,6 @@ use App\Http\Controllers\EducationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RouteController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserAnswerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +35,7 @@ Route::controller(RouteController::class)->group(function () {
     // QUIZ
     Route::get('/admin/quiz', 'quiz')->middleware('admin');
     Route::get('/admin/quiz/result', 'quiz_result')->middleware('admin');
+    Route::get('/admin/quiz/{slug}/review', [QuizController::class, 'show'])->name('quiz.review');
 
     // CATEGORY
     Route::get('/admin/category', 'category')->middleware('admin');
@@ -98,13 +98,8 @@ Route::controller(EducationController::class)->group(function () {
 
 Route::controller(UserAnswerController::class)->group(function () {
     Route::post('/quiz/answer', 'store')->middleware('auth');
-    Route::post('/quiz/essayAnswer', 'storeEssayAnswer')->middleware('auth');
     Route::get('/quiz/{id}/thumbnail', [QuizController::class, 'showThumbnail',])->name('quiz.thumbnail');
     Route::post('/quiz', function () {
         return Redirect::to('/quiz');
     })->name('submit_quiz');
-
-Route::get('/admin/quiz/{id}/review', [ReviewController::class, 'show'])->name('quiz.review');
-Route::get('/quiz/{quizId}', 'QuizController@displayQuiz');
-
 });
