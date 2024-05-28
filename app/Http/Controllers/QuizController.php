@@ -37,6 +37,29 @@ class QuizController extends Controller
         return view('views\quiz_user', compact('data', 'category', 'education'));
     }
 
+    public function quizSearch(Request $request)
+    {
+        $query = Quiz::query();
+
+        if ($request->has('table_search')) {
+            $search = $request->input('table_search');
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        $quizzes = $query->get();
+        $category = Category::all();
+        $education = Education::all();
+        $users = $query->get();
+
+        return view('admin/quiz/quiz', [
+            'page' => 'Quiz',
+            'category' => $category,
+            'education' => $education,
+            'data' => $quizzes,
+            'user' => $users
+        ]);
+    }
+
     public function adminIndex(Request $request)
     {
         $category = Category::all();

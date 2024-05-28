@@ -35,138 +35,145 @@
     </section>
 
     <!-- Main content -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Category List</h3>
-            <div class="card-tools">
-                <div class="input-group input-group-sm" style="width: 150px">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search" />
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-default">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body table-responsive p-0">
-            <table class="table table-hover text-nowrap">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Category Name</th>
-                        <th class="text-center"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($data as $category)
-                        <tr>
-                            <td>{{ $category->id }}</td>
-                            <td>{{ $category->category_name }}</td>
-                            <td class="text-center">
-                                <a class="btn btn-info btn-sm" href="#edit-modal{{ $category->id }}" data-toggle="modal">
-                                    Edit
-                                </a>
-                                <button type="button" class="btn btn-danger btn-sm delete-btn"
-                                    data-id="{{ $category->id }}" data-toggle="modal" data-target="#delete">
-                                    Delete
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Category List</h3>
+                <div class="card-tools">
+                    <form action="/admin/category" method="GET">
+                        <div class="input-group input-group-sm" style="width: 150px">
+                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search"
+                                value="{{ request('table_search') }}" />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
                                 </button>
-                            </td>
-                        </tr>
-
-                        <div class="modal fade" id="edit-modal{{ $category->id }}">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Edit Category</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="/admin/category/edit/{{ $category->id }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="card-body">
-                                                <div class="form-group">
-                                                    <label for="exampleInputToken">Category Name</label>
-                                                    <input type="text" name="category_name" class="form-control"
-                                                        id="exampleInputToken" placeholder="Enter Category Name"
-                                                        value="{{ $category->category_name }}">
-                                                </div>
-                                            </div>
-                                            <!-- /.card-body -->
-                                    </div>
-                                    <div class="modal-footer justify-content-between">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        <input type="submit" name="submit" class="btn btn-success"
-                                            value="Update Category">
-                                    </div>
-                                    </form>
-                                </div>
-                                <!-- /.modal-content -->
                             </div>
-                            <!-- /.modal-dialog -->
                         </div>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <!-- /.card-body -->
-        <div class="modal fade" id="add-category">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add Category</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="/admin/category/create" method="POST">
-                            @csrf
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="exampleInputToken">Category Name</label>
-                                    <input type="text" name="category_name" class="form-control" id="exampleInputToken"
-                                        placeholder="Enter Category Name">
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" name="submit" class="btn btn-success" value="Add Category">
-                    </div>
                     </form>
                 </div>
-                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Category Name</th>
+                            <th class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data as $category)
+                            <tr>
+                                <td>{{ $category->id }}</td>
+                                <td>{{ $category->category_name }}</td>
+                                <td class="text-center">
+                                    <a class="btn btn-info btn-sm" href="#edit-modal{{ $category->id }}"
+                                        data-toggle="modal">
+                                        Edit
+                                    </a>
+                                    <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                        data-id="{{ $category->id }}" data-toggle="modal" data-target="#delete">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <div class="modal fade" id="edit-modal{{ $category->id }}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Edit Category</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/category/edit/{{ $category->id }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputToken">Category Name</label>
+                                                        <input type="text" name="category_name" class="form-control"
+                                                            id="exampleInputToken" placeholder="Enter Category Name"
+                                                            value="{{ $category->category_name }}">
+                                                    </div>
+                                                </div>
+                                                <!-- /.card-body -->
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                            <input type="submit" name="submit" class="btn btn-success"
+                                                value="Update Category">
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
         </div>
-        <div class="modal fade" id="delete">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Delete</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p> <b>If you delete this, all the data related will be deleted!</b> <br> <br> Are you sure? </p>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <a id="deleteButton" class="btn btn-danger">
-                            Delete
-                        </a>
-                    </div>
+    </section>
+    <!-- /.card-body -->
+    <div class="modal fade" id="add-category">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <!-- /.modal-content -->
+                <div class="modal-body">
+                    <form action="/admin/category/create" method="POST">
+                        @csrf
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputToken">Category Name</label>
+                                <input type="text" name="category_name" class="form-control" id="exampleInputToken"
+                                    placeholder="Enter Category Name">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" name="submit" class="btn btn-success" value="Add Category">
+                </div>
+                </form>
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div class="modal fade" id="delete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p> <b>If you delete this, all the data related will be deleted!</b> <br> <br> Are you sure? </p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a id="deleteButton" class="btn btn-danger">
+                        Delete
+                    </a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
         </div>
     </div>
     <!-- /.content -->

@@ -40,14 +40,17 @@
             <div class="card-header">
                 <h3 class="card-title">Quiz List</h3>
                 <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <form action="/admin/quiz" method="GET">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search"
+                                value="{{ request('table_search') }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <!-- ./card-header -->
@@ -308,7 +311,8 @@
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="exampleInputFile4"
-                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')" name="thumbnail">
+                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')"
+                                                name="thumbnail">
                                             <label class="custom-file-label" id="fileLabel4"
                                                 for="exampleInputFile4">Choose
                                                 image</label>

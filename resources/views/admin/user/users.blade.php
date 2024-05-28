@@ -40,14 +40,17 @@
             <div class="card-header">
                 <h3 class="card-title">Registered User</h3>
                 <div class="card-tools">
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
+                    <form action="/admin/users" method="GET">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search"
+                                value="{{ request('table_search') }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <!-- ./card-header -->
@@ -109,7 +112,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Create User</h4>
+                                            <h4 class="modal-title">Edit User</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -117,6 +120,7 @@
                                         <div class="modal-body">
                                             <form action="/admin/user/edit/{{ $user->id }}" method="POST">
                                                 @csrf
+                                                @method('POST')
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <label for="exampleInputToken">Name</label>
@@ -141,7 +145,8 @@
                                                         <label>Education</label>
                                                         <select class="form-control" name="education_id">
                                                             @foreach ($education as $edu)
-                                                                <option value="{{ $edu->id }}" {{ $edu->id == $user->education_id ? 'selected' : '' }}>
+                                                                <option value="{{ $edu->id }}"
+                                                                    {{ $edu->id == $user->education_id ? 'selected' : '' }}>
                                                                     {{ $edu->education_name }}
                                                                 </option>
                                                             @endforeach
@@ -150,7 +155,8 @@
                                                     <div class="form-group">
                                                         <label for="exampleInputPassword">Password</label>
                                                         <input type="password" name="password" class="form-control"
-                                                            id="exampleInputPassword" placeholder="Password" value="{{ $user->password }}">
+                                                            id="exampleInputPassword" placeholder="Password"
+                                                            value="{{ $user->password }}">
                                                     </div>
                                                 </div>
                                                 <!-- /.card-body -->
@@ -159,7 +165,7 @@
                                             <button type="button" class="btn btn-default"
                                                 data-dismiss="modal">Close</button>
                                             <input type="submit" name="submit" class="btn btn-success"
-                                                value="Create User">
+                                                value="Update User">
                                         </div>
                                         </form>
                                     </div>

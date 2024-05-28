@@ -11,11 +11,22 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('education')->get();
-        return view('admin.user.user', [
+        $query = User::with('education');
+
+        if ($request->has('table_search')) {
+            $search = $request->input('table_search');
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $users = $query->get();
+        $education = Education::all(); // Fetch all education data
+
+        return view('admin.user.users', [
+            'page' => 'Users',
             'data' => $users,
+            'education' => $education, // Pass the education data to the view
         ]);
     }
 
