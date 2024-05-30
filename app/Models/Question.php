@@ -12,6 +12,23 @@ class Question extends Model
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($question) {
+            $question->quiz->calculateMaxScore();
+        });
+
+        static::updated(function ($question) {
+            $question->quiz->calculateMaxScore();
+        });
+
+        static::deleted(function ($question) {
+            $question->quiz->calculateMaxScore();
+        });
+    }
+
     public function quiz()
     {
         return $this->belongsTo(Quiz::class);
@@ -25,11 +42,6 @@ class Question extends Model
     public function userAnswer()
     {
         return $this->hasMany(UserAnswer::class);
-    }
-
-    public function options()
-    {
-        return $this->hasMany(Option::class);
     }
 
     public function userAnswers()

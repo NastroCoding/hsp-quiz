@@ -12,6 +12,23 @@ class Choice extends Model
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($choice) {
+            $choice->question->quiz->calculateMaxScore();
+        });
+
+        static::updated(function ($choice) {
+            $choice->question->quiz->calculateMaxScore();
+        });
+
+        static::deleted(function ($choice) {
+            $choice->question->quiz->calculateMaxScore();
+        });
+    }
+
     public function question()
     {
         return $this->belongsTo(Question::class);

@@ -126,6 +126,9 @@ class QuizController extends Controller
             'updated_by' => $updated_by,
         ]);
 
+        // Calculate max_score
+        $quiz->calculateMaxScore();
+
         return redirect('/admin/quiz')->with(
             'quiz_success',
             'Quiz Add Success!'
@@ -175,6 +178,9 @@ class QuizController extends Controller
             'slug' => $slug,
             'updated_by' => $updated_by,
         ]);
+
+        // Calculate max_score
+        $quiz->calculateMaxScore();
 
         return redirect('/admin/quiz')->with(
             'success',
