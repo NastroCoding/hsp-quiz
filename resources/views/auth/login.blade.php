@@ -1,17 +1,3 @@
-@if ($errors->any())
-@foreach ($errors->all() as $error)
-<div class="alert alert-danger" role="alert">
-    {{ $error }}
-</div>
-@endforeach
-@endif
-
-@if (session()->has('register_success'))
-<div class="alert alert-success" role="alert">
-    {{ session('register_success') }}
-</div>
-@endif
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,19 +5,62 @@
     <title>Login | HSPnet</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ URL::asset('plugins/fontawesome-free/css/all.min.css') }}" />
     <!-- IonIcons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('dist/css/hspadmin.css') }}" />
     {{-- Animate.css --}}
-    <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}">
+    {{-- <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}"> --}}
 </head>
 
 <body class="hold-transition login-page">
-    <div class="login-box">
+
+    <div class="wrapper">
+        <section class="login-container">
+            <div class="login-box">
+                <div class="login-logo">
+                    <img src="{{ URL::asset('dist/img/logo.png') }}" alt="Transjakarta" />
+                    <div>
+                        <h1>HSPNet</h1>
+                        <h6>Login to start your session!</h6>
+                    </div>
+                </div>
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger">
+                            <p>Username or password is incorrect!</p>
+                        </div>
+                    @endforeach
+                @endif
+                @if (session()->has('register_success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('register_success') }}
+                    </div>
+                @endif
+                <form action="/signin" method="POST">
+                    @csrf
+                    <div class="login-input-box">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="email" placeholder="Email" name="email" />
+                    </div>
+                    <div class="login-input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password" />
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <div class="credit">
+                    <p>&copy; HSPnet - 2024</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {{-- <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
@@ -62,11 +91,12 @@
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
-    </div>
+    </div> --}}
+
     <!-- jQuery -->
-    <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script>
+    {{-- <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script> --}}
     <!-- Bootstrap -->
-    <script src="{{ URL::asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {{-- <script src="{{ URL::asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
     <!-- AdminLTE -->
-    <script src="{{ URL::asset('dist/js/adminlte.js') }}"></script>
+    {{-- <script src="{{ URL::asset('dist/js/adminlte.js') }}"></script> --}}
 </body>

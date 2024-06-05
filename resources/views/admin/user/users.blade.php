@@ -73,7 +73,13 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->role }}</td>
-                                <td>{{ $user->education->education_name }}</td>
+                                <td>
+                                    @if (empty($user->education->education_name))
+                                        -
+                                    @else
+                                        {{ $user->education->education_name }}
+                                    @endif
+                                </td>
                                 <td>
                                     <a class="btn btn-info btn-sm" data-toggle="modal"
                                         data-target="#edit-user{{ $user->id }}">
