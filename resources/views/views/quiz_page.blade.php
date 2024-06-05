@@ -42,9 +42,12 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Number {{ $que->number }}</h3>
                                 </div>
-                                <form action="@if ($que->question_type == 'multiple_choice' || $que->question_type == 'weighted_multiple') /quiz/answer @else /quiz/essayAnswer @endif"
-                                    method="POST" id="quiz-form">
+                                <form action="/quiz/submit" method="POST" id="quiz-form">
                                     @csrf
+                                    @if ($data)
+                                        <input type="hidden" name="quiz_id" value="{{ $data->id }}">
+                                        <input type="hidden" name="slug" value="{{ $data->slug }}">
+                                    @endif
                                     <input type="hidden" name="question_id" value="{{ $que->id }}">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -104,7 +107,6 @@
                                 window.addEventListener('load', (event) => {
                                     const nextButton = document.getElementById("next-button");
                                     const backButton = document.getElementById("back-button");
-                                    const anchors = document.querySelectorAll('a[href^="/quiz/view/{{ $slug }}/"]');
 
                                     if (nextButton) {
                                         nextButton.addEventListener("click", function(event) {
@@ -117,13 +119,6 @@
                                             navigateQuestion(event, -1);
                                         });
                                     }
-
-                                    anchors.forEach(anchor => {
-                                        anchor.addEventListener("click", function(event) {
-                                            const targetQuestionNumber = parseInt(this.href.split('/').pop());
-                                            navigateQuestion(event, targetQuestionNumber - {{ $que->number }});
-                                        });
-                                    });
                                 });
 
                                 function navigateQuestion(event, offset) {

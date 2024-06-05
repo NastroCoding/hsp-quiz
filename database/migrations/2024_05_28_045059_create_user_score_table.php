@@ -13,25 +13,19 @@ class CreateUserScoreTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_score', function (Blueprint $table) {
+        Schema::create('user_scores', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('quiz_id');
             $table->integer('score');
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('updated_by');
             $table->timestamps();
             $table->softDeletes();
 
             $table->index('user_id');
             $table->index('quiz_id');
-            $table->index('created_by');
-            $table->index('updated_by');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -42,6 +36,6 @@ class CreateUserScoreTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_score');
+        Schema::dropIfExists('user_scores');
     }
 }

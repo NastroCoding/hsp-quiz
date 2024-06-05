@@ -83,7 +83,7 @@
                                     </a>
                                     <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
                                     <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal"
-                                        data-target="#review">Review</a>
+                                        data-target="#review{{ $quiz->id }}">Review</a>
                                     <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
                                         data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
                                         Delete
@@ -220,61 +220,64 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- review modal-->
-    <div class="modal fade" id="review">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Review</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Participated users</h3>
-                                    <input type="date" id="local-date" name="local-date" value=""
-                                        size="10" class="float-right card-title">
+    @foreach ($data as $quiz)
+        <div class="modal fade" id="review{{ $quiz->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Review</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Participated users</h3>
+                                        <input type="date" id="local-date" name="local-date" value=""
+                                            size="10" class="float-right card-title">
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body table-responsive p-0">
+                                        <table class="table table-hover text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>User</th>
+                                                    <th>Points</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            @foreach ($user as $user)
+                                                <tr>
+                                                    <td>{{ $user->id }}</td>
+                                                    <td>{{ $user->email }}</td>
+                                                    <td>90/{{ $quiz->max_score }}</td>
+                                                    <td><a href="/admin/quiz/review"
+                                                            class="btn btn-sm btn-primary">Review</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
                                 </div>
-                                <!-- /.card-header -->
-                                <div class="card-body table-responsive p-0">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>User</th>
-                                                <th>Score</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        @foreach ($user as $user)
-                                            <tr>
-                                                <td>{{ $user->id }}</td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>90/100</td>
-                                                <td><a href="/admin/quiz/review" class="btn btn-sm btn-primary">Review</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- /.card-body -->
+                                <!-- /.card -->
                             </div>
-                            <!-- /.card -->
                         </div>
                     </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
+    @endforeach
     @foreach ($data as $quiz)
         {{-- edit quiz modal --}}
         <div class="modal fade" id="edit-quiz{{ $quiz->id }}">

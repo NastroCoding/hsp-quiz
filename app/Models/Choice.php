@@ -34,8 +34,8 @@ class Choice extends Model
         return $this->belongsTo(Question::class);
     }
 
-    public function userAnswer()
+    public function userAnswers()
     {
-        return $this->hasMany(UserAnswer::class);
+        return $this->hasMany(UserAnswer::class, 'choosen_choice_id');
     }
 }

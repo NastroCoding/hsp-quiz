@@ -56,13 +56,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                     </ul>
                 </div>
-
                 <!-- Right navbar links -->
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                     <!-- Messages Dropdown Menu -->
                     <li class="nav-item dropdown">
                         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-toggle">User</a>
+                            aria-expanded="false" class="nav-link dropdown-toggle">{{ Auth::user()->name }}</a>
                         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                             <li>
                                 <a href="/logout" class="dropdown-item">Logout</a>

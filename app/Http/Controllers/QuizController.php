@@ -9,6 +9,8 @@ use App\Models\Question;
 use App\Models\Category;
 use App\Models\Education;
 use App\Models\User;
+use App\Models\UserScore;
+use App\Models\Choice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -236,7 +238,7 @@ class QuizController extends Controller
 
         // Get the countdown time from the quiz
         $countdownTime = $quiz->time;
-
+        $data = Quiz::where('slug', $slug)->first();
         return view('views.quiz_page', [
             'page' => $quiz->title,
             'quiz' => $quiz,
@@ -247,6 +249,7 @@ class QuizController extends Controller
             'userAnswers' => $userAnswers,
             'userEssays' => $userEssays, // Pass user's essay answers to the view
             'countdownTime' => $quiz->time,
+            'data' => $data,
         ]);
     }
 
@@ -277,6 +280,7 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
+        $data = Quiz::where('slug', $slug)->first();
         return view(
             'views.quiz_page',
             [
@@ -288,14 +292,41 @@ class QuizController extends Controller
                 'question_number' => $number,
                 'userAnswers' => $userAnswers, // Pass user's answers to the view
                 'userEssays' => $userEssays, // Pass user's essay answers to the view
+                'data' => $data,
             ]
         );
     }
 
-
     public function submitQuiz(Request $request)
     {
-        return redirect('/quiz');
+        $userId = Auth::id();
+        $quizId = $request->input('quiz_id');
+
+        // Get the IDs of the questions belonging to the quiz
+        $quizQuestionIds = Question::where('quiz_id', $quizId)->pluck('id');
+
+        // Calculate the total score based on user's answers for the quiz questions
+        $userAnswers = UserAnswer::where('user_id', $userId)
+            ->whereIn('question_id', $quizQuestionIds)
+            ->get();
+
+        $totalScore = 0;
+
+        foreach ($userAnswers as $answer) {
+            $choice = Choice::find($answer->choosen_choice_id);
+            if ($choice) {
+                $totalScore += $choice->score; // Assuming 'score' column exists in 'choices' table
+            }
+        }
+
+        // Save or update the total score in the user_score table
+        UserScore::updateOrCreate(
+            ['user_id' => $userId, 'quiz_id' => $quizId],
+            ['score' => $totalScore]
+        );
+
+        // Redirect to a confirmation page or quiz results
+        return redirect('/home');
     }
 
     public function reviewPage()

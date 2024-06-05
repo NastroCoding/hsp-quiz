@@ -27,7 +27,6 @@ class UserAnswer extends Model
         return $this->belongsTo(Choice::class, 'choosen_choice_id');
     }
 
-    // Define a custom accessor to retrieve is_correct from the related Choice model
     public function getIsCorrectAttribute()
     {
         return $this->choosenChoice->is_correct;
