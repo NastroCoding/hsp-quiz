@@ -131,8 +131,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputToken">Token</label>
-                                <input type="text" name="token" class="form-control" id="exampleInputToken"
+                                <div class="input-group mb-3">
+                                    <input type="text" name="token" class="form-control" id="exampleInputToken generateToken"
                                     placeholder="Enter token">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style="cursor: pointer" onclick="tokenGenerate()">Generate</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="formFile" class="form-label">Thumbnail</label>
@@ -305,8 +310,8 @@
                                         placeholder="Enter Description">{{ $quiz->description }}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputDescription">Token</label>
-                                    <input type="text" name="token" class="form-control" id="exampleInputTitle"
+                                    <label for="exampleInputDescription">Token </label>
+                                    <input type="text" name="token" class="form-control" id="tokenGenerate"
                                         placeholder="Enter token" value="{{ $quiz->token }}">
                                 </div>
                                 <div class="form-group">
@@ -387,6 +392,13 @@
 
 @section('scripts')
     <script>
+
+        function tokenGenerate() {
+            let generate = Math.random().toString(36).slice(1,7);
+            const valueToken = document.querySelector("#generateToken")
+            valueToken.textContent = generate
+        }
+
         $(document).ready(function() {
             // Capture delete button click event
             $('.delete-btn').click(function() {

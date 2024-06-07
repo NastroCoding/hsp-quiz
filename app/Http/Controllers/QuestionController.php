@@ -102,6 +102,9 @@ class QuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $choiceCount = count($request->choices);
+        for ($i=0; $i < $choiceCount ; $i++) { 
+        }
         // Validate the request data
         $validatedData = $request->validate([
             'quiz_id' => 'required', // Assuming quiz_id cannot be changed

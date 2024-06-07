@@ -76,10 +76,10 @@ Route::controller(QuizController::class)->group(function () {
     Route::get('/admin/quiz/delete/{id}', 'destroy')->middleware('admin');
     Route::get('/quiz/view/{slug}/{number}', 'quiz_num')->middleware('auth');
     Route::post('/quiz/view/{slug}', 'quiz_view')->middleware('auth');
-    Route::get('/quizzes', 'index')->name('quiz.index'); // Add the new route here
+    Route::get('/quizzes', 'index')->middleware('auth')->name('quiz.index'); // Add the new route here
     Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
     Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
-    Route::post('/quiz/submit', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
+    Route::post('/quiz/submit', 'store')->middleware('auth');
 });
 
 Route::controller(QuestionController::class)->group(function () {

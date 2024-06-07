@@ -42,7 +42,7 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Number {{ $que->number }}</h3>
                                 </div>
-                                <form action="/quiz/submit" method="POST" id="quiz-form">
+                                <form action="/quiz/answer" method="POST" id="quiz-form">
                                     @csrf
                                     @if ($data)
                                         <input type="hidden" name="quiz_id" value="{{ $data->id }}">
