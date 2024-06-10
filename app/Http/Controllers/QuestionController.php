@@ -104,7 +104,6 @@ class QuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         // Validate the request data
         $validatedData = $request->validate([
             'quiz_id' => 'required', // Assuming quiz_id cannot be changed
@@ -169,14 +168,14 @@ class QuestionController extends Controller
 
         // Handle new choices added dynamically
         foreach ($validatedData['choices'] as $index => $choice) {
-
             if (!isset($choice['id'])) {
+                $image_choice = null;
 
-                if ($request->hasFile("choice_images.{$index}")) {
-                    $imagePath = $request->file("choice_images.{$index}")->store('choice_images', 'public');
+                if (isset($choice['image'])) {
+                    // Retrieve the uploaded image
+                    $image = $choice['image'];
+                    $imagePath = $image->store('choice_images', 'public');
                     $image_choice = $imagePath;
-                } else {
-                    $image_choice = null;
                 }
 
                 $newChoice = Choice::create([
@@ -193,20 +192,23 @@ class QuestionController extends Controller
 
                 if ($existingChoice) {
                     // Check if a new image is uploaded
-                    if ($request->hasFile("choice_images.{$index}")) {
-                        $newImagePath = $request->file("choice_images.{$index}")->store('choice_images', 'public');
+                    if (isset($choice['image'])) {
+                        $image_choice = null;
 
-                        // Optionally, delete the old image from storage if needed
-                        if ($existingChoice->image_choice) {
-                            Storage::disk('public')->delete($existingChoice->image_choice);
+                        // Check if an image was uploaded for the choice
+                        if (isset($choice['image'])) {
+                            // Retrieve the uploaded image
+                            $image = $choice['image'];
+
+                            // Process the uploaded image
+                            $imagePath = $image->store('choice_images', 'public');
+                            $image_choice = $imagePath;
                         }
-
-                        $image_choice = $newImagePath;
                     } else {
                         // Keep the existing image path
                         $image_choice = $existingChoice->image_choice;
                     }
-                    
+
                     // Update the existing choice with new data
                     $existingChoice->update([
                         'choice' => $choice['text'],  // Update choice text if applicable
