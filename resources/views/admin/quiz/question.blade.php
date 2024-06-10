@@ -447,11 +447,10 @@
                                                 <!-- Add hidden input for is_correct, with unique id -->
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">
-                                                        <!-- Modify the checkbox based on the is_correct value -->
                                                         <input type="checkbox"
                                                             name="is_correct_checkbox[{{ $index }}]"
-                                                            onchange="updateIsCorrectValue(this, {{ $index }})"
-                                                            {{ $choice->is_correct ? 'checked' : '' }}>
+                                                            {{ $choice->is_correct ? 'checked' : '' }}
+                                                            onchange="updatedIsCorrectValue(this, {{ $index }})">
                                                     </span>
                                                 </div>
                                                 <input type="text" class="form-control"

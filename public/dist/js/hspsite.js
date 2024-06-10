@@ -207,6 +207,11 @@ function updateIsCorrectValue(checkbox) {
     hiddenInput.value = checkbox.checked ? "1" : "0";
 }
 
+function updatedIsCorrectValue(checkbox, index) {
+    const isCorrectInput = document.getElementById(`isCorrect${index}`);
+    isCorrectInput.value = checkbox.checked ? '1' : '0';
+}
+
 // JavaScript function to update the hidden input value when checkbox is clicked
 function createIsCorrectValue(checkbox) {
     // Get the parent input group

@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
             'name' => 'Administrator',
             'email' => 'notadmin@gmail.com',
             'role' => 'superadmin',
-            'password' => Hash::make('HSPnet24'), // Hash the password
+            'password' => Hash::make('admin123'), // Hash the password
         ]);
     }
 }
