@@ -414,11 +414,7 @@
                                                     accept="image/*" name="questionImage"
                                                     onchange="editPreviewImage(event, 'question', 'fileLabel4')">
                                                 <label class="custom-file-label" id="fileLabel4" for="exampleInputFile4">
-                                                    @if ($question->images)
-                                                        {{ $question->images }}
-                                                    @else
-                                                        Choose Image
-                                                    @endif
+                                                    Choose Image to change
                                                 </label>
                                             </div>
                                         </div>
@@ -439,12 +435,16 @@
                                         <!-- Your dynamic options HTML -->
                                         @foreach ($question->choices as $index => $choice)
                                             <div class="input-group">
+                                                <!-- Hidden input for choice ID -->
                                                 <input type="hidden" name="choices[{{ $index }}][id]"
                                                     value="{{ $choice->id }}">
+
+                                                <!-- Hidden input for is_correct -->
                                                 <input type="hidden" name="is_correct[{{ $index }}]"
                                                     id="isCorrect{{ $index }}"
                                                     value="{{ $choice->is_correct ? '1' : '0' }}">
-                                                <!-- Add hidden input for is_correct, with unique id -->
+
+                                                <!-- Checkbox for selecting correct choice -->
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">
                                                         <input type="checkbox"
@@ -453,34 +453,42 @@
                                                             onchange="updatedIsCorrectValue(this, {{ $index }})">
                                                     </span>
                                                 </div>
+
+                                                <!-- Input field for choice text -->
                                                 <input type="text" class="form-control"
                                                     placeholder="Option {{ $index + 1 }}"
                                                     name="choices[{{ $index }}][text]"
                                                     value="{{ $choice->choice }}" />
-                                                <!-- Modified: added file input for each choice -->
+
+                                                <!-- Button for uploading choice image -->
                                                 <div class="input-group-append">
                                                     <span class="input-group-text btn btn-default" style="cursor: pointer"
                                                         onclick="uploadOptionImage(this)">
                                                         <i class="fas fa-image"></i>
                                                     </span>
+                                                    <!-- Button for removing choice -->
                                                     <span class="input-group-text btn btn-danger" style="cursor: pointer"
                                                         onclick="removeOption(this)">
                                                         <i class="fas fa-trash"></i>
                                                     </span>
                                                 </div>
+
+                                                <!-- Input field for uploading choice image -->
                                                 <input type="file" accept="image/*" style="display: none"
                                                     onchange="previewOptionImage(event, 'imagePreview{{ $index + 1 }}')"
-                                                    class="optionImageInput" name="choices[{{ $index }}][image]"
-                                                    value="@if ($choice->image_choice) {{ asset('storage/' . $choice->image_choice) }} @endif" />
+                                                    class="optionImageInput"
+                                                    name="choices[{{ $index }}][image]" />
                                             </div>
                                             <!-- Image preview container -->
                                             <div class="optionImagePreview mb-2" id="imagePreview{{ $index + 1 }}">
+                                                <!-- Display the choice image if exists -->
                                                 @if ($choice->image_choice)
                                                     <img src="{{ asset('storage/' . $choice->image_choice) }}"
                                                         alt="Choice Image" style="max-width: 300px;" class="mb-2">
                                                 @endif
                                             </div>
                                         @endforeach
+
                                     </div>
                                     <div class="form-group">
                                         <br>

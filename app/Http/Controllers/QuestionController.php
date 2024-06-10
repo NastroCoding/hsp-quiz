@@ -178,8 +178,18 @@ class QuestionController extends Controller
                     $image_choice = $imagePath;
                 }
 
-                $newChoice = Choice::create([
-                    'choice' => $choice,
+                // $newChoice = Choice::create([
+                //     'choice' => $choice,
+                //     'question_id' => $question->id,
+                //     'is_correct' => $validatedData['is_correct'][$index] ?? false,
+                //     'updated_by' => $updatedBy,
+                //     'created_by' => $updatedBy,
+                //     'image_choice' => $image_choice
+                // ]);
+
+                $newChoice = Choice::query();
+                $newChoice->create([
+                    'choice' => $choice['text'],
                     'question_id' => $question->id,
                     'is_correct' => $validatedData['is_correct'][$index] ?? false,
                     'updated_by' => $updatedBy,
