@@ -11,9 +11,20 @@ class EducationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Education::query();
+
+        if ($request->has('table_search')) {
+            $search = $request->input('table_search');
+            $query->where('education_name', 'like', '%' . $search . '%');
+        }
+
+        $educations = $query->get();
+
+        return view('admin.education.education', [
+            'data' => $educations,
+        ]);
     }
 
     /**

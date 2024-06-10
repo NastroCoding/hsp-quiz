@@ -23,11 +23,10 @@ class CategoryController extends Controller
 
         $categories = $query->get();
 
-        return view('admin/category/category', [
+        return view('admin.category.category', [
             'data' => $categories,
         ]);
     }
-
 
     /**
      * Store a newly created resource in storage.

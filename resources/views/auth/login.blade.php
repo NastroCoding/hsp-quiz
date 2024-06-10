@@ -15,6 +15,30 @@
     <link rel="stylesheet" href="{{ URL::asset('dist/css/hspadmin.css') }}" />
     {{-- Animate.css --}}
     {{-- <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}"> --}}
+    <style>
+        .input-group {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .input-group-append {
+            position: absolute;
+            right: 13%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .input-group-text {
+            border: none;
+            background: none;
+        }
+    </style>
 </head>
 
 <body class="hold-transition login-page">
@@ -49,54 +73,32 @@
                     </div>
                     <div class="login-input-box">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Password" name="password" />
+                        <input type="password" placeholder="Password" name="password" id="inputPassword" />
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-default " style="cursor: pointer;">
+                                <i class="fas fa-eye toggle-password"></i>
+                            </span>
+                        </div>
                     </div>
                     <button type="submit">Login</button>
                 </form>
                 <div class="credit">
+                    <p>Don't have an account? register <a href="/register">here</a></p>
                     <p>&copy; HSPnet - 2024</p>
                 </div>
             </div>
         </section>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.querySelector('.toggle-password');
+            const passwordInput = document.querySelector('#inputPassword');
 
-    {{-- <div class="login-box">
-        <!-- /.login-logo -->
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <p href="" class="h1"><b>HSP</b>net</p>
-            </div>
-            <div class="card-body">
-                <p class="login-box-msg">Log in to start your session</p>
-                <form action="/signin" method="POST">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Email" name="email" id="inputEmail3">
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password" name="password">
-                    </div>
-                    <div class="row">
-                        <!-- /.col -->
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block floart-right">Sign In</button>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                </form>
-                <p class="mb-0">
-                    <a href="/register" class="text-center">I don't have an account</a>
-                </p>
-            </div>
-            <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
-    </div> --}}
-
-    <!-- jQuery -->
-    {{-- <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script> --}}
-    <!-- Bootstrap -->
-    {{-- <script src="{{ URL::asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
-    <!-- AdminLTE -->
-    {{-- <script src="{{ URL::asset('dist/js/adminlte.js') }}"></script> --}}
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 </body>

@@ -104,6 +104,7 @@ Route::controller(EducationController::class)->group(function () {
     Route::post('/admin/education/create', 'store')->middleware('admin');
     Route::get('/admin/education/delete/{id}', 'destroy')->middleware('admin');
     Route::put('/admin/education/edit/{id}', 'update')->middleware('admin');
+    Route::put('/admin/education', 'index')->middleware('admin');
 });
 
 Route::controller(UserAnswerController::class)->group(function () {
