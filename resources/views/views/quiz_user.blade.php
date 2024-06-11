@@ -38,8 +38,12 @@
                         @foreach ($data as $quiz)
                             <div class="col-lg-4">
                                 <div class="card" style="width: 23rem;">
+                                    @if ($quiz->thumbnail == null)
+
+                                    @else
                                     <img class="card-img-top" src="{{ asset('storage/' . $quiz->thumbnail) }}"
                                         alt="Card image cap" style="width:100%; height:180px;">
+                                    @endif
                                     <div class="card-header">
                                         <h5 class="card-title m-0">{{ $quiz->title }}</h5>
                                     </div>

@@ -40,6 +40,8 @@ class QuestionController extends Controller
             'choice_images.*' => 'required_without:choices.*|image', // Validation for choice images
         ]);
 
+        dd($request->all());
+
         // Ensure that the number of is_correct values matches the number of choices
         if (count($validatedData['choices']) !== count($validatedData['is_correct'])) {
             return redirect()->back()->withErrors(['is_correct' => 'The number of is_correct values must match the number of choices.'])->withInput();
@@ -164,49 +166,67 @@ class QuestionController extends Controller
         // Delete the choices that are not present in the submitted form
         Choice::whereIn('id', $choicesToDelete)->delete();
 
-        // Update or create choices associated with the question
-        foreach ($validatedData['choices'] as $index => $choiceData) {
-            // Get the choice ID from the request, if available
-            $choiceId = $choiceData['id'] ?? null;
-            $questionChoice = $choiceId ? Choice::find($choiceId) : new Choice();
-
-            // Update choice details
-            $questionChoice->question_id = $question->id;
-            $questionChoice->choice = $choiceData['text'] ?? ''; // Set choice text
-
-            // Check if choice image is present
-            if ($request->hasFile("choice_images.{$index}")) {
-                // Store the choice image
-                $imagePath = $request->file("choice_images.{$index}")->store('choice_images', 'public');
-                $questionChoice->image_choice = $imagePath;
-            }
-
-            // Update is_correct value
-            $questionChoice->is_correct = $validatedData['is_correct'][$index] ?? false;
-
-            $questionChoice->created_by = $updatedBy;
-            $questionChoice->updated_by = $updatedBy;
-
-            $questionChoice->save();
-        }
-
         // Handle new choices added dynamically
         foreach ($validatedData['choices'] as $index => $choice) {
             if (!isset($choice['id'])) {
-                $newChoice = new Choice();
-                $newChoice->question_id = $question->id;
-                $newChoice->choice = $choice['text'] ?? ''; // Assuming 'text' is the key for choice text
-                $newChoice->is_correct = $validatedData['is_correct'][$index] ?? false;
+                $image_choice = null;
 
-                if ($request->hasFile("choice_images.{$index}")) {
-                    $imagePath = $request->file("choice_images.{$index}")->store('choice_images', 'public');
-                    $newChoice->image_choice = $imagePath;
+                if (isset($choice['image'])) {
+                    // Retrieve the uploaded image
+                    $image = $choice['image'];
+                    $imagePath = $image->store('choice_images', 'public');
+                    $image_choice = $imagePath;
                 }
 
-                $newChoice->created_by = $updatedBy;
-                $newChoice->updated_by = $updatedBy;
+                // $newChoice = Choice::create([
+                //     'choice' => $choice,
+                //     'question_id' => $question->id,
+                //     'is_correct' => $validatedData['is_correct'][$index] ?? false,
+                //     'updated_by' => $updatedBy,
+                //     'created_by' => $updatedBy,
+                //     'image_choice' => $image_choice
+                // ]);
 
-                $newChoice->save();
+                $newChoice = Choice::query();
+                $newChoice->create([
+                    'choice' => $choice['text'],
+                    'question_id' => $question->id,
+                    'is_correct' => $validatedData['is_correct'][$index] ?? false,
+                    'updated_by' => $updatedBy,
+                    'created_by' => $updatedBy,
+                    'image_choice' => $image_choice
+                ]);
+            } else {
+                // Retrieve the existing choice by its id
+                $existingChoice = Choice::find($choice['id']);
+
+                if ($existingChoice) {
+                    // Check if a new image is uploaded
+                    if (isset($choice['image'])) {
+                        $image_choice = null;
+
+                        // Check if an image was uploaded for the choice
+                        if (isset($choice['image'])) {
+                            // Retrieve the uploaded image
+                            $image = $choice['image'];
+
+                            // Process the uploaded image
+                            $imagePath = $image->store('choice_images', 'public');
+                            $image_choice = $imagePath;
+                        }
+                    } else {
+                        // Keep the existing image path
+                        $image_choice = $existingChoice->image_choice;
+                    }
+
+                    // Update the existing choice with new data
+                    $existingChoice->update([
+                        'choice' => $choice['text'],  // Update choice text if applicable
+                        'is_correct' => $validatedData['is_correct'][$index] ?? false,
+                        'updated_by' => $updatedBy,
+                        'image_choice' => $image_choice
+                    ]);
+                }
             }
         }
 

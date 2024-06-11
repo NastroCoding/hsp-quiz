@@ -8,37 +8,51 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('quizzes', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('education_id');
-            $table->string('token')->unique()->nullable();
+            $table->string('token')->nullable();
             $table->string('title');
             $table->text('thumbnail')->nullable();
             $table->text('description');
             $table->enum('is_active', ['on', 'off'])->default('off');
+            $table->integer('max_score')->nullable();
             $table->string('slug')->unique();
             $table->integer('time');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
+<<<<<<< HEAD
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+=======
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('deleted_at')->nullable();
+
+>>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('education_id')->references('id')->on('education')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('quizes');
+        Schema::dropIfExists('quizzes');
     }
 };

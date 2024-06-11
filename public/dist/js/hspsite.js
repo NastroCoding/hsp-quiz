@@ -148,29 +148,32 @@ function addOption() {
 
 function editAddOption(questionId) {
     // Get the options container
-    var optionsContainer = document.getElementById(
-        "editOptionsContainer" + questionId
-    );
+    var optionsContainer = document.getElementById("editOptionsContainer" + questionId);
 
     // Count the number of existing options
-    var optionCount =
-        optionsContainer.getElementsByClassName("input-group").length;
+    var optionCount = optionsContainer.getElementsByClassName("input-group").length;
 
     // Create a new option div
     var newOptionDiv = document.createElement("div");
-    newOptionDiv.className = "input-group";
+    newOptionDiv.className = "input-group mb-3";
 
     // Create the HTML for the new option
     var newOptionHTML = `
-        <input type="hidden" name="is_correct[]" value="0">
+        <!-- Hidden input for is_correct -->
+        <input type="hidden" name="choices[${optionCount}][id]" value="">
+        <input type="hidden" name="is_correct[${optionCount}]" id="isCorrect${optionCount}" value="0" class="is_correct_hidden">
+
+        <!-- Checkbox for selecting correct choice -->
         <div class="input-group-prepend">
             <span class="input-group-text">
-                <input type="checkbox" name="is_correct_checkbox[]" onchange="updateIsCorrectValue(this)">
+                <input type="checkbox" name="is_correct_checkbox[${optionCount}]" onchange="updatedIsCorrectValue(this, ${optionCount})">
             </span>
         </div>
-        <input type="text" class="form-control" placeholder="Option ${
-            optionCount + 1
-        }" name="choices[]">
+
+        <!-- Text input for the choice -->
+        <input type="text" class="form-control" placeholder="Option ${optionCount + 1}" name="choices[${optionCount}][text]">
+
+        <!-- Buttons for image upload and removing the choice -->
         <div class="input-group-append">
             <span class="input-group-text btn btn-default" style="cursor: pointer" onclick="uploadOptionImage(this)">
                 <i class="fas fa-image"></i>
@@ -179,9 +182,9 @@ function editAddOption(questionId) {
                 <i class="fas fa-trash"></i>
             </span>
         </div>
-        <input type="file" accept="image/*" style="display: none" onchange="previewOptionImage(event, 'imagePreview${
-            optionCount + 1
-        }')" class="optionImageInput" name="choice_images[]">
+
+        <!-- File input for the choice image -->
+        <input type="file" accept="image/*" style="display: none" onchange="previewOptionImage(event, 'imagePreview${optionCount + 1}')" class="optionImageInput" name="choices[${optionCount}][image]">
     `;
 
     // Set the HTML for the new option div
@@ -205,6 +208,11 @@ function updateIsCorrectValue(checkbox) {
 
     // Update the value based on checkbox state
     hiddenInput.value = checkbox.checked ? "1" : "0";
+}
+
+function updatedIsCorrectValue(checkbox, index) {
+    const isCorrectInput = document.getElementById(`isCorrect${index}`);
+    isCorrectInput.value = checkbox.checked ? "1" : "0";
 }
 
 // JavaScript function to update the hidden input value when checkbox is clicked

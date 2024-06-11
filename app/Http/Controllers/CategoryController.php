@@ -12,10 +12,20 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $category = Category::all();
-        return view('admin.category.category', ['data' => $category]);
+        $query = Category::query();
+
+        if ($request->has('table_search')) {
+            $search = $request->input('table_search');
+            $query->where('category_name', 'like', '%' . $search . '%');
+        }
+
+        $categories = $query->get();
+
+        return view('admin.category.category', [
+            'data' => $categories,
+        ]);
     }
 
     /**
@@ -38,7 +48,6 @@ class CategoryController extends Controller
         ]);
 
         return redirect('/admin/category')->with('category_create', 'Category Berhasil Ditambahkan!');
-
     }
 
     /**

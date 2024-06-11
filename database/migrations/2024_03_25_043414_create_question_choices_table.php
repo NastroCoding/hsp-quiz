@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('choice')->nullable();
             $table->text('image_choice')->nullable();
             $table->tinyInteger('is_correct')->default(0);
-            $table->integer('point_value')->nullable();
+            $table->integer('point_value')->default(0);
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
             $table->timestamps();

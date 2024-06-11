@@ -83,7 +83,7 @@
                                     </a>
                                     <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
                                     <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal"
-                                        data-target="#review">Review</a>
+                                        data-target="#review{{ $quiz->id }}">Review</a>
                                     <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
                                         data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
                                         Delete
@@ -131,8 +131,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputToken">Token</label>
-                                <input type="text" name="token" class="form-control" id="exampleInputToken"
+                                <div class="input-group mb-3">
+                                    <input type="text" name="token" class="form-control" id="exampleInputToken generateToken"
                                     placeholder="Enter token">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" style="cursor: pointer" onclick="tokenGenerate()">Generate</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="formFile" class="form-label">Thumbnail</label>
@@ -220,6 +225,7 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- review modal-->
+<<<<<<< HEAD
 <div class="modal fade" id="review">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -261,10 +267,63 @@
                                 </table>
                             </div>
                             <!-- /.card-body -->
+=======
+    @foreach ($data as $quiz)
+        <div class="modal fade" id="review{{ $quiz->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Review</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Participated users</h3>
+                                        <input type="date" id="local-date" name="local-date" value=""
+                                            size="10" class="float-right card-title">
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body table-responsive p-0">
+                                        <table class="table table-hover text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>User</th>
+                                                    <th>Points</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            @foreach ($user as $user)
+                                                <tr>
+                                                    <td>{{ $user->id }}</td>
+                                                    <td>{{ $user->email }}</td>
+                                                    <td>90/{{ $quiz->max_score }}</td>
+                                                    <td><a href="/admin/quiz/review"
+                                                            class="btn btn-sm btn-primary">Review</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+>>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
                         </div>
                         <!-- /.card -->
                     </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
+<<<<<<< HEAD
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -333,6 +392,63 @@
                                         value="{{ $quiz->time }}">
                                     <div class="input-group-append">
                                         <span class="input-group-text">min</span>
+=======
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endforeach
+    @foreach ($data as $quiz)
+        {{-- edit quiz modal --}}
+        <div class="modal fade" id="edit-quiz{{ $quiz->id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Quiz</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/quiz/edit/{{ $quiz->id }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputTitle">Quiz Title</label>
+                                    <input type="text" name="title" class="form-control" id="exampleInputTitle"
+                                        placeholder="Enter title" value="{{ $quiz->title }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputDescription">Description</label>
+                                    <textarea class="form-control" name="description" rows="3" id="exampleInputDescription"
+                                        placeholder="Enter Description">{{ $quiz->description }}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputDescription">Token </label>
+                                    <input type="text" name="token" class="form-control" id="tokenGenerate"
+                                        placeholder="Enter token" value="{{ $quiz->token }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formFile" class="form-label">Thumbnail</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="exampleInputFile4"
+                                                accept="image/*" onchange="editPreviewQuizImage(event, 'fileLabel4')"
+                                                name="thumbnail">
+                                            <label class="custom-file-label" id="fileLabel4"
+                                                for="exampleInputFile4">Choose
+                                                image</label>
+                                        </div>
+                                    </div>
+                                    <div id="editQuizImagePreview" class="mt-1">
+                                        @if ($quiz->thumbnail)
+                                            <img src="/storage{{ asset($quiz->thumbnail) }}" class="img-thumbnail"
+                                                style="width: 200px;" name="thumbnail">
+                                        @else
+                                            No thumbnail available
+                                        @endif
+>>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
                                     </div>
                                 </div>
                             </div>
@@ -382,6 +498,7 @@
 @endsection
 
 @section('scripts')
+<<<<<<< HEAD
 <script>
     $(document).ready(function() {
         // Capture delete button click event
@@ -392,6 +509,26 @@
             var deleteUrl = '/admin/quiz/delete/' + quizId;
             // Set the delete button href attribute
             $('#deleteButton').attr('href', deleteUrl);
+=======
+    <script>
+
+        function tokenGenerate() {
+            let generate = Math.random().toString(36).slice(1,7);
+            const valueToken = document.querySelector("#generateToken")
+            valueToken.textContent = generate
+        }
+
+        $(document).ready(function() {
+            // Capture delete button click event
+            $('.delete-btn').click(function() {
+                // Get the ID of the user
+                var quizId = $(this).data('id');
+                // Construct the delete URL
+                var deleteUrl = '/admin/quiz/delete/' + quizId;
+                // Set the delete button href attribute
+                $('#deleteButton').attr('href', deleteUrl);
+            });
+>>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
         });
     });
 </script>

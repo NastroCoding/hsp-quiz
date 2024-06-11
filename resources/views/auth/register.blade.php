@@ -1,66 +1,111 @@
 @if ($errors->any())
-@foreach ($errors->all() as $error)
-<div class="alert alert-danger" role="alert">
-    {{ $error }}
-</div>
-@endforeach
+    @foreach ($errors->all() as $error)
+        <div class="alert alert-danger" role="alert">
+            {{ $error }}
+        </div>
+    @endforeach
 @endif
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register | HSPnet</title>
+    <title>Login | HSPnet</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ URL::asset('plugins/fontawesome-free/css/all.min.css') }}" />
     <!-- IonIcons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ URL::asset('dist/css/adminlte.min.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('dist/css/hspadmin.css') }}" />
     {{-- Animate.css --}}
-    <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}">
+    {{-- <link rel="stylesheet" href="{{ URL::asset('dist/css/animate.css')}}"> --}}
+    <style>
+        .input-group {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .input-group-append {
+            position: absolute;
+            right: 13%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .input-group-text {
+            border: none;
+            background: none;
+        }
+    </style>
 </head>
 
 <body class="hold-transition register-page">
-    <div class="register-box">
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <p href="../../index2.html" class="h1"><b>HSP</b>net</p>
-            </div>
-            <div class="card-body">
-                <p class="login-box-msg">Register a new account</p>
-
+    <div class="wrapper">
+        <section class="login-container d-flex justify-content-evenly">
+            <div class="login-box">
+                <div class="login-logo">
+                    <img src="{{ URL::asset('dist/img/logo.png') }}" alt="Transjakarta" />
+                    <div>
+                        <h1>HSPNet</h1>
+                        <h6>Create your Account!</h6>
+                    </div>
+                </div>
+                @if ($errors->any())
+                    @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger">
+                            <p>Username or password is incorrect!</p>
+                        </div>
+                    @endforeach
+                @endif
+                @if (session()->has('register_success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('register_success') }}
+                    </div>
+                @endif
                 <form action="/signup" method="POST">
                     @csrf
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email" name="email" id="inputEmail3">
+                    <div class="login-input-box">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="email" placeholder="Email" name="email" />
                     </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password" name="password" id="inputPassword3">
-                    </div>
-                    <div class="row">
-                        <!-- /.col -->
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    <div class="login-input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password" id="inputPassword" />
+                        <div class="input-group-append">
+                            <span class="input-group-text btn btn-default " style="cursor: pointer;">
+                                <i class="fas fa-eye toggle-password"></i>
+                            </span>
                         </div>
-                        <!-- /.col -->
                     </div>
+                    <button type="submit">Register</button>
                 </form>
-
-                <a href="/" class="text-center">I already have an account</a>
+                <div class="credit">
+                    <p>Already have an account? login <a href="/">here</a></p>
+                    <p>&copy; HSPnet - 2024</p>
+                </div>
             </div>
-            <!-- /.form-box -->
-        </div><!-- /.card -->
+        </section>
     </div>
-    <!-- /.register-box -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.querySelector('.toggle-password');
+            const passwordInput = document.querySelector('#inputPassword');
 
-    <!-- jQuery -->
-    <script src="{{ URL::asset('plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap -->
-    <script src="{{ URL::asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- AdminLTE -->
-    <script src="{{ URL::asset('dist/js/adminlte.js') }}"></script>
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 </body>
