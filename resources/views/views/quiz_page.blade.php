@@ -22,9 +22,15 @@
         }
     </style>
     @for ($i = 1; $i <= $lastQuestionNumber; $i++)
-        @php
-            $answered = $userAnswers->contains('question_id', $i) || $userEssays->contains('question_id', $i);
-        @endphp
+        @foreach ($questions as $question)
+            @php
+            foreach($userAnswers as $answer){
+                if($answer->question_id == $question->id ){
+                    $answered = true;
+                }
+            }
+            @endphp
+        @endforeach
         <a href="/quiz/view/{{ $slug }}/{{ $i }}"
             class="btn {{ $answered ? 'btn-success text-white' : 'btn-default' }} col {{ $question_number == $i ? 'active' : '' }}"
             style="margin: 1px;">{{ $i }}</a>
@@ -98,72 +104,85 @@
                                                 <i class="fas fa-angle-right"></i>
                                             </button>
                                         @else
-                                            <button type="submit" class="btn btn-primary float-right">Submit</button>
+                                            <button type="button" class="btn btn-primary float-right"
+                                                id="submit-button">Submit</button>
                                         @endif
                                     </div>
                                 </form>
-                            </div>
-                            <script>
-                                window.addEventListener('load', (event) => {
-                                    const nextButton = document.getElementById("next-button");
-                                    const backButton = document.getElementById("back-button");
 
-                                    if (nextButton) {
-                                        nextButton.addEventListener("click", function(event) {
-                                            navigateQuestion(event, 1);
-                                        });
-                                    }
+                                <script>
+                                    window.addEventListener('load', (event) => {
+                                        const nextButton = document.getElementById("next-button");
+                                        const backButton = document.getElementById("back-button");
+                                        const submitButton = document.getElementById("submit-button");
 
-                                    if (backButton) {
-                                        backButton.addEventListener("click", function(event) {
-                                            navigateQuestion(event, -1);
-                                        });
-                                    }
-                                });
+                                        if (nextButton) {
+                                            nextButton.addEventListener("click", function(event) {
+                                                navigateQuestion(event, 1);
+                                            });
+                                        }
 
-                                function navigateQuestion(event, offset) {
-                                    event.preventDefault(); // Prevent default form submission or anchor click
+                                        if (backButton) {
+                                            backButton.addEventListener("click", function(event) {
+                                                navigateQuestion(event, -1);
+                                            });
+                                        }
 
-                                    // Serialize form data
-                                    const formData = new FormData(document.getElementById("quiz-form"));
+                                        if (submitButton) {
+                                            submitButton.addEventListener("click", function(event) {
+                                                navigateQuestion(event, 0, true);
+                                            });
+                                        }
+                                    });
 
-                                    // Determine the URL based on the question type
-                                    const questionType = "{{ $que->question_type }}";
-                                    let url;
-                                    if (questionType === 'multiple_choice' || questionType === 'weighted_multiple') {
-                                        url = "/quiz/answer";
-                                    } else {
-                                        url = "/quiz/essayAnswer";
-                                    }
+                                    function navigateQuestion(event, offset, isSubmit = false) {
+                                        event.preventDefault(); // Prevent default form submission
 
-                                    // Send form data asynchronously
-                                    fetch(url, {
-                                            method: "POST",
-                                            body: formData
-                                        })
-                                        .then(response => {
-                                            if (response.ok) {
-                                                // Optionally handle successful submission
-                                                console.log("Form submitted successfully");
-                                                // Redirect to the next or previous question page
-                                                const currentQuestionNumber = parseInt("{{ $que->number }}");
-                                                const nextQuestionNumber = currentQuestionNumber + offset;
-                                                if (nextQuestionNumber >= 1 && nextQuestionNumber <= {{ $lastQuestionNumber }}) {
-                                                    window.location.href = "/quiz/view/{{ $slug }}/" + nextQuestionNumber;
+                                        // Serialize form data
+                                        const formData = new FormData(document.getElementById("quiz-form"));
+
+                                        // Determine the URL based on the question type
+                                        const questionType = "{{ $que->question_type }}";
+                                        let url = "/quiz/answer"; // Default URL for multiple choice and weighted multiple
+                                        if (questionType === 'essay') {
+                                            url = "/quiz/essayAnswer";
+                                        }
+
+                                        // Send form data asynchronously
+                                        fetch(url, {
+                                                method: "POST",
+                                                body: formData
+                                            })
+                                            .then(response => {
+                                                if (response.ok) {
+                                                    // Optionally handle successful submission
+                                                    console.log("Form submitted successfully");
+
+                                                    if (isSubmit) {
+                                                        // If it's the final question, submit the form
+                                                        document.getElementById("quiz-form").submit();
+                                                    } else {
+                                                        // Redirect to the next or previous question page
+                                                        const currentQuestionNumber = parseInt("{{ $que->number }}");
+                                                        const nextQuestionNumber = currentQuestionNumber + offset;
+                                                        if (nextQuestionNumber >= 1 && nextQuestionNumber <= {{ $lastQuestionNumber }}) {
+                                                            window.location.href = "/quiz/view/{{ $slug }}/" + nextQuestionNumber;
+                                                        } else {
+                                                            console.log("Invalid question number");
+                                                        }
+                                                    }
                                                 } else {
-                                                    console.log("Invalid question number");
+                                                    // Optionally handle errors
+                                                    console.error("Form submission failed");
+
                                                 }
-                                            } else {
-                                                // Optionally handle errors
-                                                console.error("Form submission failed");
-                                            }
-                                        })
-                                        .catch(error => {
-                                            // Handle network errors
-                                            console.error("Network error:", error);
-                                        });
-                                }
-                            </script>
+                                            })
+                                            .catch(error => {
+                                                // Handle network errors
+                                                console.error("Network error:", error);
+                                            });
+                                    }
+                                </script>
                         @endif
                     @endforeach
                 </div>
