@@ -27,7 +27,7 @@ class UserAnswerController extends Controller
                 $choice = Choice::find($userAnswer->choosen_choice_id);
 
                 if ($choice && $choice->is_correct) {
-                    $rightAnswerCount++;
+                    $rightAnswerCount += $question->point_value;
                 }
             }
         }
