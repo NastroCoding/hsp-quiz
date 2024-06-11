@@ -49,9 +49,8 @@ Route::controller(RouteController::class)->group(function () {
     Route::get('/score', 'user_score')->middleware('auth');
     Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
 
-    // REVIEW PAGE
-    Route::post('/submit-answer', [QuizController::class, 'submitAnswer'])->name('submit.answer');
-    Route::get('/review-page', [QuizController::class, 'reviewPage'])->name('quiz.review');
+    // QUIZ REVIEW TABLE
+    Route::get('/admin/quiz/review', [QuizController::class, 'quizReviewIndex']);
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -79,7 +78,10 @@ Route::controller(QuizController::class)->group(function () {
     Route::get('/quizzes', 'index')->middleware('auth')->name('quiz.index'); // Add the new route here
     Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
     Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
+<<<<<<< HEAD
+=======
     Route::post('/quiz/submit', 'store')->middleware('auth');
+>>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
 });
 
 Route::controller(QuestionController::class)->group(function () {

@@ -9,8 +9,12 @@ use App\Models\Question;
 use App\Models\Category;
 use App\Models\Education;
 use App\Models\User;
+<<<<<<< HEAD
+use App\Models\QuizResults;
+=======
 use App\Models\UserScore;
 use App\Models\Choice;
+>>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -329,22 +333,29 @@ class QuizController extends Controller
         return redirect('/home');
     }
 
-    public function reviewPage()
+    // public function reviewPage()
+    // {
+    //     // Getting user answers from the database (for example by using Eloquent or Query Builder)
+    //     $userAnswer = UserAnswer::find(1);
+
+    //     // Get related questions with user answers
+    //     $question = $userAnswer->question;
+
+    //     // get answer options related to the question
+    //     $options = $question->options;
+
+    //     // Send data to view review
+    //     return view('review.page', [
+    //         'userAnswer' => $userAnswer,
+    //         'question' => $question,
+    //         'options' => $options,
+    //     ]);
+    // }
+
+    public function quizReviewIndex()
     {
-        // Getting user answers from the database (for example by using Eloquent or Query Builder)
-        $userAnswer = UserAnswer::find(1);
-
-        // Get related questions with user answers
-        $question = $userAnswer->question;
-
-        // get answer options related to the question
-        $options = $question->options;
-
-        // Send data to view review
-        return view('review.page', [
-            'userAnswer' => $userAnswer,
-            'question' => $question,
-            'options' => $options,
-        ]);
+        $quizResults = QuizResult::with('user')->get();
+        dd($quizResult);
+        return view('quiz', compact('quizResults'));
     }
 }
