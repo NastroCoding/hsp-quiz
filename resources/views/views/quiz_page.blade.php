@@ -62,7 +62,7 @@
                                                 $userAnswer = $userAnswers->firstWhere('question_id', $que->id);
                                             @endphp
                                             @foreach ($que->choices as $index => $choice)
-                                                <div class="form-group">
+                                                <div class="form-group m-0">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                             name="choosen_choice_id" value="{{ $choice->id }}"
@@ -71,7 +71,7 @@
                                                         <label class="form-check-label" for="radio{{ $index + 1 }}">
                                                             @if ($choice->image_choice)
                                                                 <img src="{{ asset('storage/' . $choice->image_choice) }}"
-                                                                    alt="Choice Image" style="max-width: 100px;"
+                                                                    alt="Choice Image" style="max-width: 200px;"
                                                                     class="rounded">
                                                             @endif
                                                             <p>{{ $choice->choice }}</p>
