@@ -27,18 +27,10 @@ return new class extends Migration
             $table->integer('time');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');
-<<<<<<< HEAD
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-=======
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
 
->>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('education_id')->references('id')->on('education')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
