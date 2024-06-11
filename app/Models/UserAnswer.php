@@ -11,7 +11,6 @@ class UserAnswer extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
-    protected $fillable = ['user_id', 'question_id', 'answer_text'];
 
     public function user()
     {
@@ -32,10 +31,5 @@ class UserAnswer extends Model
     public function getIsCorrectAttribute()
     {
         return $this->choosenChoice->is_correct;
-    }
-
-    public function quizzes()
-    {
-        return $this->hasMany(Quiz::class);
     }
 }

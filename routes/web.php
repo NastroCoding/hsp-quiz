@@ -35,7 +35,7 @@ Route::controller(RouteController::class)->group(function () {
     // QUIZ
     Route::get('/admin/quiz', 'quiz')->middleware('admin');
     Route::get('/admin/quiz/result', 'quiz_result')->middleware('admin');
-    Route::get('/admin/quiz/{slug}/review', [QuizController::class, 'show'])->name('quiz.review');
+    Route::get('/admin/quiz/review', 'quiz_review')->middleware('admin');
 
     // CATEGORY
     Route::get('/admin/category', 'category')->middleware('admin');
@@ -48,6 +48,9 @@ Route::controller(RouteController::class)->group(function () {
     Route::get('/quiz', 'user_quiz')->middleware('auth');
     Route::get('/score', 'user_score')->middleware('auth');
     Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
+
+    // QUIZ REVIEW TABLE
+    Route::get('/admin/quiz/review', [QuizController::class, 'quizReviewIndex']);
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -63,6 +66,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/admin/user/delete/{id}', 'destroy')->middleware('admin');
     Route::get('/admin/user/edit/{id}', 'show')->middleware('admin');
     Route::post('/admin/user/edit/{id}', 'update')->middleware('admin');
+    Route::get('/admin/users', 'index')->middleware('admin');
 });
 
 Route::controller(QuizController::class)->group(function () {
@@ -73,6 +77,7 @@ Route::controller(QuizController::class)->group(function () {
     Route::post('/quiz/view/{slug}', 'quiz_view')->middleware('auth');
     Route::get('/quizzes', 'index')->name('quiz.index'); // Add the new route here
     Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
+    Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
 });
 
 Route::controller(QuestionController::class)->group(function () {
@@ -90,6 +95,7 @@ Route::controller(CategoryController::class)->group(function () {
     Route::post('/admin/category/create', 'store')->middleware('admin');
     Route::get('/admin/category/delete/{id}', 'destroy')->middleware('admin');
     Route::put('/admin/category/edit/{id}', 'update')->middleware('admin');
+    Route::put('/admin/category', 'index')->middleware('admin');
 });
 
 Route::controller(EducationController::class)->group(function () {
@@ -100,6 +106,7 @@ Route::controller(EducationController::class)->group(function () {
 
 Route::controller(UserAnswerController::class)->group(function () {
     Route::post('/quiz/answer', 'store')->middleware('auth');
+    Route::post('/quiz/essayAnswer', 'storeEssayAnswer')->middleware('auth');
     Route::get('/quiz/{id}/thumbnail', [QuizController::class, 'showThumbnail',])->name('quiz.thumbnail');
     Route::post('/quiz', function () {
         return Redirect::to('/quiz');

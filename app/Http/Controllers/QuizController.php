@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Quiz;
 use App\Models\UserAnswer;
+use App\Models\UserEssay;
 use App\Models\Question;
 use App\Models\Category;
 use App\Models\Education;
 use App\Models\User;
+use App\Models\QuizResults;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -34,6 +36,29 @@ class QuizController extends Controller
         $data = $query->get();
 
         return view('views\quiz_user', compact('data', 'category', 'education'));
+    }
+
+    public function quizSearch(Request $request)
+    {
+        $query = Quiz::query();
+
+        if ($request->has('table_search')) {
+            $search = $request->input('table_search');
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        $quizzes = $query->get();
+        $category = Category::all();
+        $education = Education::all();
+        $users = $query->get();
+
+        return view('admin/quiz/quiz', [
+            'page' => 'Quiz',
+            'category' => $category,
+            'education' => $education,
+            'data' => $quizzes,
+            'user' => $users
+        ]);
     }
 
     public function adminIndex(Request $request)
@@ -199,6 +224,11 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
+        // Load user's essay answers for the questions
+        $userEssays = UserEssay::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
         // Get the countdown time from the quiz
         $countdownTime = $quiz->time;
 
@@ -209,8 +239,9 @@ class QuizController extends Controller
             'lastQuestionNumber' => $lastQuestionNumber,
             'slug' => $quiz->slug,
             'question_number' => 1,
-            'userAnswers' => $userAnswers, // Pass user's answers to the view
-            'countdownTime' => $quiz->time, // Pass the countdown time to the view
+            'userAnswers' => $userAnswers,
+            'userEssays' => $userEssays, // Pass user's essay answers to the view
+            'countdownTime' => $quiz->time,
         ]);
     }
 
@@ -236,6 +267,11 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
+        // Load user's essay answers for the questions
+        $userEssays = UserEssay::where('user_id', Auth::id())
+            ->whereIn('question_id', $questions->pluck('id'))
+            ->get();
+
         return view(
             'views.quiz_page',
             [
@@ -246,19 +282,40 @@ class QuizController extends Controller
                 'slug' => $quiz->slug,
                 'question_number' => $number,
                 'userAnswers' => $userAnswers, // Pass user's answers to the view
-            ],
-            compact('question')
+                'userEssays' => $userEssays, // Pass user's essay answers to the view
+            ]
         );
     }
+
 
     public function submitQuiz(Request $request)
     {
         return redirect('/quiz');
     }
 
-    public function review($id)
+    // public function reviewPage()
+    // {
+    //     // Getting user answers from the database (for example by using Eloquent or Query Builder)
+    //     $userAnswer = UserAnswer::find(1);
+
+    //     // Get related questions with user answers
+    //     $question = $userAnswer->question;
+
+    //     // get answer options related to the question
+    //     $options = $question->options;
+
+    //     // Send data to view review
+    //     return view('review.page', [
+    //         'userAnswer' => $userAnswer,
+    //         'question' => $question,
+    //         'options' => $options,
+    //     ]);
+    // }
+
+    public function quizReviewIndex()
     {
-        $quiz = Quiz::with(['questions.options', 'user'])->findOrFail($id);
-        return view('admin.quiz.review', compact('quiz'));
+        $quizResults = QuizResult::with('user')->get();
+        dd($quizResult);
+        return view('quiz', compact('quizResults'));
     }
 }

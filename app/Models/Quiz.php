@@ -11,16 +11,9 @@ class Quiz extends Model
 
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
-    protected $table = 'quizzes';
-    protected $fillable = ['title', 'user_id'];
 
     public function questions(){
         return $this->hasMany(Question::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 
     public function category(){
