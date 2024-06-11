@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Choice;
+use App\Models\Question;
+use App\Models\Quiz;
 use App\Models\UserAnswer;
 use App\Models\UserEssay;
 use Illuminate\Http\Request;
@@ -14,9 +16,22 @@ class UserAnswerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($quiz_id)
     {
-        // Code for listing resources (if needed)
+        $question = Question::where('quiz_id', $quiz_id)->get();
+        $rightAnswer = 0;
+        foreach ($question as $que) {
+            $userAnswer = UserAnswer::where('question_id', $que->id)->get();
+            foreach ($userAnswer as $ua) {
+                $choice = Choice::find($ua->choosen_choice_id)->get();
+                foreach($choice as $ch){
+                    if($ch->is_correct){
+                        $rightAnswer++;
+                        dd($rightAnswer);
+                    }
+                }
+            }
+        }
     }
 
     /**

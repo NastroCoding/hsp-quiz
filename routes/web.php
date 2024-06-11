@@ -114,4 +114,5 @@ Route::controller(UserAnswerController::class)->group(function () {
     Route::post('/quiz', function () {
         return Redirect::to('/quiz');
     })->name('submit_quiz');
+    Route::get('/quiz/{id}/result', 'index')->middleware('admin');
 });
