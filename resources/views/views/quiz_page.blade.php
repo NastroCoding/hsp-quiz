@@ -21,20 +21,17 @@
             }
         }
     </style>
-    @for ($i = 1; $i <= $lastQuestionNumber; $i++)
-        @foreach ($questions as $question)
-            @php
-            foreach($userAnswers as $answer){
-                if($answer->question_id == $question->id ){
-                    $answered = true;
-                }
-            }
-            @endphp
-        @endforeach
-        <a href="/quiz/view/{{ $slug }}/{{ $i }}"
-            class="btn {{ $answered ? 'btn-success text-white' : 'btn-default' }} col {{ $question_number == $i ? 'active' : '' }}"
-            style="margin: 1px;">{{ $i }}</a>
-    @endfor
+    @php
+        $answeredQuestionIds = $userAnswers->pluck('question_id')->toArray();
+    @endphp
+
+    @foreach ($questions as $question)
+        <a href="/quiz/view/{{ $slug }}/{{ $question->number }}"
+            class="btn {{ in_array($question->id, $answeredQuestionIds) ? 'btn-success text-white' : 'btn-default' }} col {{ $question_number == $question->number ? 'active' : '' }}"
+            style="margin: 1px;">
+            {{ $question->number }}
+        </a>
+    @endforeach
 @endsection
 
 @section('container')
