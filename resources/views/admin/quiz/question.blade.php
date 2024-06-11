@@ -49,7 +49,7 @@
                         <div class="card-body">
                             @if ($question->images)
                                 <img src="{{ asset('' . $question->images) }}" alt="Question Image"
-                                    style="max-width: 300px;">
+                                    style="max-width: 300px;" class="rounded">
                             @endif
                             <div class="form-group">
                                 <p>{{ $question->number }}. {{ $question->question }}</p>
@@ -57,7 +57,7 @@
                             @if ($question->question_type == 'multiple_choice' || $question->question_type == 'weighted_multiple')
                                 <div class="form-group">
                                     @foreach ($question->choices as $choice)
-                                        <div class="form-check">
+                                        <div class="form-check mb-1 mt-1">
                                             <!-- Add 'checked' attribute based on is_correct value -->
                                             @if ($question->question_type == 'weighted_multiple')
                                                 <input class="form-check-input" type="radio" disabled>
@@ -68,8 +68,9 @@
                                             <label class="form-check-label">
                                                 @if ($choice->image_choice)
                                                     <img src="{{ asset('storage/' . $choice->image_choice) }}"
-                                                        alt="Choice Image" style="max-width: 100px;">
+                                                        alt="Choice Image" style="max-width: 200px;" class="rounded"><br>
                                                 @endif
+
                                                 {{ $choice->choice }}
                                                 <span class="text-muted text-sm">
                                                     @if ($question->question_type == 'weighted_multiple')

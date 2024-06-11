@@ -59,7 +59,7 @@
                                         <div class="form-group">
                                             @if ($que->images)
                                                 <img src="{{ asset($que->images) }}" alt="Question Image"
-                                                    style="max-width: 300px;">
+                                                    style="max-width: 300px;" class="rounded">
                                             @endif
                                             <p>{{ $que->question }}</p>
                                         </div>
@@ -77,7 +77,8 @@
                                                         <label class="form-check-label" for="radio{{ $index + 1 }}">
                                                             @if ($choice->image_choice)
                                                                 <img src="{{ asset('storage/' . $choice->image_choice) }}"
-                                                                    alt="Choice Image" style="max-width: 100px;">
+                                                                    alt="Choice Image" style="max-width: 100px;"
+                                                                    class="rounded">
                                                             @endif
                                                             <p>{{ $choice->choice }}</p>
                                                         </label>
