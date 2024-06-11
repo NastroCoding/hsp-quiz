@@ -12,14 +12,9 @@ class Quiz extends Model
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 
-<<<<<<< HEAD
-    public function questions(){
-        return $this->hasMany(Question::class);
-=======
     public function questions()
     {
         return $this->hasMany(Question::class, 'quiz_id');
->>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
     }
 
     public function category()

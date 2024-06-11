@@ -9,12 +9,9 @@ use App\Models\Question;
 use App\Models\Category;
 use App\Models\Education;
 use App\Models\User;
-<<<<<<< HEAD
-use App\Models\QuizResults;
-=======
 use App\Models\UserScore;
 use App\Models\Choice;
->>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
+use App\Models\QuizResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -355,7 +352,7 @@ class QuizController extends Controller
     public function quizReviewIndex()
     {
         $quizResults = QuizResult::with('user')->get();
-        dd($quizResult);
+        dd($quizResults);
         return view('quiz', compact('quizResults'));
     }
 }

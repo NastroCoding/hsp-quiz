@@ -18,20 +18,21 @@ class UserAnswerController extends Controller
      */
     public function index($quiz_id)
     {
-        $question = Question::where('quiz_id', $quiz_id)->get();
-        $rightAnswer = 0;
-        foreach ($question as $que) {
-            $userAnswer = UserAnswer::where('question_id', $que->id)->get();
-            foreach ($userAnswer as $ua) {
-                $choice = Choice::find($ua->choosen_choice_id)->get();
-                foreach($choice as $ch){
-                    if($ch->is_correct){
-                        $rightAnswer++;
-                        dd($rightAnswer);
-                    }
+        $questions = Question::where('quiz_id', $quiz_id)->get();
+        $rightAnswerCount = 0;
+        foreach ($questions as $question) {
+            $userAnswers = UserAnswer::where('question_id', $question->id)->get();
+
+            foreach ($userAnswers as $userAnswer) {
+                $choice = Choice::find($userAnswer->choosen_choice_id);
+
+                if ($choice && $choice->is_correct) {
+                    $rightAnswerCount++;
                 }
             }
         }
+
+        return $rightAnswerCount;
     }
 
     /**

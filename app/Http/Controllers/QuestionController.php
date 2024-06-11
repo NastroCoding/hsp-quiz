@@ -40,8 +40,6 @@ class QuestionController extends Controller
             'choice_images.*' => 'required_without:choices.*|image', // Validation for choice images
         ]);
 
-        dd($request->all());
-
         // Ensure that the number of is_correct values matches the number of choices
         if (count($validatedData['choices']) !== count($validatedData['is_correct'])) {
             return redirect()->back()->withErrors(['is_correct' => 'The number of is_correct values must match the number of choices.'])->withInput();

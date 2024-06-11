@@ -78,10 +78,6 @@ Route::controller(QuizController::class)->group(function () {
     Route::get('/quizzes', 'index')->middleware('auth')->name('quiz.index'); // Add the new route here
     Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
     Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
-<<<<<<< HEAD
-=======
-    Route::post('/quiz/submit', 'store')->middleware('auth');
->>>>>>> c17eafc3b31566f343a15e2be656601d0e520545
 });
 
 Route::controller(QuestionController::class)->group(function () {
