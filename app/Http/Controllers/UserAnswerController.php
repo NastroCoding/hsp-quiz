@@ -7,6 +7,7 @@ use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\UserAnswer;
 use App\Models\UserEssay;
+use App\Models\UserScore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -17,33 +18,13 @@ class UserAnswerController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request, $quiz_id)
-{
-    $questions = Question::where('quiz_id', $quiz_id)->get();
-    $rightAnswerCount = 0;
-    $totalPoint = 0;
-
-    foreach ($questions as $question) {
-        $totalPoint += $question->point_value;
-        $userAnswers = UserAnswer::where([
-            'user_id' => $request->user()->id,
-            'question_id' => $question->id
-        ])->get();
-        foreach ($userAnswers as $userAnswer) {
-            $choice = Choice::find($userAnswer->choosen_choice_id);
-            if ($choice->is_correct) {
-                $rightAnswerCount += $question->point_value;
-                break; 
-            }
-        }
+    {
     }
-
-    return $rightAnswerCount . '/' . $totalPoint;
-}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $quiz_id)
     {
         // Validate the request data
         $validatedData = $request->validate([
@@ -83,6 +64,42 @@ class UserAnswerController extends Controller
             $message = 'Your answer has been submitted successfully!';
         }
 
+        $questions = Question::where('quiz_id', $quiz_id)->get();
+        $rightAnswerCount = 0;
+        $totalPoint = 0;
+
+        foreach ($questions as $question) {
+            $totalPoint += $question->point_value;
+            $userAnswers = UserAnswer::where([
+                'user_id' => $request->user()->id,
+                'question_id' => $question->id
+            ])->get();
+            foreach ($userAnswers as $userAnswer) {
+                $choice = Choice::find($userAnswer->choosen_choice_id);
+                if ($choice->is_correct) {
+                    $rightAnswerCount += $question->point_value;
+                    break;
+                }
+            }
+        }
+        
+        $scoreCheck = UserScore::where([
+            'quiz_id' => $quiz_id,
+            'user_id' => Auth::id()
+        ])->first();
+
+        if(!$scoreCheck) {
+            $score = UserScore::create([
+                'user_id' => Auth::id(),
+                'quiz_id' => $quiz_id,
+                'score' => $rightAnswerCount
+            ]);
+        } else {
+            $scoreCheck->update([
+                'score' => $rightAnswerCount
+            ]);
+        }
+        
         return redirect('/quiz')->with('success', $message);
     }
 
