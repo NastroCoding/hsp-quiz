@@ -129,6 +129,7 @@
                                         if (submitButton) {
                                             submitButton.addEventListener("click", function(event) {
                                                 navigateQuestion(event, 0, true);
+                                                window.location.replace("/quiz");
                                             });
                                         }
                                     });

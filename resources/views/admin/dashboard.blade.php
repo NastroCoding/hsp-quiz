@@ -21,44 +21,42 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
-        <h4 class="col-sm-6 m-1">Recent Quiz</h4>
-        <div class="container">
-            <button class="btn btn-sm btn-default mb-1" data-toggle="modal" data-target="#modal-filter"><i
-                    class="fas fa-sliders"></i></button>
-            <div class="row">
-                @if ($data->isEmpty())
-                    <div class="col-12">
-                        <p>No quizzes found matching the criteria.</p>
-                    </div>
-                @else
-                    @foreach ($data as $quiz)
-                        <div class="col-lg-4">
-                            <div class="card" style="width: 18rem;">
-                                <img class="card-img-top" src="/storage{{ asset($quiz->thumbnail) }}" alt="Card image cap"
-                                    style="width:100%; height:180px;">
-                                <div class="card-header">
-                                    <h5 class="card-title m-0">{{ $quiz->title }}</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text"> {{ $quiz->description }}</p>
-                                    <a class="btn btn-info btn-sm" data-toggle="modal"
-                                        data-target="#edit-quiz{{ $quiz->id }}">
-                                        Edit
-                                    </a>
-                                    <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
-                                    <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal"
-                                        data-target="#review">Review</a>
-                                    <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
-                                        data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
-                                        Delete
-                                    </button>
-                                </div>
+    <section class="content col-sm-6 m-1">
+        <h4>Recent Quiz</h4>
+        <button class="btn btn-sm btn-default mb-1" data-toggle="modal" data-target="#modal-filter"><i
+                class="fas fa-sliders"></i></button>
+        <div class="row">
+            @if ($data->isEmpty())
+                <div class="col-12">
+                    <p>No quizzes found matching the criteria.</p>
+                </div>
+            @else
+                @foreach ($data as $quiz)
+                    <div class="col-lg-4">
+                        <div class="card" style="width: 18rem;">
+                            <img class="card-img-top" src="/storage{{ asset($quiz->thumbnail) }}" alt="Card image cap"
+                                style="width:100%; height:180px;">
+                            <div class="card-header">
+                                <h5 class="card-title m-0">{{ $quiz->title }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"> {{ $quiz->description }}</p>
+                                <a class="btn btn-info btn-sm" data-toggle="modal"
+                                    data-target="#edit-quiz{{ $quiz->id }}">
+                                    Edit
+                                </a>
+                                <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
+                                <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal"
+                                    data-target="#review">Review</a>
+                                <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
+                                    data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
+                                    Delete
+                                </button>
                             </div>
                         </div>
-                    @endforeach
-                @endif
-            </div>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </section>
 

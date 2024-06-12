@@ -17,28 +17,28 @@ class UserAnswerController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request, $quiz_id)
-{
-    $questions = Question::where('quiz_id', $quiz_id)->get();
-    $rightAnswerCount = 0;
-    $totalPoint = 0;
+    {
+        $questions = Question::where('quiz_id', $quiz_id)->get();
+        $rightAnswerCount = 0;
+        $totalPoint = 0;
 
-    foreach ($questions as $question) {
-        $totalPoint += $question->point_value;
-        $userAnswers = UserAnswer::where([
-            'user_id' => $request->user()->id,
-            'question_id' => $question->id
-        ])->get();
-        foreach ($userAnswers as $userAnswer) {
-            $choice = Choice::find($userAnswer->choosen_choice_id);
-            if ($choice->is_correct) {
-                $rightAnswerCount += $question->point_value;
-                break; 
+        foreach ($questions as $question) {
+            $totalPoint += $question->point_value;
+            $userAnswers = UserAnswer::where([
+                'user_id' => $request->user()->id,
+                'question_id' => $question->id
+            ])->get();
+            foreach ($userAnswers as $userAnswer) {
+                $choice = Choice::find($userAnswer->choosen_choice_id);
+                if ($choice->is_correct) {
+                    $rightAnswerCount += $question->point_value;
+                    break;
+                }
             }
         }
-    }
 
-    return $rightAnswerCount . '/' . $totalPoint;
-}
+        return $rightAnswerCount . '/' . $totalPoint;
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -82,7 +82,6 @@ class UserAnswerController extends Controller
             UserAnswer::create($validatedData);
             $message = 'Your answer has been submitted successfully!';
         }
-
         return redirect('/quiz')->with('success', $message);
     }
 

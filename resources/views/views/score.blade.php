@@ -41,7 +41,7 @@
                                     <p class="card-text"> {{ $quiz->description }}</p>
                                     <div>
                                         <a class="btn btn-success disabled " style="cursor:not-allowed;">Finished</a>
-                                        <p class="float-right text-muted user-select-none">90/100</p>
+                                        <p class="float-right text-muted user-select-none">90/{{ $quiz->max_score }}</p>
                                     </div>
                                 </div>
                             </div>
