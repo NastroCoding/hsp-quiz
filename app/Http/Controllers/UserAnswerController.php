@@ -7,6 +7,7 @@ use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\UserAnswer;
 use App\Models\UserEssay;
+use App\Models\UserScore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +44,7 @@ class UserAnswerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $quiz_id)
     {
         // Validate the request data
         $validatedData = $request->validate([
@@ -82,6 +83,7 @@ class UserAnswerController extends Controller
             UserAnswer::create($validatedData);
             $message = 'Your answer has been submitted successfully!';
         }
+
         return redirect('/quiz')->with('success', $message);
     }
 

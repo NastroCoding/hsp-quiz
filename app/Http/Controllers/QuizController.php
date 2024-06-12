@@ -101,7 +101,7 @@ class QuizController extends Controller
             'description' => 'required',
             'time' => 'required',
             'slug' => 'unique:quizzes',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for thumbnail
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Add validation for thumbnail
         ]);
 
         $created_by = Auth::user()->id;
@@ -150,7 +150,7 @@ class QuizController extends Controller
             'title' => 'required',
             'description' => 'required',
             'time' => 'required',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for thumbnail
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Add validation for thumbnail
         ]);
 
         $updated_by = Auth::user()->id;
