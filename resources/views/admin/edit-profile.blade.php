@@ -62,6 +62,22 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="inputPassword"
+                                                    name="password" placeholder="Password"
+                                                    value="{{ Auth::user()->password }}" disabled
+                                                    style="cursor: not-allowed;" title="">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <!-- Button to toggle password visibility -->
+                                                <button type="button" class="btn btn-primary toggle-password"
+                                                    data-toggle="tooltip" data-placement="top" title="Show/Hide Password">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10">
                                                 <button type="submit" class="btn btn-success">Save changes</button>
                                             </div>
@@ -100,6 +116,17 @@
                 // Read the selected file as a Data URL
                 reader.readAsDataURL(selectedFile);
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.querySelector('.toggle-password');
+            const passwordInput = document.querySelector('#inputPassword');
+
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
         });
     </script>
 @endsection
