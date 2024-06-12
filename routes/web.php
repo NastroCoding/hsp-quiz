@@ -118,8 +118,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::controller(UserAnswerController::class)->group(function () {
-        Route::post('/quiz/answer', 'store')->middleware('auth');
-        Route::post('/quiz/essayAnswer', 'storeEssayAnswer')->middleware('auth');
+        Route::post('/quiz/{id}/answer', 'store')->middleware('auth');
+        Route::post('/quiz/{id}/essayAnswer', 'storeEssayAnswer')->middleware('auth');
         Route::get('/quiz/{id}/thumbnail', [QuizController::class, 'showThumbnail',])->name('quiz.thumbnail');
         Route::post('/quiz', function () {
             return Redirect::to('/quiz');
