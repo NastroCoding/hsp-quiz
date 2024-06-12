@@ -25,14 +25,14 @@ class UserAnswerController extends Controller
 
             foreach ($userAnswers as $userAnswer) {
                 $choice = Choice::find($userAnswer->choosen_choice_id);
-
+                
                 if ($choice && $choice->is_correct) {
                     $rightAnswerCount += $question->point_value;
                 }
             }
         }
 
-        return $rightAnswerCount;
+        return $rightAnswerCount . '/';
     }
 
     /**

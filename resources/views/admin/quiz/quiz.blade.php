@@ -378,7 +378,6 @@
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
-    </div>
 @endforeach
 @endsection
 
