@@ -33,25 +33,49 @@
                         <div class="col-lg-4">
                             <div class="card" style="width: 23rem;">
                                 @if ($quiz->thumbnail == null)
-                                    
-                                @else    
-                                <img class="card-img-top" src="{{ asset('storage/' . $quiz->thumbnail) }}"
-                                    alt="Card image cap" style="width:100%; height:180px;">
+                                @else
+                                    <img class="card-img-top" src="{{ asset('storage/' . $quiz->thumbnail) }}"
+                                        alt="Card image cap" style="width:100%; height:180px;">
                                 @endif
-                                    <div class="card-header">
+                                <div class="card-header">
                                     <h5 class="card-title m-0">{{ $quiz->title }}</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text"> {{ $quiz->description }}</p>
-                                    <a class="btn btn-primary" href="{{ route('quiz.thumbnail', ['id' => $quiz->id]) }}"
-                                        data-toggle="modal" data-target="#modal-quiz">
-                                        Continue
-                                    </a>
+                                    <p class="card-text">{{ $quiz->description }}</p>
+                                    @php
+                                        $userId = auth()->user()->id;
+                                        $userScore = $scores->first(function ($score) use ($userId, $quiz) {
+                                            return $score->user_id == $userId && $score->quiz_id == $quiz->id;
+                                        });
+
+                                        $userAnswers = $answers->filter(function ($answer) use ($userId, $quiz) {
+                                            return $answer->user_id == $userId && $answer->question_id == $quiz->id;
+                                        });
+                                        $userEssays = $essays->filter(function ($essay) use ($userId, $quiz) {
+                                            return $essay->user_id == $userId && $essay->question_id == $quiz->id;
+                                        });
+                                    @endphp
+                                    @dd($userScore)
+                                    @if ($userScore)
+                                        <a class="btn btn-success disabled" style="cursor:not-allowed;">Finished</a>
+                                        <p class="float-right text-muted user-select-none">
+                                            /{{ $quiz->max_score }}</p>
+                                    @elseif ($userAnswers->isNotEmpty() || $userEssays->isNotEmpty())
+                                        <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
+                                            data-toggle="modal" data-target="#modal-quiz">
+                                            Continue
+                                        </a>
+                                    @else
+                                        <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
+                                            data-toggle="modal" data-target="#modal-quiz">
+                                            Enter
+                                        </a>
+                                    @endif
                                 </div>
+
                             </div>
                         </div>
                     @endforeach
-                    <!-- /.col-lg-4 -->
                 </div>
                 <!-- /.row -->
             </div>

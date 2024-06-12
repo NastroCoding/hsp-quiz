@@ -19,26 +19,43 @@ class UserAnswerController extends Controller
      */
     public function index(Request $request, $quiz_id)
     {
+        // Fetch all questions related to the quiz
         $questions = Question::where('quiz_id', $quiz_id)->get();
-        $rightAnswerCount = 0;
+
+        // Initialize counters for total points and correctly answered points
         $totalPoint = 0;
+        $rightAnswerCount = 0;
 
         foreach ($questions as $question) {
             $totalPoint += $question->point_value;
+            $choice = Choice::where('question_id', $question->id)->get();
+            foreach ($choice as $cho) {
+                $maxScore = $cho->max('point_value');
+                $rightAnswerCount += $cho->point_value;
+                break;
+            }
+
             $userAnswers = UserAnswer::where([
                 'user_id' => $request->user()->id,
                 'question_id' => $question->id
             ])->get();
+
             foreach ($userAnswers as $userAnswer) {
                 $choice = Choice::find($userAnswer->choosen_choice_id);
-                if ($choice->is_correct) {
+
+                if ($choice && $choice->is_correct) {
                     $rightAnswerCount += $question->point_value;
                     break;
                 }
             }
         }
 
-        return $rightAnswerCount . '/' . $totalPoint;
+        $totalPoint += $maxScore;
+
+        return response()->json([
+            'totalPoints' => $totalPoint,
+            'rightAnswerCount' => $rightAnswerCount
+        ]);
     }
 
     /**
@@ -84,24 +101,38 @@ class UserAnswerController extends Controller
             $message = 'Your answer has been submitted successfully!';
         }
 
+        // Fetch all questions related to the quiz
         $questions = Question::where('quiz_id', $quiz_id)->get();
-        $rightAnswerCount = 0;
+
+        // Initialize counters for total points and correctly answered points
         $totalPoint = 0;
+        $rightAnswerCount = 0;
 
         foreach ($questions as $question) {
             $totalPoint += $question->point_value;
+            $choice = Choice::where('question_id', $question->id)->get();
+            foreach ($choice as $cho) {
+                $maxScore = $cho->max('point_value');
+                $rightAnswerCount += $cho->point_value;
+                break;
+            }
+
             $userAnswers = UserAnswer::where([
                 'user_id' => $request->user()->id,
                 'question_id' => $question->id
             ])->get();
+
             foreach ($userAnswers as $userAnswer) {
                 $choice = Choice::find($userAnswer->choosen_choice_id);
-                if ($choice->is_correct) {
+
+                if ($choice && $choice->is_correct) {
                     $rightAnswerCount += $question->point_value;
                     break;
                 }
             }
         }
+
+        $totalPoint += $maxScore;
 
         $scoreCheck = UserScore::where([
             'quiz_id' => $quiz_id,
@@ -165,24 +196,38 @@ class UserAnswerController extends Controller
                 $message = 'Your essay answer has been submitted successfully!';
             }
 
+            // Fetch all questions related to the quiz
             $questions = Question::where('quiz_id', $quiz_id)->get();
-            $rightAnswerCount = 0;
+
+            // Initialize counters for total points and correctly answered points
             $totalPoint = 0;
+            $rightAnswerCount = 0;
 
             foreach ($questions as $question) {
                 $totalPoint += $question->point_value;
+                $choice = Choice::where('question_id', $question->id)->get();
+                foreach ($choice as $cho) {
+                    $maxScore = $cho->max('point_value');
+                    $rightAnswerCount += $cho->point_value;
+                    break;
+                }
+
                 $userAnswers = UserAnswer::where([
                     'user_id' => $request->user()->id,
                     'question_id' => $question->id
                 ])->get();
+
                 foreach ($userAnswers as $userAnswer) {
                     $choice = Choice::find($userAnswer->choosen_choice_id);
-                    if ($choice->is_correct) {
+
+                    if ($choice && $choice->is_correct) {
                         $rightAnswerCount += $question->point_value;
                         break;
                     }
                 }
             }
+
+            $totalPoint += $maxScore;
 
             $scoreCheck = UserScore::where([
                 'quiz_id' => $quiz_id,

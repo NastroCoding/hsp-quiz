@@ -116,7 +116,7 @@ class RouteController extends Controller
         $answers = UserAnswer::all();
         $essays = UserEssay::all();
 
-        return view('views.quiz_user', [
+        return view('views.index', [
             'category' => $category,
             'education' => $education,
             'data' => $data,

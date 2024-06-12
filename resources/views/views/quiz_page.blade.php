@@ -91,7 +91,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                    
+
                                     <div class="card-footer">
                                         @if ($que->number != 1)
                                             <button class="btn btn-default" type="button" id="back-button">
@@ -160,6 +160,7 @@
                                                     if (isSubmit) {
                                                         // If it's the final question, submit the form
                                                         document.getElementById("quiz-form").submit();
+                                                        window.location.replace("/quiz");
                                                     } else {
                                                         // Redirect to the next or previous question page
                                                         const currentQuestionNumber = parseInt("{{ $que->number }}");
