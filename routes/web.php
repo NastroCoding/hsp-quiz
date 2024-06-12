@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Redirect;
 
 // DEFAULT ROUTE (/home)
 
+
 Route::controller(RouteController::class)->group(function () {
     // ADMIN
     Route::get('/admin/dashboard', 'admin_dashboard')->middleware('admin');
@@ -58,59 +59,69 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/signin', 'signin')->middleware('guest');
     Route::get('/register', 'register')->middleware('guest');
     Route::post('/signup', 'signup')->middleware('guest');
-    Route::get('/logout', 'logout')->middleware('auth');
 });
 
-Route::controller(UserController::class)->group(function () {
-    Route::post('/admin/user/create', 'store')->middleware('admin');
-    Route::get('/admin/user/delete/{id}', 'destroy')->middleware('admin');
-    Route::get('/admin/user/edit/{id}', 'show')->middleware('admin');
-    Route::post('/admin/user/edit/{id}', 'update')->middleware('admin');
-    Route::get('/admin/users', 'index')->middleware('admin');
-});
+Route::middleware('auth:sanctum')->group(function () {
+    // ADMIN ONLY
+    Route::middleware('admin')->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::post('/admin/user/create', 'store');
+            Route::get('/admin/user/delete/{id}', 'destroy');
+            Route::get('/admin/user/edit/{id}', 'show');
+            Route::post('/admin/user/edit/{id}', 'update');
+            Route::get('/admin/users', 'index');
+        });
 
-Route::controller(QuizController::class)->group(function () {
-    Route::post('/admin/quiz/create', 'store')->middleware('admin');
-    Route::post('/admin/quiz/edit/{id}', 'update')->middleware('admin');
-    Route::get('/admin/quiz/delete/{id}', 'destroy')->middleware('admin');
-    Route::get('/quiz/view/{slug}/{number}', 'quiz_num')->middleware('auth');
-    Route::post('/quiz/view/{slug}', 'quiz_view')->middleware('auth');
-    Route::get('/quizzes', 'index')->middleware('auth')->name('quiz.index'); // Add the new route here
-    Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
-    Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
-});
+        Route::controller(EducationController::class)->group(function () {
+            Route::post('/admin/education/create', 'store')->middleware('admin');
+            Route::get('/admin/education/delete/{id}', 'destroy')->middleware('admin');
+            Route::put('/admin/education/edit/{id}', 'update')->middleware('admin');
+            Route::put('/admin/education', 'index')->middleware('admin');
+        });
 
-Route::controller(QuestionController::class)->group(function () {
-    Route::post('/admin/quiz/question/create', 'store')->middleware('admin');
-    Route::post('/admin/quiz/question/create/essay', 'essayStore')->middleware('admin');
-    Route::post('/admin/quiz/question/create/weighted', 'weightedStore')->middleware('admin');
-    Route::post('/admin/quiz/question/edit/{id}', 'update')->middleware('admin');
-    Route::post('/admin/quiz/question/edit/essay/{id}', 'essayUpdate')->middleware('admin');
-    Route::post('/admin/quiz/question/edit/weighted/{id}', 'weightedUpdate')->middleware('admin');
-    Route::get('/admin/quiz/{slug}', 'show')->middleware('admin');
-    Route::get('/admin/quiz/question/delete/{id}', 'destroy')->middleware('admin');
-});
+        Route::controller(CategoryController::class)->group(function () {
+            Route::post('/admin/category/create', 'store')->middleware('admin');
+            Route::get('/admin/category/delete/{id}', 'destroy')->middleware('admin');
+            Route::put('/admin/category/edit/{id}', 'update')->middleware('admin');
+            Route::put('/admin/category', 'index')->middleware('admin');
+        });
 
-Route::controller(CategoryController::class)->group(function () {
-    Route::post('/admin/category/create', 'store')->middleware('admin');
-    Route::get('/admin/category/delete/{id}', 'destroy')->middleware('admin');
-    Route::put('/admin/category/edit/{id}', 'update')->middleware('admin');
-    Route::put('/admin/category', 'index')->middleware('admin');
-});
+        Route::controller(QuestionController::class)->group(function () {
+            Route::post('/admin/quiz/question/create', 'store')->middleware('admin');
+            Route::post('/admin/quiz/question/create/essay', 'essayStore')->middleware('admin');
+            Route::post('/admin/quiz/question/create/weighted', 'weightedStore')->middleware('admin');
+            Route::post('/admin/quiz/question/edit/{id}', 'update')->middleware('admin');
+            Route::post('/admin/quiz/question/edit/essay/{id}', 'essayUpdate')->middleware('admin');
+            Route::post('/admin/quiz/question/edit/weighted/{id}', 'weightedUpdate')->middleware('admin');
+            Route::get('/admin/quiz/{slug}', 'show')->middleware('admin');
+            Route::get('/admin/quiz/question/delete/{id}', 'destroy')->middleware('admin');
+        });
+    });
 
-Route::controller(EducationController::class)->group(function () {
-    Route::post('/admin/education/create', 'store')->middleware('admin');
-    Route::get('/admin/education/delete/{id}', 'destroy')->middleware('admin');
-    Route::put('/admin/education/edit/{id}', 'update')->middleware('admin');
-    Route::put('/admin/education', 'index')->middleware('admin');
-});
+    // END ADMIN ONLY
 
-Route::controller(UserAnswerController::class)->group(function () {
-    Route::post('/quiz/answer', 'store')->middleware('auth');
-    Route::post('/quiz/essayAnswer', 'storeEssayAnswer')->middleware('auth');
-    Route::get('/quiz/{id}/thumbnail', [QuizController::class, 'showThumbnail',])->name('quiz.thumbnail');
-    Route::post('/quiz', function () {
-        return Redirect::to('/quiz');
-    })->name('submit_quiz');
-    Route::get('/quiz/{id}/result', 'index')->middleware('admin');
+    Route::controller(AuthController::class)->group(function () {
+        Route::get('/logout', 'logout')->middleware('auth');
+    });
+
+    Route::controller(QuizController::class)->group(function () {
+        Route::post('/admin/quiz/create', 'store')->middleware('admin');
+        Route::post('/admin/quiz/edit/{id}', 'update')->middleware('admin');
+        Route::get('/admin/quiz/delete/{id}', 'destroy')->middleware('admin');
+        Route::get('/quiz/view/{slug}/{number}', 'quiz_num');
+        Route::post('/quiz/view/{slug}', 'quiz_view');
+        Route::get('/quizzes', 'index')->name('quiz.index'); // Add the new route here
+        Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
+        Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
+    });
+
+    Route::controller(UserAnswerController::class)->group(function () {
+        Route::post('/quiz/answer', 'store')->middleware('auth');
+        Route::post('/quiz/essayAnswer', 'storeEssayAnswer')->middleware('auth');
+        Route::get('/quiz/{id}/thumbnail', [QuizController::class, 'showThumbnail',])->name('quiz.thumbnail');
+        Route::post('/quiz', function () {
+            return Redirect::to('/quiz');
+        })->name('submit_quiz');
+        Route::get('/quiz/{id}/result', 'index')->middleware('admin');
+    });
 });
