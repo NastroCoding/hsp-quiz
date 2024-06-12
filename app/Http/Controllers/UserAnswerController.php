@@ -28,12 +28,6 @@ class UserAnswerController extends Controller
 
         foreach ($questions as $question) {
             $totalPoint += $question->point_value;
-            $choice = Choice::where('question_id', $question->id)->get();
-            foreach ($choice as $cho) {
-                $maxScore = $cho->max('point_value');
-                $rightAnswerCount += $cho->point_value;
-                break;
-            }
 
             $userAnswers = UserAnswer::where([
                 'user_id' => $request->user()->id,
@@ -42,6 +36,16 @@ class UserAnswerController extends Controller
 
             foreach ($userAnswers as $userAnswer) {
                 $choice = Choice::find($userAnswer->choosen_choice_id);
+
+                $choiceSum = Choice::where([
+                    'question_id' => $question->id,
+                    'id' => $userAnswer->choosen_choice_id,
+                ])->get();
+                foreach ($choiceSum as $cho) {
+                    $maxScore = $cho->max('point_value');
+                    $rightAnswerCount += $cho->point_value;
+                    break;
+                }
 
                 if ($choice && $choice->is_correct) {
                     $rightAnswerCount += $question->point_value;
@@ -110,12 +114,6 @@ class UserAnswerController extends Controller
 
         foreach ($questions as $question) {
             $totalPoint += $question->point_value;
-            $choice = Choice::where('question_id', $question->id)->get();
-            foreach ($choice as $cho) {
-                $maxScore = $cho->max('point_value');
-                $rightAnswerCount += $cho->point_value;
-                break;
-            }
 
             $userAnswers = UserAnswer::where([
                 'user_id' => $request->user()->id,
@@ -124,6 +122,16 @@ class UserAnswerController extends Controller
 
             foreach ($userAnswers as $userAnswer) {
                 $choice = Choice::find($userAnswer->choosen_choice_id);
+
+                $choiceSum = Choice::where([
+                    'question_id' => $question->id,
+                    'id' => $userAnswer->choosen_choice_id,
+                ])->get();
+                foreach ($choiceSum as $cho) {
+                    $maxScore = $cho->max('point_value');
+                    $rightAnswerCount += $cho->point_value;
+                    break;
+                }
 
                 if ($choice && $choice->is_correct) {
                     $rightAnswerCount += $question->point_value;
@@ -205,12 +213,6 @@ class UserAnswerController extends Controller
 
             foreach ($questions as $question) {
                 $totalPoint += $question->point_value;
-                $choice = Choice::where('question_id', $question->id)->get();
-                foreach ($choice as $cho) {
-                    $maxScore = $cho->max('point_value');
-                    $rightAnswerCount += $cho->point_value;
-                    break;
-                }
 
                 $userAnswers = UserAnswer::where([
                     'user_id' => $request->user()->id,
@@ -219,6 +221,16 @@ class UserAnswerController extends Controller
 
                 foreach ($userAnswers as $userAnswer) {
                     $choice = Choice::find($userAnswer->choosen_choice_id);
+
+                    $choiceSum = Choice::where([
+                        'question_id' => $question->id,
+                        'id' => $userAnswer->choosen_choice_id,
+                    ])->get();
+                    foreach ($choiceSum as $cho) {
+                        $maxScore = $cho->max('point_value');
+                        $rightAnswerCount += $cho->point_value;
+                        break;
+                    }
 
                     if ($choice && $choice->is_correct) {
                         $rightAnswerCount += $question->point_value;
