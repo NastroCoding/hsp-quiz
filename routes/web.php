@@ -124,6 +124,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/quiz', function () {
             return Redirect::to('/quiz');
         })->name('submit_quiz');
-        Route::get('/quiz/{id}/result', 'index')->middleware('admin');
+        Route::get('/quiz/{id}/result', 'index')->middleware('auth');
     });
 });
