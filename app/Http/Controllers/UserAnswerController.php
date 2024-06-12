@@ -16,24 +16,29 @@ class UserAnswerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($quiz_id)
-    {
-        $questions = Question::where('quiz_id', $quiz_id)->get();
-        $rightAnswerCount = 0;
-        foreach ($questions as $question) {
-            $userAnswers = UserAnswer::where('question_id', $question->id)->get();
+    public function index(Request $request, $quiz_id)
+{
+    $questions = Question::where('quiz_id', $quiz_id)->get();
+    $rightAnswerCount = 0;
+    $totalPoint = 0;
 
-            foreach ($userAnswers as $userAnswer) {
-                $choice = Choice::find($userAnswer->choosen_choice_id);
-                
-                if ($choice && $choice->is_correct) {
-                    $rightAnswerCount += $question->point_value;
-                }
+    foreach ($questions as $question) {
+        $totalPoint += $question->point_value;
+        $userAnswers = UserAnswer::where([
+            'user_id' => $request->user()->id,
+            'question_id' => $question->id
+        ])->get();
+        foreach ($userAnswers as $userAnswer) {
+            $choice = Choice::find($userAnswer->choosen_choice_id);
+            if ($choice->is_correct) {
+                $rightAnswerCount += $question->point_value;
+                break; 
             }
         }
-
-        return $rightAnswerCount . '/';
     }
+
+    return $rightAnswerCount . '/' . $totalPoint;
+}
 
     /**
      * Store a newly created resource in storage.
