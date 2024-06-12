@@ -45,7 +45,7 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Number {{ $que->number }}</h3>
                                 </div>
-                                <form action="/quiz/answer" method="POST" id="quiz-form">
+                                <form action="/quiz/{{ $que->quiz_id }}/answer" method="POST" id="quiz-form">
                                     @csrf
                                     @if ($data)
                                         <input type="hidden" name="quiz_id" value="{{ $data->id }}">
@@ -142,9 +142,9 @@
 
                                         // Determine the URL based on the question type
                                         const questionType = "{{ $que->question_type }}";
-                                        let url = "/quiz/answer"; // Default URL for multiple choice and weighted multiple
+                                        let url = "/quiz/{{ $que->quiz_id }}/answer"; // Default URL for multiple choice and weighted multiple
                                         if (questionType === 'essay') {
-                                            url = "/quiz/essayAnswer";
+                                            url = "/quiz/{{ $que->quiz_id }}/essayAnswer";
                                         }
 
                                         // Send form data asynchronously
