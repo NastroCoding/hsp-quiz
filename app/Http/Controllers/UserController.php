@@ -120,33 +120,33 @@ class UserController extends Controller
 
     public function editProfile(Request $request, $id)
     {
-        $user = Auth::user();
-
-        // Validate the form data
+        $user = User::find(Auth::user()->id);
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'profile_picture' => 'sometimes|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'password' => 'min:8'
         ]);
 
-        // Handle the profile picture upload
-        if ($request->hasFile('image')) {
-            // Delete the old profile picture if it exists
-            if ($user->image) {
-                Storage::delete($user->image);
-            }
-
-            // Store the new profile picture
-            $path = $request->file('image')->store('images', 'public');
-            $user->image = $path;
+        if($request->password){
+            $newPass = Hash::make($request->password);
+        }else {
+            $newPass = $request->old_password;
         }
 
-        // Update the user's profile
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
+        if($request->hasFile('profile_picture')){
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $imageUrl = asset('storage/' . $imagePath);
+        }else {
+            $imageUrl = $user->image;
+        }
 
-        // Save the changes
-        $user->save();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'image' => $imageUrl,
+            'password' => $newPass
+        ]);
 
         return redirect('/admin/profile')->with('update_success', 'User Successfully Deleted!');
     }

@@ -2,6 +2,13 @@
 @section('container')
     <link rel="stylesheet" href="{{ URL::asset('dist/css/style.css') }}">
     <section class="content-header">
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger" role="alert">
+                    {{ $error }}
+                </div>
+            @endforeach
+        @endif
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
@@ -27,7 +34,7 @@
                             <div class="tab-content">
                                 <div id="settings">
                                     <form class="form-horizontal" method="POST"
-                                        action="/admin/profile/{{ Auth::user()->id }}" enctype="multipart/form-data">
+                                        action="/admin/profile/edit/{{ Auth::user()->id }}" enctype="multipart/form-data">
                                         @csrf
                                         <div class="card-body box-profile">
                                             <div class="text-center">
@@ -35,7 +42,7 @@
                                                     <label for="profile-picture-input">
                                                         <img id="profile-picture"
                                                             class="profile-user-img img-fluid img-circle"
-                                                            src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('/dist/img/user.png') }}"
+                                                            src="{{ Auth::user()->image ? asset(Auth::user()->image) : asset('/dist/img/user.png') }}"
                                                             alt="User profile picture">
                                                         <div class="overlay"></div>
                                                         <span class="edit-icon"><i class="fas fa-pencil-alt"></i></span>
@@ -64,10 +71,9 @@
                                         <div class="form-group row">
                                             <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
                                             <div class="col-sm-8">
+                                                <input type="hidden" name="old_password" value="{{ Auth::user()->password }}">
                                                 <input type="password" class="form-control" id="inputPassword"
-                                                    name="password" placeholder="Password"
-                                                    value="{{ Auth::user()->password }}" disabled
-                                                    style="cursor: not-allowed;" title="">
+                                                    name="password" placeholder="Password" title="">
                                             </div>
                                             <div class="col-sm-2">
                                                 <!-- Button to toggle password visibility -->

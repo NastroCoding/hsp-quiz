@@ -69,7 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/admin/user/delete/{id}', 'destroy');
             Route::get('/admin/user/edit/{id}', 'show');
             Route::post('/admin/user/edit/{id}', 'update');
-            Route::post('/admin/profile/{id}', 'editProfile');
+            Route::post('/admin/profile/edit/{id}', 'editProfile');
             Route::post('/admin/profile/{id}', 'edit');
             Route::get('/admin/users', 'index');
         });

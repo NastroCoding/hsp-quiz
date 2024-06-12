@@ -20,12 +20,12 @@ class AuthController extends Controller
             'password' => 'required|min:8'
         ]);
 
+        $user = User::where('email', $request->email)->first();
+        
         $credentials = [
             'email' => $request->email,
             'password' => $request->password,
         ];
-
-        $user = User::where('email', $request->email)->first();
         if(Auth::attempt($credentials)){
             if($user->role == 'admin' || $user->role == 'superadmin'){
                 return redirect('/admin/dashboard');
