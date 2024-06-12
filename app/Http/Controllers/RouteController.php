@@ -7,7 +7,10 @@ use App\Models\Education;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\User;
+use App\Models\Choice;
+use App\Models\UserScore;
 use App\Models\UserAnswer;
+use App\Models\UserEssay;
 use Illuminate\Http\Request;
 
 class RouteController extends Controller
@@ -108,10 +111,19 @@ class RouteController extends Controller
         $data = Quiz::latest()->get();
         $category = Category::latest()->get();
         $education = Education::latest()->get();
-        return view('views.index', [
+        $choice = Choice::all();
+        $scores = UserScore::all();
+        $answers = UserAnswer::all();
+        $essays = UserEssay::all();
+
+        return view('views.quiz_user', [
             'category' => $category,
             'education' => $education,
             'data' => $data,
+            'choice' => $choice,
+            'scores' => $scores,
+            'answers' => $answers,
+            'essays' => $essays,
             'page' => 'Home'
         ]);
     }
@@ -121,23 +133,42 @@ class RouteController extends Controller
         $data = Quiz::latest()->get();
         $category = Category::latest()->get();
         $education = Education::latest()->get();
+        $choice = Choice::all();
+        $scores = UserScore::all();
+        $answers = UserAnswer::all();
+        $essays = UserEssay::all();
+
         return view('views.quiz_user', [
             'category' => $category,
             'education' => $education,
             'data' => $data,
+            'choice' => $choice,
+            'scores' => $scores,
+            'answers' => $answers,
+            'essays' => $essays,
             'page' => 'Quiz'
         ]);
     }
+
 
     public function user_score()
     {
         $data = Quiz::latest()->get();
         $category = Category::latest()->get();
         $education = Education::latest()->get();
-        return view('views.score', [
+        $choice = Choice::all();
+        $scores = UserScore::all();
+        $answers = UserAnswer::all();
+        $essays = UserEssay::all();
+
+        return view('views.quiz_user', [
             'category' => $category,
             'education' => $education,
             'data' => $data,
+            'choice' => $choice,
+            'scores' => $scores,
+            'answers' => $answers,
+            'essays' => $essays,
             'page' => 'Score'
         ]);
     }
