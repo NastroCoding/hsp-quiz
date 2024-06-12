@@ -52,14 +52,16 @@ class QuizController extends Controller
         $quizzes = $query->get();
         $category = Category::all();
         $education = Education::all();
-        $users = $query->get();
+        $user = User::oldest()->get();
+        $scores = UserScore::all();
 
         return view('admin/quiz/quiz', [
             'page' => 'Quiz',
             'category' => $category,
             'education' => $education,
             'data' => $quizzes,
-            'user' => $users
+            'user' => $user,
+            'scores' => $scores
         ]);
     }
 

@@ -256,12 +256,18 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @foreach ($user as $user)
+                                            @php
+                                                $userId = auth()->user()->id;
+                                                $userScore = $scores->first(function ($score) use ($userId, $quiz) {
+                                                    return $score->user_id == $userId && $score->quiz_id == $quiz->id;
+                                                });
+                                            @endphp
+                                            @foreach ($user as $users)
                                                 <tr>
-                                                    <td>{{ $user->id }}</td>
-                                                    <td>{{ $user->email }}</td>
-                                                    <td>90/{{ $quiz->max_score }}</td>
-                                                    <td><a href="/admin/quiz/review"
+                                                    <td>{{ $users->id }}</td>
+                                                    <td>{{ $users->email }}</td>
+                                                    <td>{{ $userScore->score }}/{{ $quiz->max_score }}</td>
+                                                    <td><a href="/admin/quiz/review/{{ $users->id }}"
                                                             class="btn btn-sm btn-primary">Review</a>
                                                     </td>
                                                 </tr>

@@ -45,12 +45,14 @@ class RouteController extends Controller
         $education = Education::latest()->get();
         $quiz = Quiz::latest()->get();
         $user = User::latest()->get();
+        $scores = UserScore::all();
         return view('admin.quiz.quiz', [
             'page' => 'Quiz',
             'category' => $category,
             'education' => $education,
             'data' => $quiz,
-            'user' => $user
+            'user' => $user,
+            'scores' => $scores
         ]);
     }
 
