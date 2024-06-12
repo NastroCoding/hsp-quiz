@@ -84,13 +84,49 @@ class UserAnswerController extends Controller
             $message = 'Your answer has been submitted successfully!';
         }
 
+        $questions = Question::where('quiz_id', $quiz_id)->get();
+        $rightAnswerCount = 0;
+        $totalPoint = 0;
+
+        foreach ($questions as $question) {
+            $totalPoint += $question->point_value;
+            $userAnswers = UserAnswer::where([
+                'user_id' => $request->user()->id,
+                'question_id' => $question->id
+            ])->get();
+            foreach ($userAnswers as $userAnswer) {
+                $choice = Choice::find($userAnswer->choosen_choice_id);
+                if ($choice->is_correct) {
+                    $rightAnswerCount += $question->point_value;
+                    break;
+                }
+            }
+        }
+
+        $scoreCheck = UserScore::where([
+            'quiz_id' => $quiz_id,
+            'user_id' => Auth::id()
+        ])->first();
+
+        if (!$scoreCheck) {
+            $score = UserScore::create([
+                'user_id' => Auth::id(),
+                'quiz_id' => $quiz_id,
+                'score' => $rightAnswerCount
+            ]);
+        } else {
+            $scoreCheck->update([
+                'score' => $rightAnswerCount
+            ]);
+        }
+
         return redirect('/quiz')->with('success', $message);
     }
 
     /**
      * Store a newly created essay answer in storage.
      */
-    public function storeEssayAnswer(Request $request)
+    public function storeEssayAnswer(Request $request, $quiz_id)
     {
         // Validate the request data
         $validatedData = $request->validate([
@@ -128,6 +164,43 @@ class UserAnswerController extends Controller
                 ]);
                 $message = 'Your essay answer has been submitted successfully!';
             }
+
+            $questions = Question::where('quiz_id', $quiz_id)->get();
+            $rightAnswerCount = 0;
+            $totalPoint = 0;
+
+            foreach ($questions as $question) {
+                $totalPoint += $question->point_value;
+                $userAnswers = UserAnswer::where([
+                    'user_id' => $request->user()->id,
+                    'question_id' => $question->id
+                ])->get();
+                foreach ($userAnswers as $userAnswer) {
+                    $choice = Choice::find($userAnswer->choosen_choice_id);
+                    if ($choice->is_correct) {
+                        $rightAnswerCount += $question->point_value;
+                        break;
+                    }
+                }
+            }
+
+            $scoreCheck = UserScore::where([
+                'quiz_id' => $quiz_id,
+                'user_id' => Auth::id()
+            ])->first();
+
+            if (!$scoreCheck) {
+                $score = UserScore::create([
+                    'user_id' => Auth::id(),
+                    'quiz_id' => $quiz_id,
+                    'score' => $rightAnswerCount
+                ]);
+            } else {
+                $scoreCheck->update([
+                    'score' => $rightAnswerCount
+                ]);
+            }
+
 
             return redirect('/quiz')->with('success', $message);
         } catch (\Exception $e) {
