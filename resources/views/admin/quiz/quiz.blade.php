@@ -132,10 +132,11 @@
                             <div class="form-group">
                                 <label for="exampleInputToken">Token</label>
                                 <div class="input-group mb-3">
-                                    <input type="text" name="token" class="form-control" id="exampleInputToken generateToken"
-                                    placeholder="Enter token">
+                                    <input type="text" name="token" class="form-control"
+                                        id="exampleInputToken generateToken" placeholder="Enter token">
                                     <div class="input-group-append">
-                                        <span class="input-group-text" style="cursor: pointer" onclick="tokenGenerate()">Generate</span>
+                                        <span class="input-group-text" style="cursor: pointer"
+                                            onclick="tokenGenerate()">Generate</span>
                                     </div>
                                 </div>
                             </div>
@@ -366,8 +367,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card-body -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -378,29 +379,28 @@
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
-@endforeach
+    @endforeach
 @endsection
 
 @section('scripts')
     <script>
-
         function tokenGenerate() {
-            let generate = Math.random().toString(36).slice(1,7);
+            let generate = Math.random().toString(36).slice(1, 7);
             const valueToken = document.querySelector("#generateToken")
             valueToken.textContent = generate
         }
 
         $(document).ready(function() {
-            // Capture delete button click event
-            $('.delete-btn').click(function() {
-                // Get the ID of the user
-                var quizId = $(this).data('id');
-                // Construct the delete URL
-                var deleteUrl = '/admin/quiz/delete/' + quizId;
-                // Set the delete button href attribute
-                $('#deleteButton').attr('href', deleteUrl);
-            });
+        // Capture delete button click event
+        $('.delete-btn').click(function() {
+            // Get the ID of the user
+            var quizId = $(this).data('id');
+            // Construct the delete URL
+            var deleteUrl = '/admin/quiz/delete/' + quizId;
+            // Set the delete button href attribute
+            $('#deleteButton').attr('href', deleteUrl);
         });
-    });
-</script>
+        });
+        });
+    </script>
 @endsection

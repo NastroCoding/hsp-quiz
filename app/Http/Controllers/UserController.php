@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -105,5 +106,48 @@ class UserController extends Controller
         $user->delete();
 
         return redirect('/admin/users')->with('delete_success', 'User Successfully Deleted!');
+    }
+
+    /**
+     * Show the form for editing the user's profile.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit()
+    {
+        return response()->view('admin.edit-profile');
+    }
+
+    public function editProfile(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        // Validate the form data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        // Handle the profile picture upload
+        if ($request->hasFile('image')) {
+            // Delete the old profile picture if it exists
+            if ($user->image) {
+                Storage::delete($user->image);
+            }
+
+            // Store the new profile picture
+            $path = $request->file('image')->store('images', 'public');
+            $user->image = $path;
+        }
+
+        // Update the user's profile
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        // Save the changes
+        $user->save();
+
+        return redirect('/admin/profile')->with('update_success', 'User Successfully Deleted!');
     }
 }
