@@ -332,29 +332,32 @@ class QuizController extends Controller
         return redirect('/home');
     }
 
-    // public function reviewPage()
-    // {
-    //     // Getting user answers from the database (for example by using Eloquent or Query Builder)
-    //     $userAnswer = UserAnswer::find(1);
+    public function reviewPage()
+    {
+        // Getting user answers from the database (for example by using Eloquent or Query Builder)
+        $userAnswer = UserAnswer::find(1);
 
-    //     // Get related questions with user answers
-    //     $question = $userAnswer->question;
+        // Get related questions with user answers
+        $question = $userAnswer->question;
 
-    //     // get answer options related to the question
-    //     $options = $question->options;
+        // get answer options related to the question
+        $options = $question->options;
 
-    //     // Send data to view review
-    //     return view('review.page', [
-    //         'userAnswer' => $userAnswer,
-    //         'question' => $question,
-    //         'options' => $options,
-    //     ]);
-    // }
+        // Send data to view review
+        return view('admin.quiz.review', [
+            'userAnswer' => $userAnswer,
+            'question' => $question,
+            'options' => $options,
+            'page' => 'Review',
+        ]);
+    }
 
     public function quizReviewIndex()
     {
         $quizResults = QuizResult::with('user')->get();
-        dd($quizResults);
-        return view('quiz', compact('quizResults'));
+        return view('admin.quiz.review', [
+            'quizResults' => $quizResults,
+            'page' => 'Review',
+        ]);
     }
 }

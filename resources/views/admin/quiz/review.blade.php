@@ -20,7 +20,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Quiz 1</h1>
+                    <h1>Quiz {{}}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -50,7 +50,8 @@
                             <div class="form-group">
                                 @foreach ($userAnswer->question->options as $option)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="radio{{ $userAnswer->question->id }}"
+                                        <input class="form-check-input" type="radio"
+                                            name="radio{{ $userAnswer->question->id }}"
                                             {{ $option->is_answer ? 'checked' : '' }} disabled>
                                         <label class="form-check-label"> {{ $option->option }} <span
                                                 class="text-muted text-sm">{{ $option->is_answer ? '+10 Points' : '' }}</span></label>

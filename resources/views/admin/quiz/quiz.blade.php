@@ -276,7 +276,7 @@
                                                             Not Attempted
                                                         @endif
                                                     </td>
-                                                    <td><a href="/admin/quiz/review/{{ $users->id }}"
+                                                    <td><a href="/admin/quiz/review/{{ $quiz->slug }}/{{ $users->id }}"
                                                             class="btn btn-sm btn-primary">Review</a>
                                                     </td>
                                                 </tr>
