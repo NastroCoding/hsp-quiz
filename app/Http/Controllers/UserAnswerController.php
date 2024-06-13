@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Choice;
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\User;
 use App\Models\UserAnswer;
 use App\Models\UserEssay;
 use App\Models\UserScore;
@@ -105,45 +106,14 @@ class UserAnswerController extends Controller
             $message = 'Your answer has been submitted successfully!';
         }
 
-        $questions = Question::where('quiz_id', $quiz_id)->get();
-
-        $totalPoint = 0;
-        $rightAnswerCount = 0;
-
-        foreach ($questions as $question) {
-            $totalPoint += $question->point_value;
-
-            $userAnswers = UserAnswer::where([
-                'user_id' => $request->user()->id,
-                'question_id' => $question->id
-            ])->get();
-
-            foreach ($userAnswers as $userAnswer) {
-                $choice = Choice::find($userAnswer->choosen_choice_id);
-
-                $choiceSum = Choice::where([
-                    'question_id' => $question->id,
-                    'id' => $userAnswer->choosen_choice_id,
-                ])->get();
-                foreach ($choiceSum as $cho) {
-                    $maxScore = $cho->max('point_value');
-                    $rightAnswerCount += $cho->point_value;
-                    break;
-                }
-
-                if ($choice->is_correct) {
-                    $rightAnswerCount += $question->point_value;
-                    break;
-                }
-            }
-        }
-
-        $totalPoint += $maxScore;
-
         $scoreCheck = UserScore::where([
             'quiz_id' => $quiz_id,
             'user_id' => Auth::id()
         ])->first();
+
+        $user = User::find(Auth::id());
+        $calc = $user->calculateScoresForQuiz($quiz_id);
+        $rightAnswerCount = $calc->userScore;
 
         if (!$scoreCheck) {
             $score = UserScore::create([
@@ -202,48 +172,15 @@ class UserAnswerController extends Controller
                 $message = 'Your essay answer has been submitted successfully!';
             }
 
-            // Fetch all questions related to the quiz
-            $questions = Question::where('quiz_id', $quiz_id)->get();
-
-            // Initialize counters for total points and correctly answered points
-            $totalPoint = 0;
-            $rightAnswerCount = 0;
-
-            foreach ($questions as $question) {
-                $totalPoint += $question->point_value;
-
-                $userAnswers = UserAnswer::where([
-                    'user_id' => $request->user()->id,
-                    'question_id' => $question->id
-                ])->get();
-
-                foreach ($userAnswers as $userAnswer) {
-                    $choice = Choice::find($userAnswer->choosen_choice_id);
-
-                    $choiceSum = Choice::where([
-                        'question_id' => $question->id,
-                        'id' => $userAnswer->choosen_choice_id,
-                    ])->get();
-                    foreach ($choiceSum as $cho) {
-                        $maxScore = $cho->max('point_value');
-                        $rightAnswerCount += $cho->point_value;
-                        break;
-                    }
-
-                    if ($choice && $choice->is_correct) {
-                        $rightAnswerCount += $question->point_value;
-                        break;
-                    }
-                }
-            }
-
-            $totalPoint += $maxScore;
-
             $scoreCheck = UserScore::where([
                 'quiz_id' => $quiz_id,
                 'user_id' => Auth::id()
             ])->first();
-
+    
+            $user = User::find(Auth::id());
+            $calc = $user->calculateScoresForQuiz($quiz_id);
+            $rightAnswerCount = $calc->userScore;
+    
             if (!$scoreCheck) {
                 $score = UserScore::create([
                     'user_id' => Auth::id(),
@@ -255,7 +192,6 @@ class UserAnswerController extends Controller
                     'score' => $rightAnswerCount
                 ]);
             }
-
 
             return redirect('/quiz')->with('success', $message);
         } catch (\Exception $e) {

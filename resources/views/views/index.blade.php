@@ -58,7 +58,7 @@
                                     @if ($userScore)
                                         <a class="btn btn-success disabled" style="cursor:not-allowed;">Finished</a>
                                         <p class="float-right text-muted user-select-none">
-                                            {{ $userScore->score }}/{{ $quiz->max_score }}</p>
+                                            {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}</p>
                                     @elseif ($userAnswers->isNotEmpty() || $userEssays->isNotEmpty())
                                         <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
                                             data-toggle="modal" data-target="#modal-quiz">
