@@ -37,6 +37,9 @@
         <h3 class="col-md-6">{{ $user->name }}</h3>
         <div class="row">
             @foreach ($questions as $question)
+                @php
+                    $answer = $answers->firstWhere('question_id', $question->id);
+                @endphp
                 <div class="col-md-6">
                     <div class="card card-default">
                         <!-- form start -->
@@ -50,18 +53,16 @@
                             @endif
                             @if ($question->question_type == 'multiple_choice' || $question->question_type == 'weighted_multiple')
                                 <div class="form-group">
-                                    @php
-                                        $answers = $answers->firstWhere('question_id', $question->id);
-                                    @endphp
+                                    <p>{{ $question->number }}. {{ $question->question }}</p>
                                     @foreach ($question->choices as $index => $choice)
                                         <div class="form-check mb-1 mt-1">
                                             <!-- Add 'checked' attribute based on is_correct value -->
                                             @if ($question->question_type == 'weighted_multiple')
                                                 <input class="form-check-input" type="radio" disabled
-                                                    @if (isset($answers) && $answers->choosen_choice_id == $choice->id) checked @endif>
+                                                    @if (isset($answer) && $answer->choosen_choice_id == $choice->id) checked @endif>
                                             @else
                                                 <input class="form-check-input" type="checkbox" name="checkbox1[]"
-                                                    @if (isset($answers) && $answers->choosen_choice_id == $choice->id) checked @endif disabled>
+                                                    @if (isset($answer) && $answer->choosen_choice_id == $choice->id) checked @endif disabled>
                                             @endif
                                             <label class="form-check-label">
                                                 @if ($choice->image_choice)
