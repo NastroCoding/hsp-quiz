@@ -21,12 +21,14 @@ class RouteController extends Controller
         $category = Category::latest()->get();
         $education = Education::latest()->get();
         $user = User::latest()->get();
+        $scores = UserScore::all();
         return view('admin.dashboard', [
             'page' => 'Dashboard',
             'category' => $category,
             'education' => $education,
             'data' => $data,
-            'user' => $user
+            'user' => $user,
+            'scores' => $scores
         ]);
     }
 
