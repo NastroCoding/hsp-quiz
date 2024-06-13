@@ -271,7 +271,7 @@
                                                     <td>{{ $users->email }}</td>
                                                     <td>
                                                         @if ($specificScore)
-                                                            {{ $specificScore->score }}/{{ $quiz->max_score }}
+                                                            {{ $users->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
                                                         @else
                                                             Not Attempted
                                                         @endif

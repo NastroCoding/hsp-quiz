@@ -105,10 +105,8 @@ class UserAnswerController extends Controller
             $message = 'Your answer has been submitted successfully!';
         }
 
-        // Fetch all questions related to the quiz
         $questions = Question::where('quiz_id', $quiz_id)->get();
 
-        // Initialize counters for total points and correctly answered points
         $totalPoint = 0;
         $rightAnswerCount = 0;
 
@@ -133,7 +131,7 @@ class UserAnswerController extends Controller
                     break;
                 }
 
-                if ($choice && $choice->is_correct) {
+                if ($choice->is_correct) {
                     $rightAnswerCount += $question->point_value;
                     break;
                 }

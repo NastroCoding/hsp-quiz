@@ -73,4 +73,41 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserScore::class);
     }
+
+    public function calculateScoresForQuiz($quiz_id)
+    {
+        // Fetch all questions for the quiz
+        $questions = Question::with('choices')->where('quiz_id', $quiz_id)->get();
+
+        // Initialize scores
+        $totalPoints = 0;
+        $userScore = 0;
+
+        // Calculate scores
+        foreach ($questions as $question) {
+            $totalPoints += $question->point_value;
+
+            // Get the user's answer for the current question
+            $userAnswer = $this->useranswer->where('question_id', $question->id)->first();
+
+            if ($userAnswer) {
+                // Find the selected choice
+                $choice = $question->choices->firstWhere('id', $userAnswer->choosen_choice_id);
+                
+                if ($choice && $choice->is_correct) {
+                    
+                    // Add points based on the question's point value
+                    $userScore += $question->point_value;
+
+                    // Add points based on the choice's point value
+                    $userScore += $choice->point_value;
+                }
+            }
+        }
+
+        return (object)[
+            'totalPoints' => $totalPoints,
+            'userScore' => $userScore,
+        ];
+    }
 }
