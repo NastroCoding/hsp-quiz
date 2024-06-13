@@ -88,33 +88,7 @@
                             <button type="submit" class="btn btn-sm btn-info" data-toggle="modal"
                                 data-id="{{ $question->id }}"
                                 data-target="#edit-{{ $question->question_type }}{{ $question->id }}">Edit</button>
-                            <!-- edit quiz modal -->
-                            <div class="modal fade" id="edit-question{{ $question->id }}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Edit</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="editForm" action="/admin/quiz/question/update" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="question_id" id="editQuestionId">
-                                                <!-- Your form fields for editing -->
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" onclick="submitEditForm()">Save
-                                                changes</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end edit question modal -->
+
                             <button type="button" class="btn btn-danger btn-sm delete-btn float-right"
                                 data-id="{{ $question->id }}" data-toggle="modal" data-target="#delete">
                                 Delete
@@ -123,6 +97,32 @@
                     </div>
                     <!-- /.card -->
                 </div>
+                <!-- edit quiz modal -->
+                <div class="modal fade" id="edit-question{{ $question->id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editForm" action="/admin/quiz/question/update" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="question_id" id="editQuestionId">
+                                    <!-- Your form fields for editing -->
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="submitEditForm()">Save
+                                    changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end edit question modal -->
             @endforeach
         </div>
     </section>

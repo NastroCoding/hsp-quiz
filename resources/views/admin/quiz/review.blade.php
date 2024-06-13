@@ -20,7 +20,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Quiz {{}}</h1>
+                    <h1>{{ $quiz->slug }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -34,36 +34,65 @@
         <!-- /.container-fluid -->
     </section>
     <section class="content">
+        <h3 class="col-md-6">{{ $user->name }}</h3>
         <div class="row">
-            <div class="col-md-6">
-                <h3>User</h3>
-                @foreach ($answeredQuestions as $userAnswer)
+            @foreach ($questions as $question)
+                <div class="col-md-6">
                     <div class="card card-default">
                         <!-- form start -->
                         <div class="card-header">
-                            <p class="card-title text-muted">{{ $userAnswer->question->question }}</p>
+                            <p class="card-title text-muted">{{ $question->question_type }}</p>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <p>{{ $userAnswer->question->description }}</p>
-                            </div>
-                            <div class="form-group">
-                                @foreach ($userAnswer->question->options as $option)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio"
-                                            name="radio{{ $userAnswer->question->id }}"
-                                            {{ $option->is_answer ? 'checked' : '' }} disabled>
-                                        <label class="form-check-label"> {{ $option->option }} <span
-                                                class="text-muted text-sm">{{ $option->is_answer ? '+10 Points' : '' }}</span></label>
-                                    </div>
-                                @endforeach
-                            </div>
+                            @if ($question->images)
+                                <img src="{{ asset('' . $question->images) }}" alt="Question Image"
+                                    style="max-width: 300px;" class="rounded">
+                            @endif
+                            @if ($question->question_type == 'multiple_choice' || $question->question_type == 'weighted_multiple')
+                                <div class="form-group">
+                                    @php
+                                        $answers = $answers->firstWhere('question_id', $question->id);
+                                    @endphp
+                                    @foreach ($question->choices as $index => $choice)
+                                        <div class="form-check mb-1 mt-1">
+                                            <!-- Add 'checked' attribute based on is_correct value -->
+                                            @if ($question->question_type == 'weighted_multiple')
+                                                <input class="form-check-input" type="radio" disabled
+                                                    @if (isset($answers) && $answers->choosen_choice_id == $choice->id) checked @endif>
+                                            @else
+                                                <input class="form-check-input" type="checkbox" name="checkbox1[]"
+                                                    @if (isset($answers) && $answers->choosen_choice_id == $choice->id) checked @endif disabled>
+                                            @endif
+                                            <label class="form-check-label">
+                                                @if ($choice->image_choice)
+                                                    <img src="{{ asset('storage/' . $choice->image_choice) }}"
+                                                        alt="Choice Image" style="max-width: 200px;" class="rounded"><br>
+                                                @endif
+                                                {{ $choice->choice }}
+                                                <span class="text-muted text-sm">
+                                                    @if ($question->question_type == 'weighted_multiple')
+                                                        +{{ $choice->point_value }} Points
+                                                    @endif
+                                                </span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="form-group">
+                                    <p>{{ $question->number }}. {{ $question->question }}</p>
+                                    @foreach ($essays as $essay)
+                                        <textarea class="form-control disabled" rows="3" placeholder="Enter ..." name="essay_answer" id="essay_answer"
+                                            disabled>{{ $essay->answer }}</textarea>
+                                    @endforeach
+                                </div>
+                            @endif
+
                         </div>
-                        <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
     </section>
 @endsection
