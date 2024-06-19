@@ -54,12 +54,10 @@
                                                 return $score->user_id == $userId && $score->quiz_id == $quiz->id;
                                             });
                                             $userAnswers = $answers->filter(function ($answer) use ($userId, $quiz) {
-                                                return $answer->user_id == $userId &&
-                                                    $answer->question_id->quiz_id == $quiz->id;
+                                                return $answer->user_id == $userId && $answer->question_id == $quiz->id;
                                             });
                                             $userEssays = $essays->filter(function ($essay) use ($userId, $quiz) {
-                                                return $essay->user_id == $userId &&
-                                                    $essay->question_id->quiz_id == $quiz->id;
+                                                return $essay->user_id == $userId && $essay->question_id == $quiz->id;
                                             });
                                         @endphp
 

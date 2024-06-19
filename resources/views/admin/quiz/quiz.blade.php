@@ -408,16 +408,15 @@
         }
 
         $(document).ready(function() {
-        // Capture delete button click event
-        $('.delete-btn').click(function() {
-            // Get the ID of the user
-            var quizId = $(this).data('id');
-            // Construct the delete URL
-            var deleteUrl = '/admin/quiz/delete/' + quizId;
-            // Set the delete button href attribute
-            $('#deleteButton').attr('href', deleteUrl);
-        });
-        });
+            // Capture delete button click event
+            $('.delete-btn').click(function() {
+                // Get the ID of the user
+                var quizId = $(this).data('id');
+                // Construct the delete URL
+                var deleteUrl = '/admin/quiz/delete/' + quizId;
+                // Set the delete button href attribute
+                $('#deleteButton').attr('href', deleteUrl);
+            });
         });
     </script>
 @endsection
