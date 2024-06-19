@@ -7,7 +7,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Welcome Admin</h1>
+                    <h1>Welcome {{ Auth::user()->name }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -222,30 +222,30 @@
                                             </tr>
                                         </thead>
                                         @php
-                                                $userId = auth()->user()->id;
-                                                $userScore = $scores->first(function ($score) use ($userId, $quiz) {
-                                                    return $score->user_id == $userId && $score->quiz_id == $quiz->id;
-                                                });
+                                            $userId = auth()->user()->id;
+                                            $userScore = $scores->first(function ($score) use ($userId, $quiz) {
+                                                return $score->user_id == $userId && $score->quiz_id == $quiz->id;
+                                            });
+                                        @endphp
+                                        @foreach ($user as $users)
+                                            @php
+                                                $specificScore = $users->scores->firstWhere('quiz_id', $quiz->id);
                                             @endphp
-                                            @foreach ($user as $users)
-                                                @php
-                                                    $specificScore = $users->scores->firstWhere('quiz_id', $quiz->id);
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $users->id }}</td>
-                                                    <td>{{ $users->email }}</td>
-                                                    <td>
-                                                        @if ($specificScore)
-                                                            {{ $users->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
-                                                        @else
-                                                            Not Attempted
-                                                        @endif
-                                                    </td>
-                                                    <td><a href="/admin/quiz/review/{{ $quiz->slug }}/{{ $users->id }}"
-                                                            class="btn btn-sm btn-primary">Review</a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                            <tr>
+                                                <td>{{ $users->id }}</td>
+                                                <td>{{ $users->email }}</td>
+                                                <td>
+                                                    @if ($specificScore)
+                                                        {{ $users->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
+                                                    @else
+                                                        Not Attempted
+                                                    @endif
+                                                </td>
+                                                <td><a href="/admin/quiz/review/{{ $quiz->slug }}/{{ $users->id }}"
+                                                        class="btn btn-sm btn-primary">Review</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>

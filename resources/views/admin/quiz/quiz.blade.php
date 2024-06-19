@@ -216,7 +216,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a id="deleteButton" class="btn btn-danger">
+                    <a id="deleteButton" class="btn btn-danger" href="/admin/quiz/delete">
                         Delete
                     </a>
                 </div>
@@ -384,10 +384,10 @@
                             </div>
                     </div>
                     <!-- /.card-body -->
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-success" value="Edit Quiz">
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-success" value="Edit Quiz">
+                    </div>
                 </div>
                 </form>
             </div>
@@ -396,6 +396,8 @@
         <!-- /.modal-dialog -->
     @endforeach
 @endsection
+
+
 
 @section('scripts')
     <script>
