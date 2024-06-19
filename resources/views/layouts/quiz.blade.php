@@ -101,8 +101,53 @@
                 if (distance < 0) {
                     clearInterval(x);
                     document.getElementById("countdownTimer").innerHTML = "EXPIRED";
-                    localStorage.removeItem('countdownEndTime'); // Remove stored value on expiration
-                    // Optionally, you can redirect or handle quiz expiry here
+                    localStorage.removeItem('countdownEndTime');
+                    const formData = new FormData(document.getElementById("quiz-form"));
+
+                    // Determine the URL based on the question type
+                    const questionType = "{{ $que->question_type }}";
+                    let url =
+                    "/quiz/{{ $que->quiz_id }}/answer"; // Default URL for multiple choice and weighted multiple
+                    if (questionType === 'essay') {
+                        url = "/quiz/{{ $que->quiz_id }}/essayAnswer";
+                    }
+
+                    // Send form data asynchronously
+                    fetch(url, {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // Optionally handle successful submission
+                                console.log("Form submitted successfully");
+                                isSubmit = true;
+                                if (isSubmit) {
+                                    // If it's the final question, submit the form
+                                    document.getElementById("quiz-form").submit();
+                                    window.location.replace("/quiz");
+                                } else {
+                                    // Redirect to the next or previous question page
+                                    const currentQuestionNumber = parseInt("{{ $que->number }}");
+                                    const nextQuestionNumber = currentQuestionNumber + offset;
+                                    if (nextQuestionNumber >= 1 && nextQuestionNumber <=
+                                        {{ $lastQuestionNumber }}) {
+                                        window.location.href = "/quiz/view/{{ $slug }}/" +
+                                            nextQuestionNumber;
+                                    } else {
+                                        console.log("Invalid question number");
+                                    }
+                                }
+                            } else {
+                                // Optionally handle errors
+                                console.error("Form submission failed");
+
+                            }
+                        })
+                        .catch(error => {
+                            // Handle network errors
+                            console.error("Network error:", error);
+                        });
                 } else {
                     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
