@@ -104,8 +104,8 @@
                     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                    document.getElementById("countdownTimer").innerHTML = hours + "h "
-                    + minutes + "m " + seconds + "s ";
+                    document.getElementById("countdownTimer").innerHTML = hours + "h " +
+                        minutes + "m " + seconds + "s ";
                 }
             }
 
