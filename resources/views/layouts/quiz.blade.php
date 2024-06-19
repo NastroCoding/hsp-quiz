@@ -30,15 +30,12 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
                             class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item">
-                    <button id="resetButton">Reset Timer</button>
-                </li>
                 <li class="nav-item"></li>
             </ul>
             <!-- Right navbar links -->
             <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link disabled">Time Remaining: <span id="countdownTimer1"></span></a>
+                    <p class="nav-link" style="color: #000">Time Remaining: <span id="countdownTimer"></span></p>
                 </li>
             </ul>
         </nav>
@@ -79,7 +76,43 @@
     {{-- JQuery  --}}
     <script src="{{ URL::asset('/dist/js/jquery.min.js') }}"></script>
     <script>
-        CountdownTimer.init("countdownTimer1");
+        $(document).ready(function() {
+            var countdownMinutes = {{ $data->time }}; // Assuming $data->time is in minutes
+            var countDownDate;
+
+            // Check if countdown end time is already stored in localStorage
+            var storedCountdownTime = localStorage.getItem('countdownEndTime');
+
+            if (storedCountdownTime) {
+                countDownDate = new Date(storedCountdownTime).getTime();
+            } else {
+                // Calculate countdown end time
+                countDownDate = new Date().getTime() + (countdownMinutes * 60 * 1000);
+                localStorage.setItem('countdownEndTime', new Date(countDownDate));
+            }
+
+            function updateCountdown() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("countdownTimer").innerHTML = "EXPIRED";
+                    localStorage.removeItem('countdownEndTime'); // Remove stored value on expiration
+                    // Optionally, you can redirect or handle quiz expiry here
+                } else {
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById("countdownTimer").innerHTML = hours + "h "
+                    + minutes + "m " + seconds + "s ";
+                }
+            }
+
+            updateCountdown(); // Call it immediately on page load
+            var x = setInterval(updateCountdown, 1000); // Update every second
+        });
     </script>
 </body>
 
