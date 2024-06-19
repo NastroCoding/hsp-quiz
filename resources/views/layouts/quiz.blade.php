@@ -76,18 +76,22 @@
     <script src="{{ URL::asset('/dist/js/jquery.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            var countdownMinutes = {{ $data->time }}; // Assuming $data->time is in minutes
+
+            var data = @json($data);
+            console.log(data['time']);
+
+            var countdownMinutes = data['time']; // Assuming $data->time is in minutes
             var countDownDate;
 
             // Check if countdown end time is already stored in localStorage
-            var storedCountdownTime = localStorage.getItem('countdownEndTime');
+            var storedCountdownTime = localStorage.getItem(`countdownEndTime_${data['id']}`);
 
             if (storedCountdownTime) {
                 countDownDate = new Date(storedCountdownTime).getTime();
             } else {
                 // Calculate countdown end time
                 countDownDate = new Date().getTime() + (countdownMinutes * 60 * 1000);
-                localStorage.setItem('countdownEndTime', new Date(countDownDate));
+                localStorage.setItem(`countdownEndTime_${data['id']}`, new Date(countDownDate));
             }
 
             function updateCountdown() {
@@ -109,7 +113,7 @@
                 }
             }
 
-            updateCountdown(); // Call it immediately on page load
+            updateCountdown(); // Call it immediately on page load  
             var x = setInterval(updateCountdown, 1000); // Update every second
         });
     </script>
