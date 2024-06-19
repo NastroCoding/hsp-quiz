@@ -189,49 +189,4 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const countdownElements = ['countdownTimer1', 'countdownTimer2', 'countdownTimer3'];
-            countdownElements.forEach(timerId => CountdownTimer.init(timerId));
-
-            document.getElementById('resetButton')?.addEventListener('click', function() {
-                CountdownTimer.resetCountdown();
-            });
-        });
-
-        var CountdownTimer = {
-            resetCountdown: function() {
-                var countDownDate = new Date().getTime() + {{ $quiz->time }} * 60 * 1000;
-                localStorage.setItem("countdownDate", countDownDate.toString());
-                location.reload();
-            },
-
-            init: function(timerId) {
-                var countDownDate = localStorage.getItem("countdownDate") || new Date().getTime() +
-                    {{ $quiz->time }} * 60 * 1000;
-                localStorage.setItem("countdownDate", countDownDate);
-
-                var x = setInterval(function() {
-                    var now = new Date().getTime();
-                    var distance = countDownDate - now;
-
-                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    var timerElement = document.getElementById(timerId);
-                    if (timerElement) {
-                        timerElement.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
-                    }
-
-                    if (distance < 0) {
-                        clearInterval(x);
-                        if (timerElement) {
-                            timerElement.innerHTML = "EXPIRED";
-                        }
-                    }
-                }, 1000);
-            }
-        };
-    </script>
 @endsection

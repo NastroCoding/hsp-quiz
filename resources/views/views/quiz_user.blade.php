@@ -54,25 +54,28 @@
                                                 return $score->user_id == $userId && $score->quiz_id == $quiz->id;
                                             });
                                             $userAnswers = $answers->filter(function ($answer) use ($userId, $quiz) {
-                                                return $answer->user_id == $userId && $answer->question_id == $quiz->id;
+                                                return $answer->user_id == $userId &&
+                                                    $answer->question_id->quiz_id == $quiz->id;
                                             });
                                             $userEssays = $essays->filter(function ($essay) use ($userId, $quiz) {
-                                                return $essay->user_id == $userId && $essay->question_id == $quiz->id;
+                                                return $essay->user_id == $userId &&
+                                                    $essay->question_id->quiz_id == $quiz->id;
                                             });
                                         @endphp
 
                                         @if ($userScore)
                                             <a class="btn btn-success disabled" style="cursor:not-allowed;">Finished</a>
                                             <p class="float-right text-muted user-select-none">
-                                                {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore  }}/{{ $quiz->max_score }}</p>
+                                                {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
+                                            </p>
                                         @elseif ($userAnswers->isNotEmpty() || $userEssays->isNotEmpty())
                                             <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
-                                                data-toggle="modal" data-target="#modal-quiz">
+                                                data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
                                                 Continue
                                             </a>
                                         @else
                                             <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
-                                                data-toggle="modal" data-target="#modal-quiz">
+                                                data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
                                                 Enter
                                             </a>
                                         @endif
@@ -80,6 +83,41 @@
 
                                 </div>
                             </div>
+                            @if ($data->isNotEmpty())
+                                <div class="modal fade" id="modal-quiz{{ $quiz->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Enter Quiz</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="/quiz/view/{{ $quiz->slug }}" method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <label for="exampleInputEmail1">Enter quiz code</label>
+                                                            <input type="text" name="token" class="form-control"
+                                                                id="exampleInputEmail1" placeholder="XXXXXX">
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.card-body -->
+                                                </div>
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success">Go</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                            @endif
                         @endforeach
                     @endif
                 </div>
@@ -89,38 +127,4 @@
         </div>
         <!-- /.content -->
     </div>
-
-    @if ($data->isNotEmpty())
-        <div class="modal fade" id="modal-quiz">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Enter Quiz</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="/quiz/view/{{ $quiz->slug }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Enter quiz code</label>
-                                    <input type="text" name="token" class="form-control" id="exampleInputEmail1"
-                                        placeholder="XXXXXX">
-                                </div>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Go</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    @endif
 @endsection

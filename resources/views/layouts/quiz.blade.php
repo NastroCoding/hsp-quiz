@@ -30,9 +30,6 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
                             class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item">
-                    <button id="resetButton">Reset Timer</button>
-                </li>
                 <li class="nav-item"></li>
             </ul>
             <!-- Right navbar links -->
@@ -45,7 +42,7 @@
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
             <a href="" class="brand-link">
-                <img src="{{ URL::asset('dist/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image"
+                <img src="{{ URL::asset('dist/img/logo.png') }}" alt="HSP Logo" class="brand-image"
                     style="opacity: 0.8" />
                 <span class="brand-text font-weight-light">HSPnet</span>
             </a>
@@ -80,6 +77,50 @@
     <script src="{{ URL::asset('/dist/js/jquery.min.js') }}"></script>
     <script>
         CountdownTimer.init("countdownTimer1");
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const countdownElements = ['countdownTimer1'];
+            countdownElements.forEach(timerId => CountdownTimer.init(timerId));
+
+            document.getElementById('resetButton')?.addEventListener('click', function() {
+                CountdownTimer.resetCountdown();
+            });
+        });
+
+        var CountdownTimer = {
+            resetCountdown: function() {
+                var countDownDate = new Date().getTime() + {{ $quiz->time }} * 60 * 1000;
+                localStorage.setItem("countdownDate", countDownDate.toString());
+                location.reload();
+            },
+
+            init: function(timerId) {
+                var countDownDate = localStorage.getItem("countdownDate") || new Date().getTime() +
+                    {{ $quiz->time }} * 60 * 1000;
+                localStorage.setItem("countdownDate", countDownDate);
+
+                var x = setInterval(function() {
+                    var now = new Date().getTime();
+                    var distance = countDownDate - now;
+
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    var timerElement = document.getElementById(timerId);
+                    if (timerElement) {
+                        timerElement.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+                    }
+
+                    if (distance < 0) {
+                        clearInterval(x);
+                        if (timerElement) {
+                            timerElement.innerHTML = "EXPIRED";
+                        }
+                    }
+                }, 1000);
+            }
+        };
     </script>
 </body>
 
