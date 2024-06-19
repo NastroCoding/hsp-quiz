@@ -189,6 +189,7 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- review modal-->
+    @foreach ($data as $quiz)
     <div class="modal fade" id="review">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -260,6 +261,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    @endforeach
     <!-- sort modal -->
     <div class="modal fade" id="modal-filter">
         <div class="modal-dialog">
