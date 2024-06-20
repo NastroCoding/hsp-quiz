@@ -21,6 +21,7 @@
             }
         }
     </style>
+    
     @php
         $answeredQuestionIds = $userAnswers->pluck('question_id')->toArray();
     @endphp

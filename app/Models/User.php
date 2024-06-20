@@ -10,13 +10,12 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    use SoftDeletes;
 
     protected $dates = ['deleted_at'];
 

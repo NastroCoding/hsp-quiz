@@ -48,7 +48,7 @@ Route::controller(RouteController::class)->group(function () {
     Route::get('/home', 'index')->middleware('auth');
     Route::get('/quiz', 'user_quiz')->middleware('auth');
     Route::get('/score', 'user_score')->middleware('auth');
-    Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
+    // Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
 
     // QUIZ REVIEW TABLE
     Route::get('/admin/quiz/review/{slug}/{userId}', [QuizController::class, 'quizReviewIndex']);
@@ -78,14 +78,14 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/admin/education/create', 'store')->middleware('admin');
             Route::get('/admin/education/delete/{id}', 'destroy')->middleware('admin');
             Route::put('/admin/education/edit/{id}', 'update')->middleware('admin');
-            Route::put('/admin/education', 'index')->middleware('admin');
+            Route::get('/admin/education', 'index')->middleware('admin');
         });
 
         Route::controller(CategoryController::class)->group(function () {
             Route::post('/admin/category/create', 'store')->middleware('admin');
             Route::get('/admin/category/delete/{id}', 'destroy')->middleware('admin');
             Route::put('/admin/category/edit/{id}', 'update')->middleware('admin');
-            Route::put('/admin/category', 'index')->middleware('admin');
+            Route::get('/admin/category', 'index')->middleware('admin');
         });
 
         Route::controller(QuestionController::class)->group(function () {
@@ -112,7 +112,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin/quiz/delete/{id}', 'destroy')->middleware('admin');
         Route::get('/quiz/view/{slug}/{number}', 'quiz_num');
         Route::post('/quiz/view/{slug}', 'quiz_view');
-        Route::get('/quiz/filter', 'index')->name('quiz.index'); // Add the new route here
+        Route::get('/quiz/filter',  'index')->name('quiz.filter'); // Add the new route here
         Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
         Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
     });

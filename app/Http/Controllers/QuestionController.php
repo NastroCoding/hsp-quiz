@@ -108,7 +108,7 @@ class QuestionController extends Controller
             'question' => 'required|string',
             'point_value' => 'required',
             'question_type' => 'required',
-            'questionImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for question image
+            'questionImage' => 'nullable|image|mimes:jpeg,png,jpg,gif', // Add validation for question image
             'choices' => 'required_without:choice_images|array',
             'choices.*' => 'required_without:choice_images', // Require string for each choice if choice_images are not provided
             'is_correct' => 'required|array', // Make is_correct field required
@@ -271,7 +271,7 @@ class QuestionController extends Controller
         $validatedData = $request->validate([
             'quiz_id' => 'required|exists:quizzes,id',
             'question' => 'required|string',
-            'essayImage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation for essay image
+            'essayImage' => 'nullable|image|mimes:jpeg,png,jpg,gif', // Add validation for essay image
         ]);
 
         // Find the essay question by ID
@@ -411,9 +411,11 @@ class QuestionController extends Controller
         $submittedChoiceIds = $validatedData['choice_ids'] ?? [];
 
         // Delete choices that are not present in the form submission
-        $question->choices()->whereNotIn('id', $submittedChoiceIds)->delete();
 
         // Update existing choices and add new ones if necessary
+        // Array to collect IDs of choices that should not be deleted
+        $allChoiceIdsToKeep = [];
+
         foreach ($validatedData['choices'] as $index => $choice) {
             $pointValue = $validatedData['point_value'][$index];
             if (isset($submittedChoiceIds[$index])) {
@@ -437,6 +439,10 @@ class QuestionController extends Controller
                         $imagePath = $request->file('choice_images.' . $index)->store('choice_images', 'public');
                         $questionChoice->image_choice = $imagePath;
                     }
+                    $questionChoice->save();
+
+                    // Add to array of choice IDs to keep
+                    $allChoiceIdsToKeep[] = $choiceId;
                 }
             } else {
                 // Create new choice
@@ -455,8 +461,16 @@ class QuestionController extends Controller
                 }
 
                 $newChoice->save();
+
+                // Add new choice ID to the array of choice IDs to keep
+                $allChoiceIdsToKeep[] = $newChoice->id;
             }
         }
+
+        // Now delete choices not in the collected IDs
+        $question->choices()
+            ->whereNotIn('id', $allChoiceIdsToKeep)
+            ->delete();
 
         // Handle choices that only have images and no text
         foreach ($request->file('choice_images', []) as $index => $file) {

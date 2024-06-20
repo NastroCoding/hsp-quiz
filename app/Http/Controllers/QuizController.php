@@ -24,6 +24,9 @@ class QuizController extends Controller
     {
         $category = Category::all();
         $education = Education::all();
+        $answers = UserAnswer::all();
+        $scores = UserScore::all();
+        $essays = UserEssay::all();
 
         $query = Quiz::query();
 
@@ -37,7 +40,7 @@ class QuizController extends Controller
 
         $data = $query->get();
 
-        return view('views\quiz_user', compact('data', 'category', 'education'));
+        return view('views.quiz_user', compact('data', 'category', 'education', 'answers', 'scores', 'essays'));
     }
 
     public function quizSearch(Request $request)
@@ -69,6 +72,9 @@ class QuizController extends Controller
     {
         $category = Category::all();
         $education = Education::all();
+        $answers = UserAnswer::all();
+        $scores = UserScore::all();
+        $essays = UserEssay::all();
 
         $query = Quiz::query();
 
@@ -85,7 +91,7 @@ class QuizController extends Controller
 
         $page = 'Dashboard'; // Define the $page variable
 
-        return view('admin.dashboard', compact('data', 'category', 'education', 'user', 'page'));
+        return view('admin.dashboard', compact('data', 'category', 'education', 'user', 'page', 'scores', 'answers', 'essays'));
     }
 
 

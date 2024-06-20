@@ -101,7 +101,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form method="GET" action="{{ route('quiz.index') }}">
+                <form method="GET" action="{{ route('quiz.filter') }}">
                     <div class="modal-body">
                         <div class="card-body">
                             <div class="row">

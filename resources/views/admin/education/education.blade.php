@@ -96,7 +96,7 @@
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <label for="exampleInputToken">Education Name</label>
-                                                        <input type="text" name="education" class="form-control"
+                                                        <input type="text" name="education_name" class="form-control"
                                                             id="exampleInputToken" placeholder="Enter Education"
                                                             value="{{ $education->education_name }}">
                                                     </div>

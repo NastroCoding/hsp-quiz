@@ -25,6 +25,7 @@ class CategoryController extends Controller
 
         return view('admin.category.category', [
             'data' => $categories,
+            'page' => 'Categories'
         ]);
     }
 

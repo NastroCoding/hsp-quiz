@@ -32,9 +32,10 @@ class AuthController extends Controller
             }else{
                 return redirect('/home');
             }
-        }else{
-            return back()->withErrors('Invalid Credentials');
-        }
+        }    
+        
+        return back()->withErrors('Invalid Credentials');
+        
     }
 
     public function register(){

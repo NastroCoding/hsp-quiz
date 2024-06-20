@@ -24,6 +24,7 @@ class EducationController extends Controller
 
         return view('admin.education.education', [
             'data' => $educations,
+            'page' => 'Educations'
         ]);
     }
 
