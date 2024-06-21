@@ -36,8 +36,8 @@
                         <div class="col-lg-4">
                             <div class="card" style="width: 18rem;">
                                 @if ($quiz->thumbnail)
-                                    <img class="card-img-top" src="/storage{{ asset($quiz->thumbnail) }}" alt="Card image cap"
-                                style="width:100%; height:180px;">
+                                    <img class="card-img-top" src="/storage{{ asset($quiz->thumbnail) }}"
+                                        alt="Card image cap" style="width:100%; height:180px;">
                                 @endif
                                 <div class="card-header">
                                     <h5 class="card-title m-0">{{ $quiz->title }}</h5>
@@ -50,7 +50,7 @@
                                     </a>
                                     <a class="btn btn-sm btn-success" href="/admin/quiz/{{ $quiz->slug }}">Manage</a>
                                     <a class="btn btn-sm btn-warning" href="/admin/quiz/" data-toggle="modal"
-                                        data-target="#review">Review</a>
+                                        data-target="#review{{ $quiz->id }}">Review</a>
                                     <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
                                         data-id="{{ $quiz->id }}" data-toggle="modal" data-target="#delete">
                                         Delete
@@ -192,77 +192,84 @@
     </div>
     <!-- review modal-->
     @foreach ($data as $quiz)
-    <div class="modal fade" id="review">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Review</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Participated users</h3>
-                                    <input type="date" id="local-date" name="local-date" value=""
-                                        size="10" class="float-right card-title">
+        <div class="modal fade" id="review{{ $quiz->id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Review</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Participated users</h3>
+                                        <input type="date" id="local-date-{{ $quiz->id }}" name="local-date"
+                                            value="" size="10" class="float-right card-title"
+                                            data-quiz-id="{{ $quiz->id }}">
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body table-responsive p-0">
+                                        <table class="table table-hover text-nowrap" id="user-table-{{ $quiz->id }}">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>User</th>
+                                                    <th>Points</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="user-table-body-{{ $quiz->id }}">
+                                                @php
+                                                    $userId = auth()->user()->id;
+                                                    $userScore = $scores->first(function ($score) use ($userId, $quiz) {
+                                                        return $score->user_id == $userId &&
+                                                            $score->quiz_id == $quiz->id;
+                                                    });
+                                                @endphp
+                                                @foreach ($user as $users)
+                                                    @php
+                                                        $specificScore = $users->scores->firstWhere(
+                                                            'quiz_id',
+                                                            $quiz->id,
+                                                        );
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $users->id }}</td>
+                                                        <td>{{ $users->email }}</td>
+                                                        <td>
+                                                            @if ($specificScore)
+                                                                {{ $users->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
+                                                            @else
+                                                                Not Attempted
+                                                            @endif
+                                                        </td>
+                                                        <td><a href="/admin/quiz/review/{{ $quiz->slug }}/{{ $users->id }}"
+                                                                class="btn btn-sm btn-primary">Review</a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
                                 </div>
-                                <!-- /.card-header -->
-                                <div class="card-body table-responsive p-0">
-                                    <table class="table table-hover text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>User</th>
-                                                <th>Score</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        @php
-                                            $userId = auth()->user()->id;
-                                            $userScore = $scores->first(function ($score) use ($userId, $quiz) {
-                                                return $score->user_id == $userId && $score->quiz_id == $quiz->id;
-                                            });
-                                        @endphp
-                                        @foreach ($user as $users)
-                                            @php
-                                                $specificScore = $users->scores->firstWhere('quiz_id', $quiz->id);
-                                            @endphp
-                                            <tr>
-                                                <td>{{ $users->id }}</td>
-                                                <td>{{ $users->email }}</td>
-                                                <td>
-                                                    @if ($specificScore)
-                                                        {{ $users->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
-                                                    @else
-                                                        Not Attempted
-                                                    @endif
-                                                </td>
-                                                <td><a href="/admin/quiz/review/{{ $quiz->slug }}/{{ $users->id }}"
-                                                        class="btn btn-sm btn-primary">Review</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <!-- /.card-body -->
+                                <!-- /.card -->
                             </div>
-                            <!-- /.card -->
                         </div>
+                        <!-- /.card -->
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
     @endforeach
     <!-- sort modal -->
     <div class="modal fade" id="modal-filter">
@@ -316,6 +323,68 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.content -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dateInputs = document.querySelectorAll('input[type="date"][id^="local-date-"]');
+
+            dateInputs.forEach(dateInput => {
+                dateInput.addEventListener('change', function() {
+                    const selectedDate = this.value;
+                    const quizId = this.getAttribute('data-quiz-id');
+
+                    // Get the table body to update
+                    const tableBody = document.getElementById(`user-table-body-${quizId}`);
+
+                    // Determine the URL based on whether a date is selected
+                    const url = selectedDate ? `/admin/quiz/date/${quizId}?date=${selectedDate}` :
+                        `/admin/quiz/date/${quizId}`;
+
+                    // Make an AJAX request to fetch the filtered data
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Clear the table body
+                            tableBody.innerHTML = '';
+
+                            // Populate the table with the filtered data
+                            data.users.forEach(user => {
+                                const row = document.createElement('tr');
+
+                                const idCell = document.createElement('td');
+                                idCell.textContent = user.id;
+
+                                const emailCell = document.createElement('td');
+                                emailCell.textContent = user.email;
+
+                                const pointsCell = document.createElement('td');
+                                if (user.specificScore) {
+                                    pointsCell.textContent =
+                                        `${user.userScore}/${user.max_score}`;
+                                } else {
+                                    pointsCell.textContent = 'Not Attempted';
+                                }
+
+                                const reviewCell = document.createElement('td');
+                                const reviewButton = document.createElement('a');
+                                reviewButton.href =
+                                    `/admin/quiz/review/${data.quiz_slug}/${user.id}`;
+                                reviewButton.className = 'btn btn-sm btn-primary';
+                                reviewButton.textContent = 'Review';
+                                reviewCell.appendChild(reviewButton);
+
+                                row.appendChild(idCell);
+                                row.appendChild(emailCell);
+                                row.appendChild(pointsCell);
+                                row.appendChild(reviewCell);
+
+                                tableBody.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching filtered users:', error));
+                });
+            });
+        });
+    </script>
 @endsection
 
 @section('scripts')
