@@ -68,7 +68,7 @@
                                             @foreach ($que->choices as $index => $choice)
                                                 <div class="form-group m-0">
                                                     <div class="form-check">
-                                                        <input class="form-check-input question" type="radio"
+                                                        <input class="form-check-input" type="radio"
                                                             name="choosen_choice_id" value="{{ $choice->id }}"
                                                             id="radio{{ $index + 1 }}"
                                                             @if (isset($userAnswer) && $userAnswer->choosen_choice_id == $choice->id) checked @endif>
@@ -193,20 +193,21 @@
                                     }
 
                                     function checkUnansweredQuestions() {
-                                        const questions = document.querySelectorAll('.question');
-                                        for (let i = 0; i < questions.length; i++) {
-                                            const radios = questions[i].querySelectorAll('input[type="radio"]');
+                                        const questions = document.querySelectorAll('.card-body');
+                                        let allAnswered = true;
+                                        questions.forEach((question, index) => {
+                                            const radios = question.querySelectorAll('input[type="radio"]');
                                             let isAnswered = false;
                                             radios.forEach(radio => {
                                                 if (radio.checked) {
                                                     isAnswered = true;
                                                 }
                                             });
-                                            if (!isAnswered) {
-                                                return false; // Found an unanswered question
+                                            if (radios.length > 0 && !isAnswered) {
+                                                allAnswered = false;
                                             }
-                                        }
-                                        return true; // All questions are answered
+                                        });
+                                        return allAnswered;
                                     }
 
                                     window.addEventListener('load', (event) => {
@@ -231,7 +232,7 @@
                                                 if (checkUnansweredQuestions()) {
                                                     navigateQuestion(event, 0, true);
                                                 } else {
-                                                    alert("Harap jawab semua pertanyaan untuk menyelesaikan Quiz ini!");
+                                                    alert("Ada soal yang belum terjawab, harap jawab semua soal!");
                                                     event.preventDefault();
                                                 }
                                             });

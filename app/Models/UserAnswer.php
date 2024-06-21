@@ -9,6 +9,9 @@ class UserAnswer extends Model
 {
     use HasFactory;
 
+    protected $dates = ['deleted_at'];
+    protected $guarded = [];
+
     public function user()
     {
         return $this->belongsTo(User::class);

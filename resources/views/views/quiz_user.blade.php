@@ -56,18 +56,20 @@
                                             $userAnswers = $answers->filter(function ($answer) use ($userId, $quiz) {
                                                 return $answer->user_id == $userId && $answer->question_id == $quiz->id;
                                             });
-                                            
                                             $userEssays = $essays->filter(function ($essay) use ($userId, $quiz) {
                                                 return $essay->user_id == $userId && $essay->question_id == $quiz->id;
                                             });
+                                            
+                                            $questionCount = $quiz->questions->count();
+                                            $answerCount = $answers->count()
                                         @endphp
 
-                                        @if ($userScore)
+                                        @if ($questionCount == $answerCount)
                                             <a class="btn btn-success disabled" style="cursor:not-allowed;">Finished</a>
                                             <p class="float-right text-muted user-select-none">
                                                 {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
                                             </p>
-                                        @elseif ($userAnswers->isEmpty() || $userEssays->isEmpty())
+                                        @elseif ($questionCount > $answerCount)
                                             <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
                                                 data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
                                                 Continue
