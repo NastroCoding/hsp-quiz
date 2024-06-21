@@ -161,8 +161,8 @@
                                                     <div class="form-group">
                                                         <label for="exampleInputPassword">Password</label>
                                                         <input type="password" name="password" class="form-control"
-                                                            id="exampleInputPassword" placeholder="Password"
-                                                            value="{{ $user->password }}">
+                                                            id="exampleInputPassword" placeholder="New Password"
+                                                            value="">
                                                     </div>
                                                 </div>
                                                 <!-- /.card-body -->

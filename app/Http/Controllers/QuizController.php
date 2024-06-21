@@ -388,4 +388,44 @@ class QuizController extends Controller
             'page' => 'Review',
         ]);
     }
+
+    public function getParticipants(Request $request, $quizId)
+    {
+        $date = $request->query('date');
+
+        // Find the quiz to get the slug
+        $quiz = Quiz::find($quizId);
+        $quizSlug = $quiz->slug;
+
+        if ($date) {
+            // Fetch users who participated on a specific date
+            $users = User::whereHas('scores', function ($query) use ($quizId, $date) {
+                $query->where('quiz_id', $quizId)
+                    ->whereDate('created_at', $date);
+            })->get();
+        } else {
+            // Fetch all users who participated in the quiz
+            $users = User::whereHas('scores', function ($query) use ($quizId) {
+                $query->where('quiz_id', $quizId);
+            })->get();
+        }
+
+        // Format the response to include the necessary user data
+        $response = $users->map(function ($user) use ($quizId) {
+            $specificScore = $user->scores->firstWhere('quiz_id', $quizId);
+
+            return [
+                'id' => $user->id,
+                'email' => $user->email,
+                'specificScore' => $specificScore ? true : false,
+                'userScore' => $specificScore ? $user->calculateScoresForQuiz($quizId)->userScore : null,
+                'max_score' => $specificScore ? $specificScore->quiz->max_score : null,
+            ];
+        });
+
+        return response()->json([
+            'users' => $response,
+            'quiz_slug' => $quizSlug,
+        ]);
+    }
 }

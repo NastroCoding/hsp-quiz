@@ -253,12 +253,13 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Participated users</h3>
-                                        <input type="date" id="local-date" name="local-date" value=""
-                                            size="10" class="float-right card-title">
+                                        <input type="date" id="local-date-{{ $quiz->id }}" name="local-date"
+                                            value="" size="10" class="float-right card-title"
+                                            data-quiz-id="{{ $quiz->id }}">
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body table-responsive p-0">
-                                        <table class="table table-hover text-nowrap">
+                                        <table class="table table-hover text-nowrap" id="user-table-{{ $quiz->id }}">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
@@ -267,31 +268,36 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            @php
-                                                $userId = auth()->user()->id;
-                                                $userScore = $scores->first(function ($score) use ($userId, $quiz) {
-                                                    return $score->user_id == $userId && $score->quiz_id == $quiz->id;
-                                                });
-                                            @endphp
-                                            @foreach ($user as $users)
+                                            <tbody id="user-table-body-{{ $quiz->id }}">
                                                 @php
-                                                    $specificScore = $users->scores->firstWhere('quiz_id', $quiz->id);
+                                                    $userId = auth()->user()->id;
+                                                    $userScore = $scores->first(function ($score) use ($userId, $quiz) {
+                                                        return $score->user_id == $userId &&
+                                                            $score->quiz_id == $quiz->id;
+                                                    });
                                                 @endphp
-                                                <tr>
-                                                    <td>{{ $users->id }}</td>
-                                                    <td>{{ $users->email }}</td>
-                                                    <td>
-                                                        @if ($specificScore)
-                                                            {{ $users->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
-                                                        @else
-                                                            Not Attempted
-                                                        @endif
-                                                    </td>
-                                                    <td><a href="/admin/quiz/review/{{ $quiz->slug }}/{{ $users->id }}"
-                                                            class="btn btn-sm btn-primary">Review</a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                @foreach ($user as $users)
+                                                    @php
+                                                        $specificScore = $users->scores->firstWhere(
+                                                            'quiz_id',
+                                                            $quiz->id,
+                                                        );
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $users->id }}</td>
+                                                        <td>{{ $users->email }}</td>
+                                                        <td>
+                                                            @if ($specificScore)
+                                                                {{ $users->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
+                                                            @else
+                                                                Not Attempted
+                                                            @endif
+                                                        </td>
+                                                        <td><a href="/admin/quiz/review/{{ $quiz->slug }}/{{ $users->id }}"
+                                                                class="btn btn-sm btn-primary">Review</a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -406,9 +412,69 @@
         </div>
         <!-- /.modal-dialog -->
     @endforeach
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dateInputs = document.querySelectorAll('input[type="date"][id^="local-date-"]');
+
+            dateInputs.forEach(dateInput => {
+                dateInput.addEventListener('change', function() {
+                    const selectedDate = this.value;
+                    const quizId = this.getAttribute('data-quiz-id');
+
+                    // Get the table body to update
+                    const tableBody = document.getElementById(`user-table-body-${quizId}`);
+
+                    // Determine the URL based on whether a date is selected
+                    const url = selectedDate ? `/admin/quiz/date/${quizId}?date=${selectedDate}` :
+                        `/admin/quiz/date/${quizId}`;
+
+                    // Make an AJAX request to fetch the filtered data
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Clear the table body
+                            tableBody.innerHTML = '';
+
+                            // Populate the table with the filtered data
+                            data.users.forEach(user => {
+                                const row = document.createElement('tr');
+
+                                const idCell = document.createElement('td');
+                                idCell.textContent = user.id;
+
+                                const emailCell = document.createElement('td');
+                                emailCell.textContent = user.email;
+
+                                const pointsCell = document.createElement('td');
+                                if (user.specificScore) {
+                                    pointsCell.textContent =
+                                        `${user.userScore}/${user.max_score}`;
+                                } else {
+                                    pointsCell.textContent = 'Not Attempted';
+                                }
+
+                                const reviewCell = document.createElement('td');
+                                const reviewButton = document.createElement('a');
+                                reviewButton.href =
+                                    `/admin/quiz/review/${data.quiz_slug}/${user.id}`;
+                                reviewButton.className = 'btn btn-sm btn-primary';
+                                reviewButton.textContent = 'Review';
+                                reviewCell.appendChild(reviewButton);
+
+                                row.appendChild(idCell);
+                                row.appendChild(emailCell);
+                                row.appendChild(pointsCell);
+                                row.appendChild(reviewCell);
+
+                                tableBody.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching filtered users:', error));
+                });
+            });
+        });
+    </script>
 @endsection
-
-
 
 @section('scripts')
     <script>
