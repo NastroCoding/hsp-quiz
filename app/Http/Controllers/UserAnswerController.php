@@ -176,11 +176,11 @@ class UserAnswerController extends Controller
                 'quiz_id' => $quiz_id,
                 'user_id' => Auth::id()
             ])->first();
-    
+
             $user = User::find(Auth::id());
             $calc = $user->calculateScoresForQuiz($quiz_id);
             $rightAnswerCount = $calc->userScore;
-    
+
             if (!$scoreCheck) {
                 $score = UserScore::create([
                     'user_id' => Auth::id(),
@@ -226,8 +226,41 @@ class UserAnswerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserAnswer $userAnswer)
+    public function deleteAnswer(Request $request, $quiz_id)
     {
-        // Code for deleting a resource (if needed)
+        // Validate the request data
+        $validatedData = $request->validate([
+            'question_id' => 'required|exists:questions,id',
+        ]);
+
+        // Find the existing answer and delete it
+        $existingAnswer = UserAnswer::where('user_id', Auth::id())
+            ->where('question_id', $validatedData['question_id'])
+            ->first();
+
+        if ($existingAnswer) {
+            $existingAnswer->delete();
+            $message = 'Your answer has been deleted successfully!';
+        } else {
+            $message = 'No answer found to delete!';
+        }
+
+        // Recalculate the user's score
+        $user = User::find(Auth::id());
+        $calc = $user->calculateScoresForQuiz($quiz_id);
+        $rightAnswerCount = $calc->userScore;
+
+        $scoreCheck = UserScore::where([
+            'quiz_id' => $quiz_id,
+            'user_id' => Auth::id()
+        ])->first();
+
+        if ($scoreCheck) {
+            $scoreCheck->update([
+                'score' => $rightAnswerCount
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => $message]);
     }
 }

@@ -13,6 +13,8 @@ class UserAnswer extends Model
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
 
+    protected $table = 'user_answers';
+
     public function user()
     {
         return $this->belongsTo(User::class);

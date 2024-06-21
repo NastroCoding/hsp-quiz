@@ -56,6 +56,7 @@
                                             $userAnswers = $answers->filter(function ($answer) use ($userId, $quiz) {
                                                 return $answer->user_id == $userId && $answer->question_id == $quiz->id;
                                             });
+                                            
                                             $userEssays = $essays->filter(function ($essay) use ($userId, $quiz) {
                                                 return $essay->user_id == $userId && $essay->question_id == $quiz->id;
                                             });
@@ -66,13 +67,13 @@
                                             <p class="float-right text-muted user-select-none">
                                                 {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
                                             </p>
-                                        @elseif ($userAnswers->isNotEmpty() || $userEssays->isNotEmpty())
-                                            <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
+                                        @elseif ($userAnswers->isEmpty() || $userEssays->isEmpty())
+                                            <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
                                                 data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
                                                 Continue
                                             </a>
                                         @else
-                                            <a class="btn btn-primary" href="/admin/quiz/edit/{{ $quiz->id }}"
+                                            <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
                                                 data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
                                                 Enter
                                             </a>

@@ -522,9 +522,17 @@ class QuestionController extends Controller
      */
     public function destroy(string $id)
     {
-        $question = Question::where('id', $id);
+        $question = Question::find($id);
+        $quizId = $question->quiz_id;
         $question->delete();
 
-        return redirect()->back()->with('success', 'Question deleted successfully!');
+        // Re-fetch all questions associated with the quiz and re-order their numbers
+        $questions = Question::where('quiz_id', $quizId)->orderBy('number')->get();
+        foreach ($questions as $index => $question) {
+            $question->number = $index + 1;
+            $question->save();
+        }
+
+        return redirect()->back()->with('success', 'Question deleted successfully and questions re-ordered!');
     }
 }

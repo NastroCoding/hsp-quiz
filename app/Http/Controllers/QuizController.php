@@ -246,6 +246,7 @@ class QuizController extends Controller
             ->get();
 
         // Get the countdown time from the quiz
+        session(['quiz_token' => $request->token]);
         $countdownTime = $quiz->time;
         $data = Quiz::where('slug', $slug)->first();
         return view('views.quiz_page', [
@@ -267,6 +268,12 @@ class QuizController extends Controller
         $quiz = Quiz::where('slug', $slug)->first();
         if (!$quiz) {
             return response()->json(['message' => 'Quiz not found'], 404);
+        }
+
+        $token = session('quiz_token');
+
+        if ($token != $quiz->token) {
+            return response()->json(['message' => 'Invalid token'], 403);
         }
 
         $question = Question::where('quiz_id', $quiz->id)
@@ -369,7 +376,7 @@ class QuizController extends Controller
         $userAnswer = UserAnswer::where('user_id', $userId)
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
-        $userEssays = UserEssay::where('user_id', Auth::id())
+        $userEssays = UserEssay::where('user_id', $userId)
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
         return view('admin.quiz.review', [

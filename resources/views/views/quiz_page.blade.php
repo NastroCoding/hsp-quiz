@@ -21,7 +21,7 @@
             }
         }
     </style>
-    
+
     @php
         $answeredQuestionIds = $userAnswers->pluck('question_id')->toArray();
     @endphp
@@ -68,7 +68,7 @@
                                             @foreach ($que->choices as $index => $choice)
                                                 <div class="form-group m-0">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio"
+                                                        <input class="form-check-input question" type="radio"
                                                             name="choosen_choice_id" value="{{ $choice->id }}"
                                                             id="radio{{ $index + 1 }}"
                                                             @if (isset($userAnswer) && $userAnswer->choosen_choice_id == $choice->id) checked @endif>
@@ -83,6 +83,7 @@
                                                     </div>
                                                 </div>
                                             @endforeach
+                                            <a href="#" id="reset-button">Clear my selection</a>
                                         @elseif ($que->question_type == 'essay')
                                             @php
                                                 $userEssay = $userEssays->firstWhere('question_id', $que->id);
@@ -92,7 +93,6 @@
                                             </div>
                                         @endif
                                     </div>
-
                                     <div class="card-footer">
                                         @if ($que->number != 1)
                                             <button class="btn btn-default" type="button" id="back-button">
@@ -111,6 +111,104 @@
                                 </form>
 
                                 <script>
+                                    function navigateQuestion(event, offset, isSubmit = false) {
+                                        event.preventDefault(); // Prevent default form submission
+
+                                        const radios = document.querySelectorAll('input[type="radio"]');
+                                        let isChecked = false;
+                                        let chosenChoiceId = null;
+
+                                        radios.forEach(radio => {
+                                            if (radio.checked) {
+                                                isChecked = true;
+                                                chosenChoiceId = radio.value; // Assume radio value is choice ID
+                                            }
+                                        });
+
+                                        if (isChecked) {
+                                            // Serialize form data
+                                            const formData = new FormData(document.getElementById("quiz-form"));
+                                            formData.append('choosen_choice_id', chosenChoiceId);
+
+                                            // Determine the URL based on the question type
+                                            const questionType = "{{ $que->question_type }}";
+                                            let url = "/quiz/{{ $que->quiz_id }}/answer"; // Default URL for multiple choice and weighted multiple
+                                            if (questionType === 'essay') {
+                                                url = "/quiz/{{ $que->quiz_id }}/essayAnswer";
+                                            }
+
+                                            // Send form data asynchronously
+                                            fetch(url, {
+                                                    method: "POST",
+                                                    body: formData
+                                                })
+                                                .then(response => {
+                                                    if (response.ok) {
+                                                        console.log("Form submitted successfully");
+
+                                                        if (isSubmit) {
+                                                            document.getElementById("quiz-form").submit();
+                                                            window.location.replace("/quiz");
+                                                        } else {
+                                                            const currentQuestionNumber = parseInt("{{ $que->number }}");
+                                                            const nextQuestionNumber = currentQuestionNumber + offset;
+                                                            if (nextQuestionNumber >= 1 && nextQuestionNumber <= {{ $lastQuestionNumber }}) {
+                                                                window.location.href = "/quiz/view/{{ $slug }}/" + nextQuestionNumber;
+                                                            } else {
+                                                                console.log("Invalid question number");
+                                                            }
+                                                        }
+                                                    } else {
+                                                        console.error("Form submission failed");
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error("Network error:", error);
+                                                });
+                                        } else {
+                                            // Handle deselection case
+                                            const formData = new FormData(document.getElementById("quiz-form"));
+                                            fetch("/quiz/{{ $que->quiz_id }}/deleteAnswer", {
+                                                    method: "POST",
+                                                    body: formData
+                                                })
+                                                .then(response => {
+                                                    if (response.ok) {
+                                                        console.log("Answer deleted successfully");
+                                                        const currentQuestionNumber = parseInt("{{ $que->number }}");
+                                                        const nextQuestionNumber = currentQuestionNumber + offset;
+                                                        if (nextQuestionNumber >= 1 && nextQuestionNumber <= {{ $lastQuestionNumber }}) {
+                                                            window.location.href = "/quiz/view/{{ $slug }}/" + nextQuestionNumber;
+                                                        } else {
+                                                            console.log("Invalid question number");
+                                                        }
+                                                    } else {
+                                                        console.error("Failed to delete answer");
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error("Network error:", error);
+                                                });
+                                        }
+                                    }
+
+                                    function checkUnansweredQuestions() {
+                                        const questions = document.querySelectorAll('.question');
+                                        for (let i = 0; i < questions.length; i++) {
+                                            const radios = questions[i].querySelectorAll('input[type="radio"]');
+                                            let isAnswered = false;
+                                            radios.forEach(radio => {
+                                                if (radio.checked) {
+                                                    isAnswered = true;
+                                                }
+                                            });
+                                            if (!isAnswered) {
+                                                return false; // Found an unanswered question
+                                            }
+                                        }
+                                        return true; // All questions are answered
+                                    }
+
                                     window.addEventListener('load', (event) => {
                                         const nextButton = document.getElementById("next-button");
                                         const backButton = document.getElementById("back-button");
@@ -130,59 +228,26 @@
 
                                         if (submitButton) {
                                             submitButton.addEventListener("click", function(event) {
-                                                navigateQuestion(event, 0, true);
+                                                if (checkUnansweredQuestions()) {
+                                                    navigateQuestion(event, 0, true);
+                                                } else {
+                                                    alert("Harap jawab semua pertanyaan untuk menyelesaikan Quiz ini!");
+                                                    event.preventDefault();
+                                                }
+                                            });
+                                        }
+
+                                        // Reset button logic
+                                        const resetButton = document.getElementById('reset-button');
+                                        if (resetButton) {
+                                            resetButton.addEventListener('click', function() {
+                                                const radios = document.querySelectorAll('input[type="radio"]');
+                                                radios.forEach(radio => {
+                                                    radio.checked = false;
+                                                });
                                             });
                                         }
                                     });
-
-                                    function navigateQuestion(event, offset, isSubmit = false) {
-                                        event.preventDefault(); // Prevent default form submission
-
-                                        // Serialize form data
-                                        const formData = new FormData(document.getElementById("quiz-form"));
-
-                                        // Determine the URL based on the question type
-                                        const questionType = "{{ $que->question_type }}";
-                                        let url = "/quiz/{{ $que->quiz_id }}/answer"; // Default URL for multiple choice and weighted multiple
-                                        if (questionType === 'essay') {
-                                            url = "/quiz/{{ $que->quiz_id }}/essayAnswer";
-                                        }
-
-                                        // Send form data asynchronously
-                                        fetch(url, {
-                                                method: "POST",
-                                                body: formData
-                                            })
-                                            .then(response => {
-                                                if (response.ok) {
-                                                    // Optionally handle successful submission
-                                                    console.log("Form submitted successfully");
-
-                                                    if (isSubmit) {
-                                                        // If it's the final question, submit the form
-                                                        document.getElementById("quiz-form").submit();
-                                                        window.location.replace("/quiz");
-                                                    } else {
-                                                        // Redirect to the next or previous question page
-                                                        const currentQuestionNumber = parseInt("{{ $que->number }}");
-                                                        const nextQuestionNumber = currentQuestionNumber + offset;
-                                                        if (nextQuestionNumber >= 1 && nextQuestionNumber <= {{ $lastQuestionNumber }}) {
-                                                            window.location.href = "/quiz/view/{{ $slug }}/" + nextQuestionNumber;
-                                                        } else {
-                                                            console.log("Invalid question number");
-                                                        }
-                                                    }
-                                                } else {
-                                                    // Optionally handle errors
-                                                    console.error("Form submission failed");
-
-                                                }
-                                            })
-                                            .catch(error => {
-                                                // Handle network errors
-                                                console.error("Network error:", error);
-                                            });
-                                    }
                                 </script>
                         @endif
                     @endforeach

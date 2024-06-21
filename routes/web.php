@@ -75,28 +75,28 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         Route::controller(EducationController::class)->group(function () {
-            Route::post('/admin/education/create', 'store')->middleware('admin');
-            Route::get('/admin/education/delete/{id}', 'destroy')->middleware('admin');
-            Route::put('/admin/education/edit/{id}', 'update')->middleware('admin');
-            Route::get('/admin/education', 'index')->middleware('admin');
+            Route::post('/admin/education/create', 'store');
+            Route::get('/admin/education/delete/{id}', 'destroy');
+            Route::put('/admin/education/edit/{id}', 'update');
+            Route::get('/admin/education', 'index');
         });
 
         Route::controller(CategoryController::class)->group(function () {
-            Route::post('/admin/category/create', 'store')->middleware('admin');
-            Route::get('/admin/category/delete/{id}', 'destroy')->middleware('admin');
-            Route::put('/admin/category/edit/{id}', 'update')->middleware('admin');
-            Route::get('/admin/category', 'index')->middleware('admin');
+            Route::post('/admin/category/create', 'store');
+            Route::get('/admin/category/delete/{id}', 'destroy');
+            Route::put('/admin/category/edit/{id}', 'update');
+            Route::get('/admin/category', 'index');
         });
 
         Route::controller(QuestionController::class)->group(function () {
-            Route::post('/admin/quiz/question/create', 'store')->middleware('admin');
-            Route::post('/admin/quiz/question/create/essay', 'essayStore')->middleware('admin');
-            Route::post('/admin/quiz/question/create/weighted', 'weightedStore')->middleware('admin');
-            Route::post('/admin/quiz/question/edit/{id}', 'update')->middleware('admin');
-            Route::post('/admin/quiz/question/edit/essay/{id}', 'essayUpdate')->middleware('admin');
-            Route::post('/admin/quiz/question/edit/weighted/{id}', 'weightedUpdate')->middleware('admin');
-            Route::get('/admin/quiz/{slug}', 'show')->middleware('admin');
-            Route::get('/admin/quiz/question/delete/{id}', 'destroy')->middleware('admin');
+            Route::post('/admin/quiz/question/create', 'store');
+            Route::post('/admin/quiz/question/create/essay', 'essayStore');
+            Route::post('/admin/quiz/question/create/weighted', 'weightedStore');
+            Route::post('/admin/quiz/question/edit/{id}', 'update');
+            Route::post('/admin/quiz/question/edit/essay/{id}', 'essayUpdate');
+            Route::post('/admin/quiz/question/edit/weighted/{id}', 'weightedUpdate');
+            Route::get('/admin/quiz/{slug}', 'show');
+            Route::get('/admin/quiz/question/delete/{id}', 'destroy');
         });
     });
 
@@ -110,11 +110,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/admin/quiz/create', 'store')->middleware('admin');
         Route::post('/admin/quiz/edit/{id}', 'update')->middleware('admin');
         Route::get('/admin/quiz/delete/{id}', 'destroy')->middleware('admin');
+        Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex')->middleware('admin'); // Add the new route here
+        Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
         Route::get('/quiz/view/{slug}/{number}', 'quiz_num');
         Route::post('/quiz/view/{slug}', 'quiz_view');
-        Route::get('/quiz/filter',  'index')->name('quiz.filter'); // Add the new route here
-        Route::get('/admin/quizzes', 'adminIndex')->name('quiz.adminIndex'); // Add the new route here
-        Route::get('/admin/quiz', 'quizSearch')->middleware('admin');
+        Route::get('/quiz/filter',  'index')->name('quiz.filter');
     });
 
     Route::controller(UserAnswerController::class)->group(function () {
@@ -124,6 +124,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/quiz', function () {
             return Redirect::to('/quiz');
         })->name('submit_quiz');
-        Route::get('/quiz/{id}/result', 'index')->middleware('auth');
+        Route::post('/quiz/{quiz_id}/deleteAnswer', 'deleteAnswer')->name('quiz.deleteAnswer');
+
     });
 });
