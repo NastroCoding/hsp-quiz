@@ -12,6 +12,7 @@ use App\Models\UserScore;
 use App\Models\UserAnswer;
 use App\Models\UserEssay;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RouteController extends Controller
 {
@@ -141,8 +142,6 @@ class RouteController extends Controller
         $scores = UserScore::all();
         $answers = UserAnswer::all();
         $essays = UserEssay::all();
-
-        dump(UserAnswer::query());
 
         return view('views.quiz_user', [
             'category' => $category,
