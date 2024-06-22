@@ -50,18 +50,21 @@
                                         <p class="card-text">{{ $quiz->description }}</p>
                                         @php
                                             $userId = auth()->user()->id;
-                                            $userScore = $scores->first(function ($score) use ($userId, $quiz) {
-                                                return $score->user_id == $userId && $score->quiz_id == $quiz->id;
+                                            $quizId = $quiz->id;
+                                            $quizQuestions = $quiz->questions->pluck('id');
+
+                                            $userAnswers = $answers->filter(function ($answer) use ($userId,$quizQuestions) {
+                                                return $answer->user_id == $userId &&
+                                                    $quizQuestions->contains($answer->question_id);
                                             });
-                                            $userAnswers = $answers->filter(function ($answer) use ($userId, $quiz) {
-                                                return $answer->user_id == $userId && $answer->question_id == $quiz->id;
+
+                                            $userEssays = $essays->filter(function ($essay) use ($userId,$quizQuestions) {
+                                                return $essay->user_id == $userId &&
+                                                    $quizQuestions->contains($essay->question_id);
                                             });
-                                            $userEssays = $essays->filter(function ($essay) use ($userId, $quiz) {
-                                                return $essay->user_id == $userId && $essay->question_id == $quiz->id;
-                                            });
-                                            
-                                            $questionCount = $quiz->questions->count();
-                                            $answerCount = $answers->count()
+
+                                            $answerCount = $userAnswers->count();
+                                            $questionCount = $quizQuestions->count();
                                         @endphp
 
                                         @if ($questionCount == $answerCount)
@@ -69,7 +72,7 @@
                                             <p class="float-right text-muted user-select-none">
                                                 {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
                                             </p>
-                                        @elseif ($questionCount > $answerCount)
+                                        @elseif ($questionCount > 1)
                                             <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
                                                 data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
                                                 Continue
