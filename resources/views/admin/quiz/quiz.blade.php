@@ -360,6 +360,16 @@
                                                 image</label>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputTime">Time</label>
+                                        <div class="input-group mb-3">
+                                            <input type="number" name="time" class="form-control" id="exampleInputTime"
+                                                placeholder="Minutes" value="{{ $quiz->time }}">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">min</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div id="editQuizImagePreview" class="mt-1">
                                         @if ($quiz->thumbnail)
                                             <img src="/storage{{ asset($quiz->thumbnail) }}" class="img-thumbnail"

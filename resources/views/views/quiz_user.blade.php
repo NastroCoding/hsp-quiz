@@ -53,38 +53,57 @@
                                             $quizId = $quiz->id;
                                             $quizQuestions = $quiz->questions->pluck('id');
 
-                                            $userAnswers = $answers->filter(function ($answer) use ($userId,$quizQuestions) {
+                                            $userAnswers = $answers->filter(function ($answer) use (
+                                                $userId,
+                                                $quizQuestions,
+                                            ) {
                                                 return $answer->user_id == $userId &&
                                                     $quizQuestions->contains($answer->question_id);
                                             });
 
-                                            $userEssays = $essays->filter(function ($essay) use ($userId,$quizQuestions) {
+                                            $userEssays = $essays->filter(function ($essay) use (
+                                                $userId,
+                                                $quizQuestions,
+                                            ) {
                                                 return $essay->user_id == $userId &&
                                                     $quizQuestions->contains($essay->question_id);
                                             });
 
                                             $answerCount = $userAnswers->count();
                                             $questionCount = $quizQuestions->count();
+
+                                            dump('answ' . $answerCount);
+                                            dump($questionCount);
                                         @endphp
 
-                                        @if ($questionCount == $answerCount)
-                                            <a class="btn btn-success disabled" style="cursor:not-allowed;">Finished</a>
-                                            <p class="float-right text-muted user-select-none">
-                                                {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
-                                            </p>
-                                        @elseif ($questionCount > 1)
-                                            <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
-                                                data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
-                                                Continue
-                                            </a>
-                                        @else
-                                            <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
-                                                data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
-                                                Enter
-                                            </a>
-                                        @endif
-                                    </div>
+                                        <span id="quizContainer_{{ $quizId }}">
+                                            <!-- Default state based on answer count -->
+                                            <span id="defaultState_{{ $quizId }}">
+                                                @if ($questionCount == $answerCount)
+                                                    <a class="btn btn-success disabled"
+                                                        style="cursor:not-allowed;">Finished</a>
+                                                    <p class="float-right text-muted user-select-none">
+                                                        {{ auth()->user()->calculateScoresForQuiz($quiz->id)->userScore }}/{{ $quiz->max_score }}
+                                                    </p>
+                                                @elseif ($answerCount > 0)
+                                                    <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
+                                                        data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
+                                                        Continue
+                                                    </a>
+                                                @else
+                                                    <a class="btn btn-primary" href="/quiz/view/{{ $quiz->slug }}"
+                                                        data-toggle="modal" data-target="#modal-quiz{{ $quiz->id }}">
+                                                        Enter
+                                                    </a>
+                                                @endif
+                                            </span>
 
+                                            <!-- Finished state when the timer has expired -->
+                                            <span id="timerFinished_{{ $quizId }}" style="display: none;">
+                                                <a class="btn btn-success disabled" style="cursor:not-allowed;">Time is Up!</a>
+                                            </span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             @if ($data->isNotEmpty())
@@ -131,4 +150,26 @@
         </div>
         <!-- /.content -->
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Assuming `quizzes` is an array of quiz IDs passed from the server side
+            var quizzes = @json($quiz->pluck('id'));
+
+            quizzes.forEach(function(quizId) {
+                var storedCountdownTime = localStorage.getItem(`countdownEndTime_${quizId}`);
+
+                if (storedCountdownTime) {
+                    var countDownDate = new Date(storedCountdownTime).getTime();
+                    var now = new Date().getTime();
+
+                    // Check if the timer for this quiz has expired
+                    if (now >= countDownDate) {
+                        // Timer has expired for this specific quiz
+                        document.getElementById(`defaultState_${quizId}`).style.display = 'none';
+                        document.getElementById(`timerFinished_${quizId}`).style.display = 'block';
+                    }
+                }
+            });
+        });
+    </script>
 @endsection
