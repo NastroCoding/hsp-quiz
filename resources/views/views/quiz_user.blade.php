@@ -71,9 +71,6 @@
 
                                             $answerCount = $userAnswers->count();
                                             $questionCount = $quizQuestions->count();
-
-                                            dump('answ' . $answerCount);
-                                            dump($questionCount);
                                         @endphp
 
                                         <span id="quizContainer_{{ $quizId }}">
