@@ -106,24 +106,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <!-- select -->
-                                    <div class="form-group">
-                                        <label>Category</label>
-                                        <select class="form-control" name="category">
-                                            <option value="">None</option>
-                                            @foreach ($category as $cat)
-                                                <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>Education</label>
                                         <select class="form-control" name="education">
                                             <option value="">None</option>
                                             @foreach ($education as $edu)
-                                                <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
+                                                <option value="{{ $edu->id }}"
+                                                    {{ isset($selectedEducation) && $selectedEducation == $edu->id ? 'selected' : '' }}>
+                                                    {{ $edu->education_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <select class="form-control" name="category">
+                                            <option value="">None</option>
+                                            @foreach ($category as $cat)
+                                                <option value="{{ $cat->id }}"
+                                                    {{ isset($selectedCategory) && $selectedCategory == $cat->id ? 'selected' : '' }}>
+                                                    {{ $cat->category_name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>

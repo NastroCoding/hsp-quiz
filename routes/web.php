@@ -115,7 +115,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin/quiz/date/{quizId}', 'getParticipants')->middleware('admin');
         Route::get('/quiz/view/{slug}/{number}', 'quiz_num');
         Route::post('/quiz/view/{slug}', 'quiz_view');
-        Route::get('/quiz/filter',  'index')->name('quiz.filter');
+        Route::get('/quiz/filter', 'index')->name('quiz.filter');
     });
 
     Route::controller(UserAnswerController::class)->group(function () {

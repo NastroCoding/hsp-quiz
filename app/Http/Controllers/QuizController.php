@@ -30,6 +30,9 @@ class QuizController extends Controller
 
         $query = Quiz::query();
 
+        $selectedCategory = $request->category;
+        $selectedEducation = $request->education;
+
         if ($request->has('category') && $request->category != '') {
             $query->where('category_id', $request->category);
         }
@@ -40,8 +43,9 @@ class QuizController extends Controller
 
         $data = $query->get();
 
-        return view('views.quiz_user', compact('data', 'category', 'education', 'answers', 'scores', 'essays'));
+        return view('views.quiz_user', compact('data', 'category', 'education', 'answers', 'scores', 'essays', 'selectedCategory', 'selectedEducation'));
     }
+
 
     public function quizSearch(Request $request)
     {
@@ -344,29 +348,6 @@ class QuizController extends Controller
         // Redirect to a confirmation page or quiz results
         return redirect('/home');
     }
-
-    // public function reviewPage()
-    // {
-    //     // Getting user answers from the database (for example by using Eloquent or Query Builder)
-    //     $userAnswer = UserAnswer::find(1);
-
-    //     // Get related questions with user answers
-    //     $question = $userAnswer->question;
-
-    //     // get answer options related to the question
-    //     $options = $question->options;
-
-
-
-    //     // Send data to view review
-    //     return view('admin.quiz.review', [
-    //         'userAnswer' => $userAnswer,
-    //         'question' => $question,
-    //         'options' => $options,
-
-    //         'page' => 'Review',
-    //     ]);
-    // }
 
     public function quizReviewIndex($slug, $userId)
     {
