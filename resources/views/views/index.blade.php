@@ -85,7 +85,8 @@
                                     
                                             <!-- Finished state when the timer has expired -->
                                             <span id="timerFinished_{{ $quizId }}" style="display: none;">
-                                                <a class="btn btn-success disabled" style="cursor:not-allowed;">Time is Up!</a>
+                                                <a class="btn btn-success disabled" style="cursor:not-allowed;">Time is
+                                                    Up!</a>
                                             </span>
                                         </span>
                                     </div>
