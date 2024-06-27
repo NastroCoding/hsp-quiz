@@ -39,12 +39,21 @@
             @foreach ($questions as $question)
                 @php
                     $answer = $answers->firstWhere('question_id', $question->id);
+                    $correctChoice = $question->choices->firstWhere('is_correct', true);
+                    $userCorrect = $answer && $correctChoice && $answer->choosen_choice_id == $correctChoice->id;
                 @endphp
                 <div class="col-md-6">
                     <div class="card card-default">
                         <!-- form start -->
                         <div class="card-header">
                             <p class="card-title text-muted">{{ $question->question_type }}</p>
+                            @if ($question->question_type == 'multiple_choice')
+                                @if ($userCorrect)
+                                    <span class="badge badge-success ml-2">Correct</span>
+                                @else
+                                    <span class="badge badge-danger ml-2">Wrong</span>
+                                @endif
+                            @endif
                         </div>
                         <div class="card-body">
                             @if ($question->images)
@@ -75,6 +84,11 @@
                                                         +{{ $choice->point_value }} Points
                                                     @endif
                                                 </span>
+                                                @if ($question->question_type == 'multiple_choice')
+                                                @endif
+                                                @if ($choice->is_correct)
+                                                    <span class="badge badge-success ml-2">Answer</span>
+                                                @endif
                                             </label>
                                         </div>
                                     @endforeach

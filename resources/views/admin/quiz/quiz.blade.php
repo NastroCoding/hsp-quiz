@@ -131,8 +131,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputToken">Token</label>
-                                <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Token needs to be 6 characters minimum</div>
-                                <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Uppercase is recommended</div>
+                                <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Token needs to be 6
+                                    characters minimum</div>
+                                <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Uppercase is
+                                    recommended</div>
                                 <div class="input-group mb-3">
                                     <input type="text" name="token" class="form-control" id="tokenInput"
                                         placeholder="Enter token">
@@ -152,7 +154,7 @@
                                         </script>
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="form-group">
                                 <label for="formFile" class="form-label">Thumbnail</label>
@@ -347,9 +349,31 @@
                                         placeholder="Enter Description">{{ $quiz->description }}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputDescription">Token </label>
-                                    <input type="text" name="token" class="form-control" placeholder="Enter token"
-                                        value="{{ $quiz->token }}">
+                                    <label for="exampleInputToken">Token</label>
+                                    <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Token needs to be 6
+                                        characters minimum</div>
+                                    <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Uppercase is
+                                        recommended</div>
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="token" class="form-control" id="tokenInput2"
+                                            placeholder="Enter token" value="{{ $quiz->token }}">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" style="cursor: pointer" id="tokenGenerate"
+                                                onclick="tokenGenerate()">Generate</span>
+                                            <script>
+                                                function tokenGenerate() {
+                                                    let generate = Math.random().toString(36).substring(2, 8); // Corrected to generate a 6-character token
+                                                    const input = document.body.querySelector('#tokenInput2');
+                                                    if (input) {
+                                                        input.value = generate.toUpperCase();
+                                                    } else {
+                                                        console.log("Input element with ID 'tokenInput' not found.");
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+    
                                 </div>
                                 <div class="form-group">
                                     <label for="formFile" class="form-label">Thumbnail</label>
@@ -366,8 +390,8 @@
                                     <div class="form-group">
                                         <label for="exampleInputTime">Time</label>
                                         <div class="input-group mb-3">
-                                            <input type="number" name="time" class="form-control" id="exampleInputTime"
-                                                placeholder="Minutes" value="{{ $quiz->time }}">
+                                            <input type="number" name="time" class="form-control"
+                                                id="exampleInputTime" placeholder="Minutes" value="{{ $quiz->time }}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">min</span>
                                             </div>
