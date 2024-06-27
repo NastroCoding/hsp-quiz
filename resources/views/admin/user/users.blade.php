@@ -9,9 +9,19 @@
                 </div>
             @endforeach
         @endif
-        @if (session()->has('quiz_success'))
+        @if (session()->has('register_success'))
             <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
-                {{ session('quiz_success') }}
+                {{ session('register_success') }}
+            </div>
+        @endif
+        @if (session()->has('update_success'))
+            <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
+                {{ session('update_success') }}
+            </div>
+        @endif
+        @if (session()->has('delete_success'))
+            <div class="alert alert-success animate__animated animate__slideInDown" role="alert">
+                {{ session('delete_success') }}
             </div>
         @endif
         <div class="container-fluid">
