@@ -115,6 +115,7 @@
                                         event.preventDefault(); // Prevent default form submission
 
                                         const radios = document.querySelectorAll('input[type="radio"]');
+                                        const questionType = "{{ $que->question_type }}";
                                         let isChecked = false;
                                         let chosenChoiceId = null;
 
@@ -125,15 +126,14 @@
                                             }
                                         });
 
-                                        if (isChecked) {
+                                        if (isChecked || questionType == 'essay') {
                                             // Serialize form data
                                             const formData = new FormData(document.getElementById("quiz-form"));
                                             formData.append('choosen_choice_id', chosenChoiceId);
 
                                             // Determine the URL based on the question type
-                                            const questionType = "{{ $que->question_type }}";
                                             let url = "/quiz/{{ $que->quiz_id }}/answer"; // Default URL for multiple choice and weighted multiple
-                                            if (questionType === 'essay') {
+                                            if (questionType == 'essay') {
                                                 url = "/quiz/{{ $que->quiz_id }}/essayAnswer";
                                             }
 
