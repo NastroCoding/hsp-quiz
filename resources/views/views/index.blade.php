@@ -68,7 +68,7 @@
                                                     $quizQuestions->contains($essay->question_id);
                                             });
 
-                                            $answerCount = $userAnswers->count();
+                                            $answerCount = $userAnswers->count() + $userEssays->count();
                                             $questionCount = $quizQuestions->count();
                                         @endphp
 
@@ -96,7 +96,8 @@
 
                                             <!-- Finished state when the timer has expired -->
                                             <span id="timerFinished_{{ $quizId }}" style="display: none;">
-                                                <a class="btn btn-success disabled" style="cursor:not-allowed;">Time is Up!</a>
+                                                <a class="btn btn-success disabled" style="cursor:not-allowed;">Time is
+                                                    Up!</a>
                                             </span>
                                         </span>
                                     </div>
