@@ -81,10 +81,12 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a class="btn btn-info btn-sm" data-toggle="modal"
-                                        data-target="#edit-user{{ $user->id }}">
-                                        Edit
-                                    </a>
+                                    @if (Auth::user()->role == 'superadmin' || (Auth::user()->role == 'admin' && $user->role != 'superadmin'))
+                                        <a class="btn btn-info btn-sm" data-toggle="modal"
+                                            data-target="#edit-user{{ $user->id }}">
+                                            Edit
+                                        </a>
+                                    @endif
                                     <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
                                         data-id="{{ $user->id }}" data-toggle="modal" data-target="#delete">
                                         Delete
