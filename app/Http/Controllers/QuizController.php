@@ -82,6 +82,9 @@ class QuizController extends Controller
 
         $query = Quiz::query();
 
+        $selectedCategory = $request->category;
+        $selectedEducation = $request->education;
+
         if ($request->has('category') && $request->category != '') {
             $query->where('category_id', $request->category);
         }
@@ -95,7 +98,7 @@ class QuizController extends Controller
 
         $page = 'Dashboard'; // Define the $page variable
 
-        return view('admin.dashboard', compact('data', 'category', 'education', 'user', 'page', 'scores', 'answers', 'essays'));
+        return view('admin.dashboard', compact('data', 'category', 'education', 'user', 'page', 'scores', 'answers', 'essays', 'selectedCategory', 'selectedEducation'));
     }
 
 

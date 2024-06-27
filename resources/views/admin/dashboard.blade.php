@@ -292,7 +292,10 @@
                                         <select class="form-control" name="category">
                                             <option value="">None</option>
                                             @foreach ($category as $cat)
-                                                <option value="{{ $cat->id }}">{{ $cat->category_name }}</option>
+                                                <option value="{{ $cat->id }}"
+                                                    {{ isset($selectedCategory) && $selectedCategory == $cat->id ? 'selected' : '' }}>
+                                                    {{ $cat->category_name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -303,7 +306,10 @@
                                         <select class="form-control" name="education">
                                             <option value="">None</option>
                                             @foreach ($education as $edu)
-                                                <option value="{{ $edu->id }}">{{ $edu->education_name }}</option>
+                                                <option value="{{ $edu->id }}"
+                                                    {{ isset($selectedEducation) && $selectedEducation == $edu->id ? 'selected' : '' }}>
+                                                    {{ $edu->education_name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
