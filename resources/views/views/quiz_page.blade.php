@@ -132,6 +132,7 @@
                                             formData.append('choosen_choice_id', chosenChoiceId);
 
                                             // Determine the URL based on the question type
+                                            let quiz_id = "{{ $quiz->id }}"
                                             let url = "/quiz/{{ $que->quiz_id }}/answer"; // Default URL for multiple choice and weighted multiple
                                             if (questionType == 'essay') {
                                                 url = "/quiz/{{ $que->quiz_id }}/essayAnswer";
@@ -148,6 +149,7 @@
 
                                                         if (isSubmit) {
                                                             document.getElementById("quiz-form").submit();
+                                                            localStorage.removeItem(`countdownEndTime_${quiz_id}`)
                                                             window.location.replace("/quiz");
                                                         } else {
                                                             const currentQuestionNumber = parseInt("{{ $que->number }}");

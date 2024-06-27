@@ -51,7 +51,7 @@ Route::controller(RouteController::class)->group(function () {
     // Route::get('/quiz/{slug}', 'user_quiz_page')->middleware('auth');
 
     // QUIZ REVIEW TABLE
-    Route::get('/admin/quiz/review/{slug}/{userId}', [QuizController::class, 'quizReviewIndex']);
+    Route::get('/admin/quiz/review/{slug}/{userId}', [QuizController::class, 'quizReviewIndex'])->middleware('auth:sanctum');
 });
 
 Route::controller(AuthController::class)->group(function () {
