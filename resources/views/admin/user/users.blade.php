@@ -78,29 +78,32 @@
                     </thead>
                     <tbody>
                         @foreach ($data as $user)
-                        <tr data-widget="expandable-table" aria-expanded="false">
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->role }}</td>
-                            <td>
-                                @if (empty($user->education->education_name))
-                                    -
-                                @else
-                                    {{ $user->education->education_name }}
-                                @endif
-                            </td>
-                            <td>
-                                @if (Auth::user()->role == 'superadmin' || (Auth::user()->role == 'admin' && $user->role != 'superadmin' && $user->role != 'admin'))
-                                    <a class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit-user{{ $user->id }}">
-                                        Edit
-                                    </a>
-                                    <button type="button" class="btn btn-danger btn-sm delete-btn ml-1" data-id="{{ $user->id }}" data-toggle="modal" data-target="#delete">
-                                        Delete
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>                        
+                            <tr data-widget="expandable-table" aria-expanded="false">
+                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->role }}</td>
+                                <td>
+                                    @if (empty($user->education->education_name))
+                                        -
+                                    @else
+                                        {{ $user->education->education_name }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if (Auth::user()->role == 'superadmin' ||
+                                            (Auth::user()->role == 'admin' && $user->role != 'superadmin' && $user->role != 'admin'))
+                                        <a class="btn btn-info btn-sm" data-toggle="modal"
+                                            data-target="#edit-user{{ $user->id }}">
+                                            Edit
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
+                                            data-id="{{ $user->id }}" data-toggle="modal" data-target="#delete">
+                                            Delete
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
                             <tr class="expandable-body">
                                 <td colspan="6">
                                     <p>
@@ -170,7 +173,11 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="exampleInputPassword">Password</label>
-                                                        <input type="hidden" name="oldpassword" value="{{ $user->password }}">
+                                                        <input type="hidden" name="oldpassword"
+                                                            value="{{ $user->password }}">
+                                                        <div class=" mb-1 text-muted text-sm"><span class="text-danger">*
+                                                            </span>Password needs to
+                                                            be 8 characters minimum</div>
                                                         <input type="password" name="password" class="form-control"
                                                             id="exampleInputPassword" placeholder="New Password"
                                                             value="">
@@ -240,6 +247,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword">Password</label>
+                                <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Password needs to
+                                    be 8 characters minimum</div>
                                 <input type="password" name="password" class="form-control" id="exampleInputPassword"
                                     placeholder="Password">
                             </div>

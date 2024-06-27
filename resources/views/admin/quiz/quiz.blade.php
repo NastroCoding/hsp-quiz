@@ -131,6 +131,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputToken">Token</label>
+                                <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Token needs to be 6 characters minimum</div>
+                                <div class=" mb-1 text-muted text-sm"><span class="text-danger">* </span>Uppercase is recommended</div>
                                 <div class="input-group mb-3">
                                     <input type="text" name="token" class="form-control" id="tokenInput"
                                         placeholder="Enter token">
@@ -150,6 +152,7 @@
                                         </script>
                                     </div>
                                 </div>
+                                
                             </div>
                             <div class="form-group">
                                 <label for="formFile" class="form-label">Thumbnail</label>
