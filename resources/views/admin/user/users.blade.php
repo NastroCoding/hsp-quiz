@@ -86,6 +86,11 @@
                                             data-target="#edit-user{{ $user->id }}">
                                             Edit
                                         </a>
+                                    @else
+                                        <a class="btn btn-info btn-sm disabled" data-toggle="modal"
+                                            data-target="#edit-user{{ $user->id }}" disabled>
+                                            Edit
+                                        </a>
                                     @endif
                                     <button type="button" class="btn btn-danger btn-sm delete-btn ml-1"
                                         data-id="{{ $user->id }}" data-toggle="modal" data-target="#delete">
