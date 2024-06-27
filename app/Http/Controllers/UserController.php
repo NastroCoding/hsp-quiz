@@ -75,17 +75,22 @@ class UserController extends Controller
         $validate = $request->validate([
             'education_id' => 'required', 
             'email' => 'required',
-            'password' => 'required|min:8'
         ]);
-
-        $hash = Hash::make($request->password);
 
         $user = User::findOrFail($id);
         $updated_by = Auth::id();
+        $pass = $request->password;
+        
+        if($request->password == null){
+            $hash = $request->oldpassword;
+        }else {
+            $hash = Hash::make($pass);
+        }
 
         $user->update([
             'education_id' => $request->education_id,
             'email' => $request->email,
+            'role' => $request->role,
             'updated_by' => $updated_by,
             'password' => $hash
         ]);

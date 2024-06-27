@@ -170,6 +170,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="exampleInputPassword">Password</label>
+                                                        <input type="hidden" name="oldpassword" value="{{ $user->password }}">
                                                         <input type="password" name="password" class="form-control"
                                                             id="exampleInputPassword" placeholder="New Password"
                                                             value="">
