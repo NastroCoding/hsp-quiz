@@ -53,7 +53,7 @@ class EducationController extends Controller
      */
     public function show(Education $education)
     {
-        //
+        
     }
 
     /**

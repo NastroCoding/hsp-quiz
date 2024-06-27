@@ -40,7 +40,7 @@ class RouteController extends Controller
         ]);
     }
 
-    // QUIZ
+    
 
     public function quiz()
     {
@@ -74,7 +74,7 @@ class RouteController extends Controller
         ]);
     }
 
-    // ADMIN USERS
+    
 
     public function users()
     {
@@ -87,7 +87,7 @@ class RouteController extends Controller
         ]);
     }
 
-    // CATEGORY
+    
 
     public function category()
     {
@@ -98,7 +98,7 @@ class RouteController extends Controller
         ]);
     }
 
-    // EDUCATION
+    
     public function education()
     {
         $education = Education::latest()->get();
@@ -108,7 +108,7 @@ class RouteController extends Controller
         ]);
     }
 
-    // INDEX
+    
 
 
     public function index()

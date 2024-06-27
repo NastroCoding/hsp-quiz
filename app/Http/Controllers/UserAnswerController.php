@@ -20,10 +20,10 @@ class UserAnswerController extends Controller
      */
     public function index(Request $request, $quiz_id)
     {
-        // Fetch all questions related to the quiz
+        
         $questions = Question::where('quiz_id', $quiz_id)->get();
 
-        // Initialize counters for total points and correctly answered points
+        
         $totalPoint = 0;
         $rightAnswerCount = 0;
 
@@ -68,32 +68,32 @@ class UserAnswerController extends Controller
      */
     public function store(Request $request, $quiz_id)
     {
-        // Validate the request data
+        
         $validatedData = $request->validate([
             'question_id' => 'required|exists:questions,id',
             'choosen_choice_id' => 'required|exists:choices,id',
         ]);
 
-        // Get the chosen choice
+        
         $chosenChoice = Choice::findOrFail($validatedData['choosen_choice_id']);
 
-        // Determine if the chosen choice is correct
+        
         $isCorrect = $chosenChoice->is_correct;
 
-        // Add the authenticated user's ID and is_correct to the data
+        
         $validatedData['user_id'] = Auth::id();
         $validatedData['is_correct'] = $isCorrect;
 
-        // Set the created_by and updated_by fields to the authenticated user's ID
+        
         $validatedData['created_by'] = Auth::id();
         $validatedData['updated_by'] = Auth::id();
 
-        // Check if the user has already answered this question
+        
         $existingAnswer = UserAnswer::where('user_id', Auth::id())
             ->where('question_id', $validatedData['question_id'])
             ->first();
 
-        // If an existing answer is found, update it; otherwise, create a new one
+        
         if ($existingAnswer) {
             $existingAnswer->update([
                 'choosen_choice_id' => $validatedData['choosen_choice_id'],
@@ -135,26 +135,25 @@ class UserAnswerController extends Controller
      */
     public function storeEssayAnswer(Request $request, $quiz_id)
     {
-        // Validate the request data
+        
         $validatedData = $request->validate([
             'question_id' => 'required|exists:questions,id',
             'essay_answer' => 'required|string',
         ]);
 
-        // Add the authenticated user's ID to the data
+        
         $validatedData['user_id'] = Auth::id();
 
-        // Set the created_by and updated_by fields to the authenticated user's ID
         $validatedData['created_by'] = Auth::id();
         $validatedData['updated_by'] = Auth::id();
 
         try {
-            // Check if the user has already answered this question
+            
             $existingAnswer = UserEssay::where('user_id', Auth::id())
                 ->where('question_id', $validatedData['question_id'])
                 ->first();
 
-            // If an existing answer is found, update it; otherwise, create a new one
+            
             if ($existingAnswer) {
                 $existingAnswer->update([
                     'answer' => $validatedData['essay_answer'],
@@ -195,10 +194,10 @@ class UserAnswerController extends Controller
 
             return redirect('/quiz')->with('success', $message);
         } catch (\Exception $e) {
-            // Log the error
+            
             Log::error('Error storing essay answer: ' . $e->getMessage(), $validatedData);
 
-            // Return with error message
+            
             return redirect('/quiz')->with('error', 'There was a problem submitting your answer. Please try again.');
         }
     }
@@ -208,10 +207,10 @@ class UserAnswerController extends Controller
      */
     public function show($id)
     {
-        // Fetch the essay answer by id
+        
         $essay = UserEssay::findOrFail($id);
 
-        // Pass the essay answer to the view
+        
         return view('essay.show', ['essay_answer' => $essay->answer]);
     }
 
@@ -220,7 +219,7 @@ class UserAnswerController extends Controller
      */
     public function update(Request $request, UserAnswer $userAnswer)
     {
-        // Code for updating a resource (if needed)
+        
     }
 
     /**
@@ -228,12 +227,12 @@ class UserAnswerController extends Controller
      */
     public function deleteAnswer(Request $request, $quiz_id)
     {
-        // Validate the request data
+        
         $validatedData = $request->validate([
             'question_id' => 'required|exists:questions,id',
         ]);
 
-        // Find the existing answer and delete it
+        
         $existingAnswer = UserAnswer::where('user_id', Auth::id())
             ->where('question_id', $validatedData['question_id'])
             ->first();
@@ -245,7 +244,7 @@ class UserAnswerController extends Controller
             $message = 'No answer found to delete!';
         }
 
-        // Recalculate the user's score
+        
         $user = User::find(Auth::id());
         $calc = $user->calculateScoresForQuiz($quiz_id);
         $rightAnswerCount = $calc->userScore;

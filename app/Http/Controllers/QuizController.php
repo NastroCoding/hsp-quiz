@@ -94,9 +94,9 @@ class QuizController extends Controller
         }
 
         $data = $query->get();
-        $user = User::latest()->get(); // Fetching the latest users
+        $user = User::latest()->get(); 
 
-        $page = 'Dashboard'; // Define the $page variable
+        $page = 'Dashboard'; 
 
         return view('admin.dashboard', compact('data', 'category', 'education', 'user', 'page', 'scores', 'answers', 'essays', 'selectedCategory', 'selectedEducation'));
     }
@@ -116,14 +116,14 @@ class QuizController extends Controller
             'description' => 'required',
             'time' => 'required',
             'slug' => 'unique:quizzes',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Add validation for thumbnail
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', 
         ]);
 
         $created_by = Auth::user()->id;
         $updated_by = Auth::user()->id;
         $slug = Str::slug($request->title);
 
-        // Store the thumbnail file if it exists
+        
         $thumbnailPath = null;
         if ($request->hasFile('thumbnail')) {
             $thumbnailPath = $request
@@ -139,12 +139,12 @@ class QuizController extends Controller
             'description' => $request->description,
             'time' => $request->time,
             'slug' => $slug,
-            'thumbnail' => $thumbnailPath, // Store the thumbnail path
+            'thumbnail' => $thumbnailPath, 
             'created_by' => $created_by,
             'updated_by' => $updated_by,
         ]);
 
-        // Calculate max_score
+        
         $quiz->calculateMaxScore();
 
         return redirect('/admin/quiz')->with(
@@ -165,7 +165,7 @@ class QuizController extends Controller
             'title' => 'required',
             'description' => 'required',
             'time' => 'required',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Add validation for thumbnail
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', 
         ]);
 
         $updated_by = Auth::user()->id;
@@ -173,13 +173,13 @@ class QuizController extends Controller
 
         $quiz = Quiz::findOrFail($id);
 
-        // Update the thumbnail path if a new thumbnail is provided
+        
         if ($request->hasFile('thumbnail')) {
-            // Delete the old thumbnail if it exists
+            
             if ($quiz->thumbnail) {
                 Storage::disk('public')->delete($quiz->thumbnail);
             }
-            // Store the new thumbnail
+            
             $thumbnailPath = $request
                 ->file('thumbnail')
                 ->store('thumbnails', 'public');
@@ -197,7 +197,7 @@ class QuizController extends Controller
             'updated_by' => $updated_by,
         ]);
 
-        // Calculate max_score
+        
         $quiz->calculateMaxScore();
 
         return redirect('/admin/quiz')->with(
@@ -212,7 +212,7 @@ class QuizController extends Controller
     public function destroy(string $id)
     {
         $quiz = Quiz::findOrFail($id);
-        // Delete the associated thumbnail if it exists
+        
         if ($quiz->thumbnail) {
             Storage::disk('public')->delete($quiz->thumbnail);
         }
@@ -239,7 +239,7 @@ class QuizController extends Controller
             return redirect('/quiz')->with('failed', 'Invalid token!');
         }
 
-        // Load questions associated with the quiz
+        
         $questions = $quiz->questions;
         $lastQuestionNumber = $questions->max('number') ?? 0;
 
@@ -247,12 +247,12 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
-        // Load user's essay answers for the questions
+        
         $userEssays = UserEssay::where('user_id', Auth::id())
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
-        // Get the countdown time from the quiz
+        
         session(['quiz_token' => $request->token]);
         $countdownTime = $quiz->time;
         $data = Quiz::where('slug', $slug)->first();
@@ -264,7 +264,7 @@ class QuizController extends Controller
             'slug' => $quiz->slug,
             'question_number' => 1,
             'userAnswers' => $userAnswers,
-            'userEssays' => $userEssays, // Pass user's essay answers to the view
+            'userEssays' => $userEssays, 
             'countdownTime' => $quiz->time,
             'data' => $data,
         ]);
@@ -298,7 +298,7 @@ class QuizController extends Controller
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
 
-        // Load user's essay answers for the questions
+        
         $userEssays = UserEssay::where('user_id', Auth::id())
             ->whereIn('question_id', $questions->pluck('id'))
             ->get();
@@ -313,8 +313,8 @@ class QuizController extends Controller
                 'lastQuestionNumber' => $lastQuestionNumber,
                 'slug' => $quiz->slug,
                 'question_number' => $number,
-                'userAnswers' => $userAnswers, // Pass user's answers to the view
-                'userEssays' => $userEssays, // Pass user's essay answers to the view
+                'userAnswers' => $userAnswers, 
+                'userEssays' => $userEssays, 
                 'data' => $data,
             ]
         );
@@ -325,10 +325,10 @@ class QuizController extends Controller
         $userId = Auth::id();
         $quizId = $request->input('quiz_id');
 
-        // Get the IDs of the questions belonging to the quiz
+        
         $quizQuestionIds = Question::where('quiz_id', $quizId)->pluck('id');
 
-        // Calculate the total score based on user's answers for the quiz questions
+        
         $userAnswers = UserAnswer::where('user_id', $userId)
             ->whereIn('question_id', $quizQuestionIds)
             ->get();
@@ -338,17 +338,17 @@ class QuizController extends Controller
         foreach ($userAnswers as $answer) {
             $choice = Choice::find($answer->choosen_choice_id);
             if ($choice) {
-                $totalScore += $choice->score; // Assuming 'score' column exists in 'choices' table
+                $totalScore += $choice->score; 
             }
         }
 
-        // Save or update the total score in the user_score table
+        
         UserScore::updateOrCreate(
             ['user_id' => $userId, 'quiz_id' => $quizId],
             ['score' => $totalScore]
         );
 
-        // Redirect to a confirmation page or quiz results
+        
         return redirect('/home');
     }
 
@@ -377,24 +377,24 @@ class QuizController extends Controller
     {
         $date = $request->query('date');
 
-        // Find the quiz to get the slug
+        
         $quiz = Quiz::find($quizId);
         $quizSlug = $quiz->slug;
 
         if ($date) {
-            // Fetch users who participated on a specific date
+            
             $users = User::whereHas('scores', function ($query) use ($quizId, $date) {
                 $query->where('quiz_id', $quizId)
                     ->whereDate('created_at', $date);
             })->get();
         } else {
-            // Fetch all users who participated in the quiz
+            
             $users = User::whereHas('scores', function ($query) use ($quizId) {
                 $query->where('quiz_id', $quizId);
             })->get();
         }
 
-        // Format the response to include the necessary user data
+        
         $response = $users->map(function ($user) use ($quizId) {
             $specificScore = $user->scores->firstWhere('quiz_id', $quizId);
 

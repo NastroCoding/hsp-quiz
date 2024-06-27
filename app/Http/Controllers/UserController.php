@@ -22,19 +22,19 @@ class UserController extends Controller
         }
 
         $users = $query->get();
-        $education = Education::all(); // Fetch all education data
+        $education = Education::all(); 
 
         return view('admin.user.users', [
             'page' => 'Users',
             'data' => $users,
-            'education' => $education, // Pass the education data to the view
+            'education' => $education, 
         ]);
     }
 
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'education_id' => 'required', // Ensure education_id is required
+            'education_id' => 'required', 
             'name' => 'required',
             'email' => 'required',
             'password' => 'required|min:8'
@@ -73,7 +73,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $validate = $request->validate([
-            'education_id' => 'required', // Ensure education_id is required
+            'education_id' => 'required', 
             'email' => 'required',
             'password' => 'required|min:8'
         ]);
